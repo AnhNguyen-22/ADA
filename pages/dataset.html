@@ -6,5 +6,47 @@
     <title>Dataset - AirSense HCMC</title>
 </head>
 <body>
+    <!-- Sidebar Container -->
+    <div id="sidebar-container"></div>
+    
+    <main class="main-content">
+        <div class="content-header">
+            <h1>Dữ liệu</h1>
+        </div>
+        <div class="content-card">
+            <p>Nội dung trang dữ liệu sẽ được thêm vào đây.</p>
+        </div>
+    </main>
+    
+    <!-- Load Sidebar trực tiếp -->
+    <script>
+        (function() {
+            const container = document.getElementById('sidebar-container');
+            if (!container) return;
+            
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', '../components/sidebar.html', true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && (xhr.status === 200 || xhr.status === 0)) {
+                    container.innerHTML = xhr.responseText;
+                    
+                    // Cập nhật logo
+                    const logoImg = container.querySelector('#sidebar-logo');
+                    if (logoImg) {
+                        logoImg.src = '../assets/img/logo_lon.png';
+                    }
+                    
+                    // Load JS
+                    const script = document.createElement('script');
+                    script.src = '../components/sidebar.js';
+                    script.onload = function() {
+                        if (window.initSidebar) window.initSidebar();
+                    };
+                    document.body.appendChild(script);
+                }
+            };
+            xhr.send();
+        })();
+    </script>
 </body>
 </html>

@@ -1,10 +1,547 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Theo dõi theo trạm - AirSense HCMC</title>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta charset="utf-8"/>
+<title>AirSense HCMC - Theo dõi trạm</title>
+<link href="../assets/css/station-tracking.css" rel="stylesheet"/>
+<link href="../components/sidebar.css" rel="stylesheet"/>
+<link href="../components/dropdown.css" rel="stylesheet"/>
 </head>
 <body>
+<div class="station-tracking-page">
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="page-header">
+            <h1 class="page-title">THEO DÕI TRẠM</h1>
+            <div class="header-info">
+                <p class="location-info">Thành phố Hồ Chí Minh</p>
+                <p class="who-guideline">WHO guideline: PM2.5 24h = 15 µg/m³</p>
+            </div>
+        </div>
+
+        <!-- Two Column Layout -->
+        <div class="two-column-layout">
+            <!-- Left Card: PM2.5 Station Section -->
+            <div class="pm25-station-section">
+                <div class="section-header">
+                    <h2 class="section-title">Chỉ số PM2.5 tại Trạm</h2>
+                    <p class="section-subtitle">Trung bình ~ 37.8 µg/m³</p>
+                </div>
+                
+                <div class="station-controls">
+                    <!-- Station Dropdown Component -->
+                    <div class="dropdown-container" id="station-dropdown" style="position: relative; width: 250px;">
+                        <button class="dropdown-button" type="button" aria-haspopup="true" aria-expanded="false" style="padding: 12px 16px; font-size: 14px; background-color: #e1f5fe; border: 1px solid rgba(79, 195, 247, 0.3); box-shadow: none;">
+                            <span class="dropdown-button-text" style="font-family: '72-Semibold', Helvetica; font-weight: 400; color: #131e29; text-align: left;">S1 - Giao thông</span>
+                            <span class="dropdown-arrow" style="font-size: 10px; color: #131e29;">▼</span>
+                        </button>
+                        <div class="dropdown-menu" role="menu">
+                            <!-- Items sẽ được render tự động -->
+                        </div>
+                    </div>
+
+                    <!-- Status Badge -->
+                    <div class="status-badge status-bad">
+                        Xấu
+                    </div>
+                </div>
+
+                <!-- Chart Container -->
+                <div class="graph-container" id="pm25-graph">
+                    <h3 class="chart-title">PM2.5 — Tổng trạm</h3>
+                    <canvas id="pm25-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- Right Card: Station Information -->
+            <div class="station-info-section">
+                <div class="section-header">
+                    <h2 class="section-title">Thông tin Trạm</h2>
+                    <div class="status-badge status-bad" style="position: absolute; top: 0; right: 0;">
+                        Xấu
+                    </div>
+                </div>
+
+                <!-- Circular Gauge Chart -->
+                <div class="gauge-container">
+                    <canvas id="gauge-chart"></canvas>
+                    <div class="gauge-value" id="gauge-value">45</div>
+                    <div class="gauge-unit">µg/m³</div>
+                </div>
+
+                <!-- Station Info List -->
+                <ul class="station-info-list">
+                    <li>Maecenas quis velit nec ipsum sollicitudin mattis at quis sapien.</li>
+                    <li>Nam in risus sit amet est pellentesque feugiat.</li>
+                    <li>Ut eu nulla a purus ultrices interdum.</li>
+                    <li>Nullam egestas nisi quis nunc dictum tristique.</li>
+                    <li>Morbi quis libero tempor, accumsan diam lacinia, dignissim nulla.</li>
+                </ul>
+
+                <!-- Comparison Bar Chart -->
+                <div class="comparison-chart-container">
+                    <h3 class="comparison-chart-title">So sánh chỉ số PM2.5 tại Trạm <span id="station-name-display">S1</span></h3>
+                    <canvas id="comparison-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- AQI Scale Section -->
+        <div class="aqi-scale-section">
+            <h2 class="section-title">Thang đo chỉ số chất lượng không khí (AQI)</h2>
+            <div class="aqi-gradient-bar">
+                <div class="aqi-segment aqi-good" style="flex: 1;">
+                    <div class="aqi-label">Tốt</div>
+                    <div class="aqi-range">0-50</div>
+                </div>
+                <div class="aqi-segment aqi-moderate" style="flex: 1;">
+                    <div class="aqi-label">Trung bình</div>
+                    <div class="aqi-range">51-100</div>
+                </div>
+                <div class="aqi-segment aqi-poor" style="flex: 1;">
+                    <div class="aqi-label">Kém</div>
+                    <div class="aqi-range">101-150</div>
+                </div>
+                <div class="aqi-segment aqi-bad" style="flex: 1;">
+                    <div class="aqi-label">Xấu</div>
+                    <div class="aqi-range">151-200</div>
+                </div>
+                <div class="aqi-segment aqi-very-bad" style="flex: 1;">
+                    <div class="aqi-label">Rất xấu</div>
+                    <div class="aqi-range">201-300</div>
+                </div>
+                <div class="aqi-segment aqi-hazardous" style="flex: 1;">
+                    <div class="aqi-label">Nguy hại</div>
+                    <div class="aqi-range">301+</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Component -->
+    <aside class="side-ql-unchoose" id="sidebar">
+        <!-- Logo ở trên cùng -->
+        <img class="image-3 logo-large" src="../assets/img/logo_lon.png" alt="AirSense HCMC Logo" id="sidebar-logo"/>
+        <img class="image-3 logo-small" src="../assets/img/logo_nho.png" alt="AirSense HCMC Logo Small" id="sidebar-logo-small" style="display: none;"/>
+        
+        <!-- Toggle Button -->
+        <img class="show-left-side-panel" id="sidebarToggle" src="https://c.animaapp.com/aROkQ2yh/img/show-left-side-panel@2x.png" alt="Toggle sidebar" style="cursor: pointer;"/>
+        
+        <!-- Mode Switcher -->
+        <div class="group-12">
+            <div class="rectangle-26"></div>
+            <div class="rectangle-27"></div>
+            <div class="text-wrapper-76" data-mode="public">Công khai</div>
+            <div class="text-wrapper-77" data-mode="management">Quản lý</div>
+        </div>
+        
+        <!-- Active Menu Item Background -->
+        <div class="rectangle-28"></div>
+        
+        <!-- Navigation Icons -->
+        <a href="overview.html" class="nav-link" data-page="overview">
+            <img class="analyze" src="https://c.animaapp.com/aROkQ2yh/img/analyze@2x.png" alt="Tổng quan"/>
+            <div class="text-wrapper-78">Tổng quan</div>
+        </a>
+        
+        <a href="station-tracking.html" class="nav-link active" data-page="station-tracking">
+            <img class="place-marker-2" src="https://c.animaapp.com/aROkQ2yh/img/place-marker-1@2x.png" alt="Theo dõi theo trạm"/>
+            <div class="theo-d-i-tr-m">Theo dõi theo trạm</div>
+        </a>
+        
+        <a href="recommendations.html" class="nav-link" data-page="recommendations">
+            <img class="good-quality" src="https://c.animaapp.com/aROkQ2yh/img/good-quality@2x.png" alt="Khuyến cáo"/>
+            <div class="text-wrapper-79">Khuyến cáo</div>
+        </a>
+        
+        <a href="dataset.html" class="nav-link" data-page="dataset">
+            <img class="database" src="https://c.animaapp.com/aROkQ2yh/img/database@2x.png" alt="Dataset"/>
+            <div class="text-wrapper-80">Dataset</div>
+        </a>
+        
+        <a href="model-evaluation.html" class="nav-link" data-page="model-evaluation">
+            <img class="intelligence" src="https://c.animaapp.com/aROkQ2yh/img/intelligence@2x.png" alt="Đánh giá mô hình"/>
+            <div class="text-wrapper-81">Đánh giá mô hình</div>
+        </a>
+        
+        <a href="policy-suggestions.html" class="nav-link" data-page="policy-suggestions">
+            <img class="light-on" src="https://c.animaapp.com/aROkQ2yh/img/light-on@2x.png" alt="Gợi ý chính sách"/>
+            <div class="text-wrapper-82">Gợi ý chính sách</div>
+        </a>
+        
+        <!-- User Profile Section -->
+        <div class="group-11">
+            <div class="rectangle-25"></div>
+            <img class="image-2" src="../assets/img/avt.png" alt="Avatar"/>
+            <div class="text-wrapper-74">Quản lý</div>
+            <p class="text-wrapper-75">Bạn đang ở trang quản lý</p>
+            <img class="logout-rounded" src="https://c.animaapp.com/aROkQ2yh/img/logout-rounded@2x.png" alt="Logout" style="cursor: pointer;"/>
+        </div>
+    </aside>
+</div>
+
+<script src="../components/sidebar.js"></script>
+<script src="../components/dropdown.js"></script>
+<script>
+    // Khởi tạo khi trang load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Update active link for station-tracking in sidebar
+        const stationLink = document.querySelector('a[href="station-tracking.html"]');
+        if (stationLink) {
+            stationLink.classList.add('active');
+            // Remove active from other links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link !== stationLink) {
+                    link.classList.remove('active');
+                }
+            });
+        }
+
+        // Dữ liệu PM2.5 cho các trạm theo thời gian trong ngày (12 điểm: 0:00, 2:00, ..., 22:00)
+        const timeLabels = ['0:00', '2:00', '4:00', '6:00', '8:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'];
+        const stationPM25Data = {
+            's1': [32, 34, 36, 38, 40, 42, 41, 39, 37, 35, 33, 32],
+            's2': [25, 27, 29, 31, 30, 32, 31, 29, 28, 27, 26, 25],
+            's3': [35, 37, 39, 41, 43, 45, 44, 42, 40, 38, 36, 35],
+            's4': [45, 47, 49, 51, 53, 55, 54, 52, 50, 48, 46, 45],
+            's5': [30, 32, 34, 36, 35, 37, 36, 34, 33, 32, 31, 30],
+            's6': [22, 24, 26, 28, 27, 29, 28, 26, 25, 24, 23, 22]
+        };
+
+        // Hàm tính giá trị trung bình
+        function calculateAverage(values) {
+            return Math.round((values.reduce((a, b) => a + b, 0) / values.length) * 10) / 10;
+        }
+
+        // Hàm vẽ line chart
+        function drawChart(selectedStationId) {
+            const canvas = document.getElementById('pm25-chart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width = canvas.offsetWidth;
+            const height = canvas.height = 400;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+            
+            // Chart settings
+            const padding = { top: 50, right: 40, bottom: 60, left: 60 };
+            const chartWidth = width - padding.left - padding.right;
+            const chartHeight = height - padding.top - padding.bottom;
+            
+            // Get data for selected station only
+            const selectedData = stationPM25Data[selectedStationId];
+            const minValue = Math.min(...selectedData) - 5;
+            const maxValue = Math.max(...selectedData) + 5;
+            const valueRange = maxValue - minValue;
+            
+            // Draw grid lines
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 1;
+            const gridLines = 5;
+            for (let i = 0; i <= gridLines; i++) {
+                const y = padding.top + (chartHeight / gridLines) * i;
+                ctx.beginPath();
+                ctx.moveTo(padding.left, y);
+                ctx.lineTo(width - padding.right, y);
+                ctx.stroke();
+            }
+            
+            // Draw vertical grid lines for time
+            const timePoints = timeLabels.length;
+            for (let i = 0; i < timePoints; i++) {
+                const x = padding.left + (chartWidth / (timePoints - 1)) * i;
+                ctx.beginPath();
+                ctx.moveTo(x, padding.top);
+                ctx.lineTo(x, height - padding.bottom);
+                ctx.stroke();
+            }
+            
+            // Draw X-axis labels (thời gian)
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#666';
+            timeLabels.forEach((label, index) => {
+                const x = padding.left + (chartWidth / (timePoints - 1)) * index;
+                ctx.fillText(label, x, height - padding.bottom + 20);
+            });
+            
+            // Chỉ vẽ line chart cho trạm được chọn
+            const stationColors = {
+                's1': '#4fc3f7',
+                's2': '#66bb6a',
+                's3': '#ffa726',
+                's4': '#ef5350',
+                's5': '#ab47bc',
+                's6': '#26a69a'
+            };
+            
+            const data = selectedData;
+            const color = stationColors[selectedStationId];
+            
+            // Draw line
+            ctx.beginPath();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 3;
+            
+            data.forEach((value, index) => {
+                const x = padding.left + (chartWidth / (timePoints - 1)) * index;
+                const y = padding.top + chartHeight - ((value - minValue) / valueRange) * chartHeight;
+                
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+            
+            ctx.stroke();
+            
+            // Draw data points
+            data.forEach((value, index) => {
+                const x = padding.left + (chartWidth / (timePoints - 1)) * index;
+                const y = padding.top + chartHeight - ((value - minValue) / valueRange) * chartHeight;
+                
+                // Draw circle
+                ctx.beginPath();
+                ctx.fillStyle = color;
+                ctx.arc(x, y, 5, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Draw white border
+                ctx.beginPath();
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.arc(x, y, 5, 0, Math.PI * 2);
+                ctx.stroke();
+            });
+            
+            // Draw Y-axis labels
+            ctx.fillStyle = '#666';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'right';
+            for (let i = 0; i <= gridLines; i++) {
+                const value = maxValue - (valueRange / gridLines) * i;
+                const y = padding.top + (chartHeight / gridLines) * i;
+                ctx.fillText(Math.round(value), padding.left - 10, y + 4);
+            }
+        }
+
+        // Hàm vẽ circular gauge chart
+        function drawGaugeChart(value) {
+            const canvas = document.getElementById('gauge-chart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const size = 200;
+            canvas.width = size;
+            canvas.height = size;
+            
+            const centerX = size / 2;
+            const centerY = size / 2;
+            const radius = 80;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, size, size);
+            
+            // Draw gauge segments
+            const segments = [
+                { start: 0, end: 50, color: '#4caf50', label: 'Tốt' },
+                { start: 50, end: 100, color: '#ffeb3b', label: 'Trung bình' },
+                { start: 100, end: 150, color: '#ff9800', label: 'Kém' },
+                { start: 150, end: 200, color: '#f44336', label: 'Xấu' },
+                { start: 200, end: 300, color: '#9c27b0', label: 'Rất xấu' },
+                { start: 300, end: 500, color: '#7b1fa2', label: 'Nguy hại' }
+            ];
+            
+            const maxValue = 500;
+            const startAngle = Math.PI;
+            const endAngle = 0;
+            const totalAngle = Math.PI;
+            
+            segments.forEach(segment => {
+                const startPercent = segment.start / maxValue;
+                const endPercent = segment.end / maxValue;
+                const segmentStartAngle = startAngle + (totalAngle * startPercent);
+                const segmentEndAngle = startAngle + (totalAngle * endPercent);
+                
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, segmentStartAngle, segmentEndAngle);
+                ctx.lineWidth = 20;
+                ctx.strokeStyle = segment.color;
+                ctx.stroke();
+            });
+            
+            // Draw needle
+            const valuePercent = Math.min(value / maxValue, 1);
+            const needleAngle = startAngle + (totalAngle * valuePercent);
+            const needleLength = radius - 10;
+            
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(
+                centerX + Math.cos(needleAngle) * needleLength,
+                centerY + Math.sin(needleAngle) * needleLength
+            );
+            ctx.strokeStyle = '#131e29';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            
+            // Draw center circle
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 8, 0, Math.PI * 2);
+            ctx.fillStyle = '#131e29';
+            ctx.fill();
+        }
+
+        // Hàm vẽ comparison bar chart
+        function drawComparisonChart(stationId) {
+            const canvas = document.getElementById('comparison-chart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width = canvas.offsetWidth;
+            const height = canvas.height = 200;
+            
+            ctx.clearRect(0, 0, width, height);
+            
+            const padding = { top: 40, right: 40, bottom: 60, left: 60 };
+            const chartWidth = width - padding.left - padding.right;
+            const chartHeight = height - padding.top - padding.bottom;
+            
+            // Data
+            const whoGuideline = 15;
+            const stationValue = calculateAverage(stationPM25Data[stationId]);
+            const hcmcAverage = 35;
+            
+            const labels = ['0', 'WHO', `Trạm ${stationId.toUpperCase()}`, 'TP.HCM'];
+            const values = [0, whoGuideline, stationValue, hcmcAverage];
+            const maxValue = Math.max(...values) + 10;
+            
+            // Draw grid
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 1;
+            for (let i = 0; i <= 5; i++) {
+                const y = padding.top + (chartHeight / 5) * i;
+                ctx.beginPath();
+                ctx.moveTo(padding.left, y);
+                ctx.lineTo(width - padding.right, y);
+                ctx.stroke();
+            }
+            
+            // Draw Y-axis labels
+            ctx.fillStyle = '#666';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'right';
+            for (let i = 0; i <= 5; i++) {
+                const value = maxValue - (maxValue / 5) * i;
+                const y = padding.top + (chartHeight / 5) * i;
+                ctx.fillText(Math.round(value), padding.left - 10, y + 4);
+            }
+            
+            // Draw bars
+            const barWidth = chartWidth / labels.length;
+            labels.forEach((label, index) => {
+                if (index === 0) return; // Skip first bar (0)
+                
+                const value = values[index];
+                const barHeight = (value / maxValue) * chartHeight;
+                const x = padding.left + index * barWidth + barWidth * 0.2;
+                const y = padding.top + chartHeight - barHeight;
+                const w = barWidth * 0.6;
+                
+                ctx.fillStyle = '#9e9e9e';
+                ctx.fillRect(x, y, w, barHeight);
+                
+                // Label
+                ctx.fillStyle = '#666';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(label, x + w/2, height - padding.bottom + 20);
+            });
+            
+            // Y-axis label
+            ctx.save();
+            ctx.translate(padding.left - 30, padding.top + chartHeight / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillStyle = '#666';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('µg/m³', 0, 0);
+            ctx.restore();
+        }
+
+        // Khởi tạo dropdown cho trạm
+        let currentStation = 's1';
+        const stationDropdown = new Dropdown('station-dropdown', {
+            items: [
+                { value: 's1', text: 'S1 - Giao thông' },
+                { value: 's2', text: 'S2 - Khu dân cư' },
+                { value: 's3', text: 'S3 - Giao thông' },
+                { value: 's4', text: 'S4 - Khu công nghiệp' },
+                { value: 's5', text: 'S5 - Giao thông' },
+                { value: 's6', text: 'S6 - Khu dân cư' }
+            ],
+            defaultItem: 's1',
+            onSelect: function(value, text) {
+                console.log('Đã chọn trạm:', value, text);
+                currentStation = value;
+                // Cập nhật giá trị trung bình và status badge
+                const data = stationPM25Data[value];
+                const avgValue = calculateAverage(data);
+                document.querySelector('.section-subtitle').textContent = `Trung bình ~ ${avgValue} µg/m³`;
+                
+                // Cập nhật status badge (cả 2 badge)
+                const statusBadges = document.querySelectorAll('.status-badge');
+                statusBadges.forEach(badge => {
+                    badge.className = 'status-badge';
+                    if (avgValue > 50) {
+                        badge.classList.add('status-bad');
+                        badge.textContent = 'Xấu';
+                    } else if (avgValue > 35) {
+                        badge.classList.add('status-moderate');
+                        badge.textContent = 'Trung bình';
+                    } else {
+                        badge.classList.add('status-good');
+                        badge.textContent = 'Tốt';
+                    }
+                });
+                
+                // Cập nhật tên trạm trong comparison chart
+                document.getElementById('station-name-display').textContent = value.toUpperCase();
+                
+                // Cập nhật gauge value
+                document.getElementById('gauge-value').textContent = Math.round(avgValue);
+                
+                // Vẽ lại tất cả các chart
+                drawChart(value);
+                drawGaugeChart(avgValue);
+                drawComparisonChart(value);
+            }
+        });
+
+        // Vẽ charts ban đầu
+        const initialAvg = calculateAverage(stationPM25Data['s1']);
+        document.getElementById('gauge-value').textContent = Math.round(initialAvg);
+        drawChart('s1');
+        drawGaugeChart(initialAvg);
+        drawComparisonChart('s1');
+        
+        // Redraw chart on window resize
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                const avg = calculateAverage(stationPM25Data[currentStation]);
+                document.getElementById('gauge-value').textContent = Math.round(avg);
+                drawChart(currentStation);
+                drawGaugeChart(avg);
+                drawComparisonChart(currentStation);
+            }, 250);
+        });
+    });
+</script>
 </body>
 </html>

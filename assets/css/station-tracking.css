@@ -1,0 +1,374 @@
+/* Station Tracking Page Styles */
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.station-tracking-page {
+    position: relative;
+    width: 100vw;
+    min-height: 100vh;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)), url("../img/bg.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    overflow-x: hidden;
+    overflow-y: auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Main Content Area */
+.main-content {
+    margin-left: 291px;
+    padding: 48px 40px;
+    position: relative;
+    min-height: 100vh;
+}
+
+/* Page Header */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 40px;
+}
+
+.page-title {
+    font-family: "72-Semibold", Helvetica;
+    font-size: 36px;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0;
+    letter-spacing: 0;
+    line-height: 1.2;
+}
+
+.header-info {
+    text-align: right;
+}
+
+.location-info {
+    font-size: 14px;
+    color: #ffffff;
+    margin: 0 0 4px 0;
+}
+
+.who-guideline {
+    font-size: 12px;
+    color: #ffffff;
+    margin: 0;
+}
+
+/* Two Column Layout */
+.two-column-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+/* PM2.5 Station Section */
+.pm25-station-section {
+    background-color: #5b738b33;
+    border-radius: 30px;
+    border: 1px solid #b0bec5e6;
+    padding: 24px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.pm25-station-section .graph-container {
+    margin-top: 32px;
+    width: 100%;
+    height: 400px;
+    position: relative;
+}
+
+.chart-title {
+    font-family: "72-Semibold", Helvetica;
+    font-size: 18px;
+    font-weight: 600;
+    color: #131e29;
+    margin: 0 0 16px 0;
+}
+
+.section-header {
+    margin-bottom: 20px;
+}
+
+.section-title {
+    font-family: "72-Semibold", Helvetica;
+    font-size: 24px;
+    font-weight: 600;
+    color: #131e29;
+    margin: 0 0 8px 0;
+}
+
+.section-subtitle {
+    font-size: 16px;
+    color: #666;
+    margin: 0;
+}
+
+.station-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* Status Badge */
+.status-badge {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.status-bad {
+    background-color: #f44336;
+}
+
+.status-moderate {
+    background-color: #ff9800;
+}
+
+.status-good {
+    background-color: #4caf50;
+}
+
+/* Station Info Section */
+.station-info-section {
+    background-color: #5b738b33;
+    border-radius: 30px;
+    border: 1px solid #b0bec5e6;
+    padding: 24px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    position: relative;
+}
+
+.station-info-section .section-header {
+    position: relative;
+    margin-bottom: 24px;
+}
+
+/* Gauge Chart */
+.gauge-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 24px 0;
+    height: 220px;
+}
+
+#gauge-chart {
+    display: block;
+}
+
+.gauge-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: "72-Semibold", Helvetica;
+    font-size: 36px;
+    font-weight: 700;
+    color: #131e29;
+    margin-top: -10px;
+}
+
+.gauge-unit {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+    color: #666;
+    margin-top: 20px;
+}
+
+/* Station Info List */
+.station-info-list {
+    list-style: none;
+    padding: 0;
+    margin: 24px 0;
+}
+
+.station-info-list li {
+    padding: 8px 0;
+    padding-left: 20px;
+    position: relative;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.6;
+}
+
+.station-info-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #131e29;
+    font-weight: bold;
+}
+
+/* Comparison Chart */
+.comparison-chart-container {
+    margin-top: 24px;
+}
+
+.comparison-chart-title {
+    font-family: "72-Semibold", Helvetica;
+    font-size: 16px;
+    font-weight: 600;
+    color: #131e29;
+    margin: 0 0 16px 0;
+}
+
+#comparison-chart {
+    width: 100%;
+    height: 200px;
+    display: block;
+}
+
+/* Chart Styles */
+#pm25-chart {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Dropdown customization for station */
+#station-dropdown .dropdown-button {
+    justify-content: space-between !important;
+}
+
+#station-dropdown .dropdown-button-text {
+    text-align: left !important;
+    font-weight: 400 !important;
+    flex: 1;
+}
+
+/* AQI Scale Section */
+.aqi-scale-section {
+    background-color: #5b738b33;
+    border-radius: 30px;
+    border: 1px solid #b0bec5e6;
+    padding: 24px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    margin-bottom: 40px;
+}
+
+.aqi-scale-section .section-title {
+    margin-bottom: 20px;
+}
+
+.aqi-gradient-bar {
+    display: flex;
+    width: 100%;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.aqi-segment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 600;
+    text-align: center;
+    padding: 8px 4px;
+}
+
+.aqi-label {
+    font-size: 12px;
+    margin-bottom: 4px;
+}
+
+.aqi-range {
+    font-size: 11px;
+    opacity: 0.9;
+}
+
+.aqi-good {
+    background-color: #4caf50;
+}
+
+.aqi-moderate {
+    background-color: #ffeb3b;
+    color: #333;
+}
+
+.aqi-poor {
+    background-color: #ff9800;
+}
+
+.aqi-bad {
+    background-color: #f44336;
+}
+
+.aqi-very-bad {
+    background-color: #9c27b0;
+}
+
+.aqi-hazardous {
+    background-color: #7b1fa2;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .main-content {
+        margin-left: 267px;
+        padding: 32px 24px;
+    }
+    
+    .two-column-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+        padding: 24px 16px;
+    }
+    
+    .page-header {
+        flex-direction: column;
+        gap: 16px;
+    }
+    
+    .header-info {
+        text-align: left;
+    }
+    
+    .station-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    #station-dropdown {
+        width: 100% !important;
+    }
+    
+    .two-column-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .aqi-gradient-bar {
+        flex-direction: column;
+        height: auto;
+    }
+    
+    .aqi-segment {
+        padding: 12px;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
