@@ -38,22 +38,6 @@
     font-weight: 500;
 }
 
-.dropdown {
-    padding: 10px 15px;
-    border: 2px solid #e0e0e0;
-    border-radius: 10px;
-    font-size: 14px;
-    background: white;
-    color: #131E29;
-    cursor: pointer;
-    transition: border-color 0.3s ease;
-}
-
-.dropdown:focus {
-    outline: none;
-    border-color: #2196F3;
-}
-
 .btn-create {
     padding: 10px 25px;
     background: #131E29;

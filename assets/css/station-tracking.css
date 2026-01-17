@@ -242,17 +242,6 @@ html, body {
     display: block;
 }
 
-/* Dropdown customization for station */
-#station-dropdown .dropdown-button {
-    justify-content: space-between !important;
-}
-
-#station-dropdown .dropdown-button-text {
-    text-align: left !important;
-    font-weight: 400 !important;
-    flex: 1;
-}
-
 /* AQI Scale Section */
 .aqi-scale-section {
     background-color: #5b738b33;

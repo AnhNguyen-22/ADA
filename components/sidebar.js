@@ -57,9 +57,7 @@
             const frame = document.querySelector('.frame');
             if (frame) {
                 frame.style.left = isCollapsed ? '118px' : '315px';
-                frame.style.width = '1101px';
-                frame.style.height = '1531px';
-                frame.style.transition = 'left 0.3s ease, width 0.3s ease';
+                frame.style.transition = 'left 0.3s ease';
             }
             
             // Cập nhật main-content để tự động co giãn
