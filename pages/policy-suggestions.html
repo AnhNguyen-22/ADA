@@ -10,47 +10,25 @@
     <link rel="stylesheet" href="../assets/css/main.css">
 </head>
 <body>
-    <!-- Background với bầu trời và mây -->
-
-
-
+    <!-- Background -->
+    <div class="background" aria-hidden="true">
+        <div class="background-overlay"></div>
+        <img src="../assets/img/background.jpg" alt="" class="background-image">
+    </div>
     <!-- Khu vực nội dung chính -->
     <main class="main-content">
-        <!-- Header -->
-        <header class="content-header">
-            <h1 class="main-title">Gợi ý chính sách</h1>
-            <div class="header-info">
-                <div class="info-item">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                        <circle cx="12" cy="7" r="4"/>
-                    </svg>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                        <circle cx="12" cy="10" r="3"/>
-                    </svg>
-                    <span>Thành phố Hồ Chí Minh</span>
-                </div>
-                <div class="info-item">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <line x1="12" y1="2" x2="12" y2="6"/>
-                        <line x1="12" y1="18" x2="12" y2="22"/>
-                        <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/>
-                        <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/>
-                        <line x1="2" y1="12" x2="6" y2="12"/>
-                        <line x1="18" y1="12" x2="22" y2="12"/>
-                        <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/>
-                        <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/>
-                    </svg>
-                    <span>WHO guideline: PM2.5 24h = 15 µg/m²</span>
-                </div>
-            </div>
-        </header>
+       <!-- Header -->
+       <header class="content-header">
+        <h1 class="main-title">GỢI Ý CHÍNH SÁCH</h1>
+        <div class="header-info">
+            <span class="location-text">Thành phố Hồ Chí Minh</span>
+            <span class="guideline-text">WHO guideline: PM2.5 24h = 15 µg/m³</span>
+        </div>
+    </header>
 
         <!-- Panel SHAP Plot -->
-        <section class="panel shap-plot-panel">
-            <h2 class="panel-title">SHAP Plot</h2>
+        <section class="card">
+            <h2 class="card-title">SHAP Plot</h2>
             <p class="panel-subtitle">[giải thích chức năng biểu đồ]</p>
             <div class="chart-container">
                 <div class="chart-placeholder">
@@ -61,8 +39,8 @@
         </section>
 
         <!-- Panel Ý nghĩa SHAP -->
-        <section class="panel shap-meaning-panel">
-            <h2 class="panel-title">Ý nghĩa SHAP</h2>
+        <section class="card">
+            <h2 class="card-title">Ý nghĩa SHAP</h2>
             <p class="meaning-text">
                 SHAP cho biết mỗi biến "đẩy" dự báo PM2.5 tăng/giảm bao nhiêu ở từng thời điểm. 
                 Giá trị tuyệt đối lớn - ảnh hưởng mạnh hơn trong mô hình. 
@@ -71,8 +49,8 @@
         </section>
 
         <!-- Panel Các gợi ý chính sách -->
-        <section class="panel policy-suggestions-panel">
-            <h2 class="panel-title">Các gợi ý chính sách</h2>
+        <section class="card">
+            <h2 class="card-title">Các gợi ý chính sách</h2>
             <div class="suggestions-list">
                 <div class="suggestion-item">
                     Ưu tiên can thiệp khu vực giao thông giờ cao điểm nếu NO2/CO nổi bật trong SHAP
@@ -89,7 +67,66 @@
             </div>
         </section>
     </main>
-
+<!-- Sidebar Component -->
+<aside class="side-ql-unchoose" id="sidebar">
+    <!-- Logo ở trên cùng -->
+    <img class="image-3 logo-large" src="../assets/img/logo_lon.png" alt="AirSense HCMC Logo" id="sidebar-logo"/>
+    <img class="image-3 logo-small" src="../assets/img/logo_nho.png" alt="AirSense HCMC Logo Small" id="sidebar-logo-small" style="display: none;"/>
+    
+    <!-- Toggle Button -->
+    <img class="show-left-side-panel" id="sidebarToggle" src="https://c.animaapp.com/aROkQ2yh/img/show-left-side-panel@2x.png" alt="Toggle sidebar" style="cursor: pointer;"/>
+    
+    <!-- Mode Switcher -->
+    <div class="group-12">
+        <div class="rectangle-26"></div>
+        <div class="rectangle-27"></div>
+        <div class="text-wrapper-76" data-mode="public">Công khai</div>
+        <div class="text-wrapper-77" data-mode="management">Quản lý</div>
+    </div>
+    
+    <!-- Active Menu Item Background -->
+    <div class="rectangle-28"></div>
+    
+    <!-- Navigation Icons -->
+    <a href="overview.html" class="nav-link" data-page="overview">
+        <img class="analyze" src="https://c.animaapp.com/aROkQ2yh/img/analyze@2x.png" alt="Tổng quan"/>
+        <div class="text-wrapper-78">Tổng quan</div>
+    </a>
+    
+    <a href="station-tracking.html" class="nav-link" data-page="station-tracking">
+        <img class="place-marker-2" src="https://c.animaapp.com/aROkQ2yh/img/place-marker-1@2x.png" alt="Theo dõi theo trạm"/>
+        <div class="theo-d-i-tr-m">Theo dõi theo trạm</div>
+    </a>
+    
+    <a href="recommendations.html" class="nav-link" data-page="recommendations">
+        <img class="good-quality" src="https://c.animaapp.com/aROkQ2yh/img/good-quality@2x.png" alt="Khuyến cáo"/>
+        <div class="text-wrapper-79">Khuyến cáo</div>
+    </a>
+    
+    <a href="dataset.html" class="nav-link active" data-page="dataset">
+        <img class="database" src="https://c.animaapp.com/aROkQ2yh/img/database@2x.png" alt="Dataset"/>
+        <div class="text-wrapper-80">Dataset</div>
+    </a>
+    
+    <a href="model-evaluation.html" class="nav-link" data-page="model-evaluation">
+        <img class="intelligence" src="https://c.animaapp.com/aROkQ2yh/img/intelligence@2x.png" alt="Đánh giá mô hình"/>
+        <div class="text-wrapper-81">Đánh giá mô hình</div>
+    </a>
+    
+    <a href="policy-suggestions.html" class="nav-link" data-page="policy-suggestions">
+        <img class="light-on" src="https://c.animaapp.com/aROkQ2yh/img/light-on@2x.png" alt="Gợi ý chính sách"/>
+        <div class="text-wrapper-82">Gợi ý chính sách</div>
+    </a>
+    
+    <!-- User Profile Section -->
+    <div class="group-11">
+        <div class="rectangle-25"></div>
+        <img class="image-2" src="../assets/img/avatar.jpeg" alt="Avatar"/>
+        <div class="text-wrapper-74">Quản lý</div>
+        <p class="text-wrapper-75">Bạn đang ở trang quản lý</p>
+        <img class="logout-rounded" src="https://c.animaapp.com/aROkQ2yh/img/logout-rounded@2x.png" alt="Logout" style="cursor: pointer;"/>
+    </div>
+</aside>
     <script src="../assets/js/policy-suggestions.js"></script>
     <script src="../components/sidebar.js"></script>
     <script src="../components/dropdown.js"></script>

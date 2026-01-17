@@ -1,5 +1,10 @@
 
 
+/* Card spacing */
+.card {
+    margin-bottom: 20px;
+}
+
 /* Panels */
 .panel {
     background: rgba(74, 144, 226, 0.3);
@@ -68,9 +73,16 @@
 }
 
 .meaning-text {
-    font-size: 16px;
-    line-height: 1.6;
-    color: white;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+    color: #131E29;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Policy Suggestions Panel */
@@ -88,11 +100,12 @@
 }
 
 .suggestion-item {
-    background: rgba(74, 144, 226, 0.4);
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 12px;
     padding: 20px;
-    color: white;
-    font-size: 15px;
+    color: #131E29;
+    font-size: 20px;
+    font-weight: 600;
     line-height: 1.5;
     cursor: pointer;
     transition: all 0.3s ease;

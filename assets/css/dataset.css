@@ -40,7 +40,7 @@
     font-family: '72', sans-serif;
     font-weight: 700;
     font-size: clamp(24px, 3.5vw, 36px);
-    color: var(--primary-blue);
+    color: #131E29;
     margin: 0;
 }
 
@@ -48,7 +48,7 @@
     font-family: '72', sans-serif;
     font-weight: 300;
     font-size: clamp(11px, 1.2vw, 13px);
-    color: var(--text-gray);
+    color: white;
     margin-top: clamp(4px, 0.5vw, 6px);
 }
 
@@ -80,7 +80,7 @@
     font-family: '72', sans-serif;
     font-weight: 600;
     font-size: clamp(11px, 1.2vw, 13px);
-    color: var(--primary-blue);
+    color: white;
     text-align: center;
     padding: clamp(8px, 1vw, 10px);
     min-width: clamp(60px, 8vw, 80px);
@@ -97,7 +97,7 @@
     font-family: '72', sans-serif;
     font-weight: 600;
     font-size: clamp(11px, 1.2vw, 13px);
-    color: var(--primary-blue);
+    color: white;
     padding: clamp(8px, 1vw, 10px);
     min-width: clamp(60px, 8vw, 80px);
     text-align: right;
@@ -154,7 +154,7 @@
     font-family: '72', sans-serif;
     font-weight: 600;
     font-size: clamp(12px, 1.4vw, 14px);
-    color: var(--primary-blue);
+    color: white;
 }
 
 .control-select {
@@ -198,13 +198,12 @@
 .variable-table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 15px;
+    background: white;
 }
 
 .variable-table thead {
-    position: sticky;
-    top: 0;
-    background: var(--card-bg);
-    z-index: 10;
+    background: rgba(225, 245, 254, 0.5);
 }
 
 .variable-table th {
@@ -215,16 +214,13 @@
     padding: clamp(12px, 1.5vw, 16px);
     text-align: left;
     border-bottom: 2px solid var(--border-color);
-    background: var(--card-bg);
 }
 
 .variable-table td {
-    font-family: '72', sans-serif;
-    font-weight: 400;
-    font-size: clamp(11px, 1.3vw, 13px);
-    color: var(--text-dark);
-    padding: clamp(10px, 1.3vw, 14px) clamp(12px, 1.5vw, 16px);
-    border-bottom: 1px solid rgba(176, 190, 197, 0.3);
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+    color: #131E29;
+    background: white;
 }
 
 .variable-table tbody tr:hover {

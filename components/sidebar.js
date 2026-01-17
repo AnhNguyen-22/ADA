@@ -55,12 +55,19 @@
         
         updateMainContentMargin(isCollapsed) {
             const frame = document.querySelector('.frame');
-            if (!frame) return;
+            if (frame) {
+                frame.style.left = isCollapsed ? '118px' : '315px';
+                frame.style.width = '1101px';
+                frame.style.height = '1531px';
+                frame.style.transition = 'left 0.3s ease, width 0.3s ease';
+            }
             
-            frame.style.left = isCollapsed ? '118px' : '315px';
-            frame.style.width = '1101px';
-            frame.style.height = '1531px';
-            frame.style.transition = 'left 0.3s ease, width 0.3s ease';
+            // Cập nhật main-content để tự động co giãn
+            const mainContent = document.querySelector('.main-content');
+            if (mainContent) {
+                mainContent.style.marginLeft = isCollapsed ? '118px' : '315px';
+                mainContent.style.transition = 'margin-left 0.3s ease';
+            }
         }
 
         initializeModeSwitcher() {
@@ -193,9 +200,14 @@
         }
 
         restoreState() {
+            const savedCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
             if (this.sidebar) {
-                this.sidebar.classList.remove('collapsed');
-                this.updateMainContentMargin(false);
+                if (savedCollapsed) {
+                    this.sidebar.classList.add('collapsed');
+                } else {
+                    this.sidebar.classList.remove('collapsed');
+                }
+                this.updateMainContentMargin(savedCollapsed);
             }
             
             const savedMode = localStorage.getItem('currentMode') || 'management';

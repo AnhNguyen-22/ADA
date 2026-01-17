@@ -10,29 +10,27 @@
     <link rel="stylesheet" href="../assets/css/main.css">
 </head>
 <body>
-
+<!-- Background -->
+<div class="background" aria-hidden="true">
+    <div class="background-overlay"></div>
+    <img src="../assets/img/background.jpg" alt="" class="background-image">
+</div>
     <!-- Main Content -->
     <main class="main-content">
-        <!-- Header Info -->
-        <header class="header-info">
-            <div class="user-info">
-                <i class="fas fa-user"></i>
-                <span>Thành phố Hồ Chí Minh</span>
-            </div>
-            <div class="guideline-info">
-                <i class="fas fa-info-circle"></i>
-                <span>WHO guideline: PM2.5 24h = 15 µg/m²</span>
+        <!-- Header -->
+        <header class="content-header">
+            <h1 class="main-title">ĐÁNH GIÁ MÔ HÌNH</h1>
+            <div class="header-info">
+                <span class="location-text">Thành phố Hồ Chí Minh</span>
+                <span class="guideline-text">WHO guideline: PM2.5 24h = 15 µg/m³</span>
             </div>
         </header>
-
-        <!-- Page Title -->
-        <h1 class="page-title">ĐÁNH GIÁ MÔ HÌNH</h1>
 
         <!-- Content Grid -->
         <div class="content-grid">
             <!-- Comparison Table Section -->
             <section class="card comparison-section">
-                <h2 class="section-title">Bảng so sánh các mô hình</h2>
+                <h3 class="card-title">Bảng so sánh các mô hình</h3>
                 <div class="controls">
                     <div class="dropdown-wrapper">
                         <label for="station-select">Chọn trạm:</label>
@@ -81,7 +79,7 @@
 
             <!-- Best Model Section -->
             <section class="card best-model-section">
-                <h2 class="section-title">Mô hình tốt nhất</h2>
+                <h3 class="card-title">Mô hình tốt nhất</h3>
                 <div class="best-model-box">
                     <h3 class="best-model-name">XGBOOST</h3>
                 </div>
@@ -90,28 +88,87 @@
 
             <!-- Chart Section -->
             <section class="card chart-section">
-                <h2 class="section-title">Biểu đồ so sánh mô hình</h2>
+                <h3 class="card-title">Biểu đồ so sánh mô hình</h3>
                 <p class="chart-description">Biểu đồ thể hiện RMSE/MAE của các mô hình</p>
                 <div class="chart-container">
                     <canvas id="comparison-chart"></canvas>
                 </div>
-                <p class="chart-note">(Biểu đồ cột so sánh RMSE/MAE của các model) minh hoạt bằng màu bên dưới</p>
+
             </section>
 
             <!-- Area Difference Section -->
             <section class="card area-difference-section">
-                <h2 class="section-title">Sự khác biệt theo khu vực:</h2>
+                <h3 class="card-title">Sự khác biệt theo khu vực:</h3>
                 <p class="area-difference-text">Traffic thường biến động theo giờ → khó hơn Residential.</p>
             </section>
 
             <!-- Reason Section -->
             <section class="card reason-section">
-                <h2 class="section-title">Lý do chọn mô hình:</h2>
+                <h3 class="card-title">Lý do chọn mô hình:</h3>
                 <p class="reason-text">ưu tiên R² cao và RMSE/MAE thấp, đồng thời ổn định khi áp dụng đa trạm</p>
             </section>
         </div>
     </main>
-
+<!-- Sidebar Component -->
+<aside class="side-ql-unchoose" id="sidebar">
+    <!-- Logo ở trên cùng -->
+    <img class="image-3 logo-large" src="../assets/img/logo_lon.png" alt="AirSense HCMC Logo" id="sidebar-logo"/>
+    <img class="image-3 logo-small" src="../assets/img/logo_nho.png" alt="AirSense HCMC Logo Small" id="sidebar-logo-small" style="display: none;"/>
+    
+    <!-- Toggle Button -->
+    <img class="show-left-side-panel" id="sidebarToggle" src="https://c.animaapp.com/aROkQ2yh/img/show-left-side-panel@2x.png" alt="Toggle sidebar" style="cursor: pointer;"/>
+    
+    <!-- Mode Switcher -->
+    <div class="group-12">
+        <div class="rectangle-26"></div>
+        <div class="rectangle-27"></div>
+        <div class="text-wrapper-76" data-mode="public">Công khai</div>
+        <div class="text-wrapper-77" data-mode="management">Quản lý</div>
+    </div>
+    
+    <!-- Active Menu Item Background -->
+    <div class="rectangle-28"></div>
+    
+    <!-- Navigation Icons -->
+    <a href="overview.html" class="nav-link" data-page="overview">
+        <img class="analyze" src="https://c.animaapp.com/aROkQ2yh/img/analyze@2x.png" alt="Tổng quan"/>
+        <div class="text-wrapper-78">Tổng quan</div>
+    </a>
+    
+    <a href="station-tracking.html" class="nav-link" data-page="station-tracking">
+        <img class="place-marker-2" src="https://c.animaapp.com/aROkQ2yh/img/place-marker-1@2x.png" alt="Theo dõi theo trạm"/>
+        <div class="theo-d-i-tr-m">Theo dõi theo trạm</div>
+    </a>
+    
+    <a href="recommendations.html" class="nav-link" data-page="recommendations">
+        <img class="good-quality" src="https://c.animaapp.com/aROkQ2yh/img/good-quality@2x.png" alt="Khuyến cáo"/>
+        <div class="text-wrapper-79">Khuyến cáo</div>
+    </a>
+    
+    <a href="dataset.html" class="nav-link active" data-page="dataset">
+        <img class="database" src="https://c.animaapp.com/aROkQ2yh/img/database@2x.png" alt="Dataset"/>
+        <div class="text-wrapper-80">Dataset</div>
+    </a>
+    
+    <a href="model-evaluation.html" class="nav-link" data-page="model-evaluation">
+        <img class="intelligence" src="https://c.animaapp.com/aROkQ2yh/img/intelligence@2x.png" alt="Đánh giá mô hình"/>
+        <div class="text-wrapper-81">Đánh giá mô hình</div>
+    </a>
+    
+    <a href="policy-suggestions.html" class="nav-link" data-page="policy-suggestions">
+        <img class="light-on" src="https://c.animaapp.com/aROkQ2yh/img/light-on@2x.png" alt="Gợi ý chính sách"/>
+        <div class="text-wrapper-82">Gợi ý chính sách</div>
+    </a>
+    
+    <!-- User Profile Section -->
+    <div class="group-11">
+        <div class="rectangle-25"></div>
+        <img class="image-2" src="../assets/img/avatar.jpeg" alt="Avatar"/>
+        <div class="text-wrapper-74">Quản lý</div>
+        <p class="text-wrapper-75">Bạn đang ở trang quản lý</p>
+        <img class="logout-rounded" src="https://c.animaapp.com/aROkQ2yh/img/logout-rounded@2x.png" alt="Logout" style="cursor: pointer;"/>
+    </div>
+</aside>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../assets/js/model-evaluation.js"></script>
     <script src="../components/sidebar.js"></script>
