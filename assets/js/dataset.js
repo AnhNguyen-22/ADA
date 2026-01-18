@@ -154,22 +154,30 @@ function populateVariableTable() {
 
 // Handle dropdown changes
 function setupDropdowns() {
-    const modeSelect = document.getElementById('modeSelect');
-    const stationSelect = document.getElementById('stationSelect');
-    
-    if (modeSelect) {
-        modeSelect.addEventListener('change', function(e) {
-            console.log('Mode changed to:', e.target.value);
+    const modeDropdown = new Dropdown('modeDropdown', {
+        items: [
+            { value: 'list', text: 'Danh sA­ch' },
+            { value: 'grid', text: 'L’ø ¯>i' }
+        ],
+        defaultItem: 'list',
+        onSelect: function(value) {
+            console.log('Mode changed to:', value);
             // Add logic for mode change if needed
-        });
-    }
-    
-    if (stationSelect) {
-        stationSelect.addEventListener('change', function(e) {
-            console.log('Station changed to:', e.target.value);
+        }
+    });
+
+    const stationDropdown = new Dropdown('stationDropdown', {
+        items: [
+            { value: 's1', text: 'S1' },
+            { value: 's2', text: 'S2' },
+            { value: 's3', text: 'S3' }
+        ],
+        defaultItem: 's1',
+        onSelect: function(value) {
+            console.log('Station changed to:', value);
             // Add logic to filter data by station if needed
-        });
-    }
+        }
+    });
 }
 
 // Initialize on page load

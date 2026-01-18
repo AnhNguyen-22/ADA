@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('comparison-chart');
     
-    if (ctx) {
+    if (ctx && typeof Chart !== 'undefined') {
         new Chart(ctx, {
             type: 'bar',
             data: {
@@ -85,14 +85,21 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Handle dropdown change
-    const stationSelect = document.getElementById('station-select');
+    const stationDropdown = new Dropdown('station-dropdown', {
+        items: [
+            { value: "s1", text: "S1 - Giao thong" },
+            { value: "s2", text: "S2 - Residential" },
+            { value: "s3", text: "S3 - Industrial" }
+        ],
+        defaultItem: "s1"
+    });
     const btnCreate = document.querySelector('.btn-create');
-    
+
     if (btnCreate) {
         btnCreate.addEventListener('click', function() {
-            const selectedStation = stationSelect.value;
-            alert(`Đang tạo báo cáo cho trạm: ${selectedStation}`);
-            // Có thể thêm logic xử lý tạo báo cáo ở đây
+            const selectedStation = stationDropdown ? stationDropdown.getText() : null;
+            const stationLabel = selectedStation || "S1 - Giao thong";
+            alert('Dang tao bao cao cho tram: ' + stationLabel);
         });
     }
 });

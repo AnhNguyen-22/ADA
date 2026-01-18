@@ -13,7 +13,7 @@
 <!-- Background -->
 <div class="background" aria-hidden="true">
     <div class="background-overlay"></div>
-    <img src="../assets/img/background.jpg" alt="" class="background-image">
+    <img src="../assets/img/background.png" alt="" class="background-image">
 </div>
     <!-- Main Content -->
     <main class="main-content">
@@ -21,8 +21,14 @@
         <header class="content-header">
             <h1 class="main-title">ĐÁNH GIÁ MÔ HÌNH</h1>
             <div class="header-info">
-                <span class="location-text">Thành phố Hồ Chí Minh</span>
-                <span class="guideline-text">WHO guideline: PM2.5 24h = 15 µg/m³</span>
+                <div class="header-meta-item">
+                    <img class="header-meta-icon" src="https://c.animaapp.com/aROkQ2yh/img/place-marker@2x.png" alt="" aria-hidden="true"/>
+                    <span class="location-text">ThA?nh ph??` H??" ChA- Minh</span>
+                </div>
+                <div class="header-meta-item">
+                    <img class="header-meta-icon" src="https://c.animaapp.com/aROkQ2yh/img/world-health-organization@2x.png" alt="" aria-hidden="true"/>
+                    <span class="guideline-text">WHO guideline: PM2.5 24h = 15 A?g/mA3</span>
+                </div>
             </div>
         </header>
 
@@ -33,12 +39,14 @@
                 <h3 class="card-title">Bảng so sánh các mô hình</h3>
                 <div class="controls">
                     <div class="dropdown-wrapper">
-                        <label for="station-select">Chọn trạm:</label>
-                        <select id="station-select" class="dropdown">
-                            <option value="S1">S1 - Giao thông</option>
-                            <option value="S2">S2 - Residential</option>
-                            <option value="S3">S3 - Industrial</option>
-                        </select>
+                        <label>Ch???n tr???m:</label>
+                        <div class="dropdown-container" id="station-dropdown">
+                            <button class="dropdown-button" type="button" aria-haspopup="true" aria-expanded="false">
+                                <span class="dropdown-button-text">S1 - Giao thong</span>
+                                <span class="dropdown-arrow">&#9662;</span>
+                            </button>
+                            <div class="dropdown-menu" role="menu"></div>
+                        </div>
                     </div>
                     <button class="btn-create">Tạo</button>
                 </div>
@@ -170,8 +178,8 @@
     </div>
 </aside>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../components/dropdown.js"></script>
     <script src="../assets/js/model-evaluation.js"></script>
     <script src="../components/sidebar.js"></script>
-    <script src="../components/dropdown.js"></script>
 </body>
 </html>

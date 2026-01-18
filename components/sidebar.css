@@ -53,6 +53,7 @@
 
 .side-ql-unchoose.collapsed .logo-small {
     display: block !important;
+    top: calc((24px + 30px + 297px) / 2 - 25px);
 }
 
 /* Toggle Button */
@@ -524,7 +525,10 @@
 }
 
 .side-ql-unchoose.collapsed .nav-link img {
-    left: 15px !important;
+    left: 50% !important;
+    transform: translateX(-50%);
+    width: 26px;
+    height: 26px;
 }
 
 .side-ql-unchoose.collapsed .group-11 {

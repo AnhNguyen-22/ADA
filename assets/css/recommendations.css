@@ -2,18 +2,22 @@
   box-sizing: border-box;
 }
 
+:root {
+  --font-family-base: "72", "Segoe UI", Arial, sans-serif;
+}
+
 .NB-c-khuyencao {
   position: relative;
   width: 100vw;
   min-height: 100vh;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url("../img/bg.jpg");
+  background-image: linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)), url("../img/background.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
   overflow-x: hidden;
   overflow-y: auto;
-  font-family: "72-Regular", "Segoe UI", Arial, sans-serif;
+  font-family: var(--font-family-base);
   color: #0f1a25;
 }
 
@@ -117,30 +121,6 @@
 
 .hour-dropdown {
   max-width: 110px;
-}
-
-.hour-dropdown .dropdown-button {
-  padding: 4px 10px;
-  border-radius: 12px;
-  background-color: #e1f5fe;
-  border: none;
-  font-size: 11px;
-  box-shadow: none;
-  color: #0f1a25;
-}
-
-.hour-dropdown .dropdown-button-text {
-  font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
-}
-
-.hour-dropdown .dropdown-arrow {
-  font-size: 8px;
-  right: 8px;
-}
-
-.hour-dropdown .dropdown-menu {
-  border-radius: 12px;
-  font-size: 11px;
 }
 
 .table {

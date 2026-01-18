@@ -6,18 +6,22 @@ html, body {
     overflow-x: hidden;
 }
 
+:root {
+    --font-family-base: "72", "Segoe UI", Arial, sans-serif;
+}
+
 .station-tracking-page {
     position: relative;
     width: 100vw;
     min-height: 100vh;
-    background-image: linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)), url("../img/bg.jpg");
+    background-image: linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)), url("../img/background.png");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
     overflow-x: hidden;
     overflow-y: auto;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family: var(--font-family-base);
 }
 
 /* Main Content Area */
@@ -47,16 +51,35 @@ html, body {
 }
 
 .header-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
     text-align: right;
 }
 
-.location-info {
-    font-size: 14px;
+.header-meta-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
     color: #ffffff;
-    margin: 0 0 4px 0;
+    white-space: nowrap;
 }
 
-.who-guideline {
+.header-meta-icon {
+    width: 14px;
+    height: 14px;
+    opacity: 0.9;
+}
+
+.location-text {
+    font-size: 14px;
+    color: #ffffff;
+    margin: 0;
+}
+
+.guideline-text {
     font-size: 12px;
     color: #ffffff;
     margin: 0;
@@ -242,17 +265,6 @@ html, body {
     display: block;
 }
 
-/* Dropdown customization for station */
-#station-dropdown .dropdown-button {
-    justify-content: space-between !important;
-}
-
-#station-dropdown .dropdown-button-text {
-    text-align: left !important;
-    font-weight: 400 !important;
-    flex: 1;
-}
-
 /* AQI Scale Section */
 .aqi-scale-section {
     background-color: #5b738b33;
@@ -346,6 +358,11 @@ html, body {
     
     .header-info {
         text-align: left;
+        align-items: flex-start;
+    }
+
+    .header-meta-item {
+        justify-content: flex-start;
     }
     
     .station-controls {

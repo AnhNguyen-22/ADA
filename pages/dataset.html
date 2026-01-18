@@ -13,7 +13,8 @@
     <div class="dashboard-container">
         <!-- Background -->
         <div class="background" aria-hidden="true">
-            <img src="../assets/img/background.jpg" alt="" class="background-image">
+            <div class="background-overlay"></div>
+            <img src="../assets/img/background.png" alt="" class="background-image">
         </div>
 
         <!-- Main Content -->
@@ -22,8 +23,14 @@
             <header class="content-header">
                 <h1 class="main-title">DỮ LIỆU</h1>
                 <div class="header-info">
-                    <span class="location-text">Thành phố Hồ Chí Minh</span>
-                    <span class="guideline-text">WHO guideline: PM2.5 24h = 15 µg/m³</span>
+                    <div class="header-meta-item">
+                        <img class="header-meta-icon" src="https://c.animaapp.com/aROkQ2yh/img/place-marker@2x.png" alt="" aria-hidden="true"/>
+                        <span class="location-text">ThA?nh ph??` H??" ChA- Minh</span>
+                    </div>
+                    <div class="header-meta-item">
+                        <img class="header-meta-icon" src="https://c.animaapp.com/aROkQ2yh/img/world-health-organization@2x.png" alt="" aria-hidden="true"/>
+                        <span class="guideline-text">WHO guideline: PM2.5 24h = 15 A?g/mA3</span>
+                    </div>
                 </div>
             </header>
 
@@ -56,19 +63,24 @@
                     <h3 class="card-title">Danh sách biến</h3>
                     <div class="variable-controls">
                         <div class="control-group">
-                            <label for="modeSelect" class="control-label">Chế độ</label>
-                            <select id="modeSelect" class="control-select">
-                                <option value="list">Danh sách</option>
-                                <option value="grid">Lưới</option>
-                            </select>
+                            <label for="modeDropdown" class="control-label">Ch??? ?`??T</label>
+                            <div class="dropdown-container" id="modeDropdown">
+                                <button class="dropdown-button" type="button" aria-haspopup="true" aria-expanded="false">
+                                    <span class="dropdown-button-text">Danh sA?ch</span>
+                                    <span class="dropdown-arrow">&#9662;</span>
+                                </button>
+                                <div class="dropdown-menu" role="menu"></div>
+                            </div>
                         </div>
                         <div class="control-group">
-                            <label for="stationSelect" class="control-label">Trạm</label>
-                            <select id="stationSelect" class="control-select">
-                                <option value="S1">S1</option>
-                                <option value="S2">S2</option>
-                                <option value="S3">S3</option>
-                            </select>
+                            <label for="stationDropdown" class="control-label">Tr???m</label>
+                            <div class="dropdown-container" id="stationDropdown">
+                                <button class="dropdown-button" type="button" aria-haspopup="true" aria-expanded="false">
+                                    <span class="dropdown-button-text">S1</span>
+                                    <span class="dropdown-arrow">&#9662;</span>
+                                </button>
+                                <div class="dropdown-menu" role="menu"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="variable-table-container">
@@ -151,8 +163,8 @@
         </aside>
     </div>
 
-    <script src="../assets/js/dataset.js"></script>
     <script src="../components/sidebar.js"></script>
     <script src="../components/dropdown.js"></script>
+    <script src="../assets/js/dataset.js"></script>
 </body>
 </html>
