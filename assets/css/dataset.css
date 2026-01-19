@@ -40,7 +40,7 @@
     font-family: '72', sans-serif;
     font-weight: 700;
     font-size: clamp(24px, 3.5vw, 36px);
-    color: #131E29;
+    color: var(--color-text-dark);
     margin: 0;
 }
 
@@ -175,18 +175,18 @@
     width: 100%;
     border-collapse: collapse;
     margin-top: 15px;
-    background: white;
+    background: var(--color-surface);
 }
 
 .variable-table thead {
-    background: rgba(225, 245, 254, 0.5);
+    background: var(--color-table-head-bg);
 }
 
 .variable-table th {
     font-family: '72', sans-serif;
     font-weight: 600;
     font-size: clamp(12px, 1.4vw, 14px);
-    color: var(--primary-blue);
+    color: var(--color-text-dark);
     padding: clamp(12px, 1.5vw, 16px);
     text-align: left;
     border-bottom: 2px solid var(--border-color);
@@ -195,8 +195,8 @@
 .variable-table td {
     padding: 12px;
     border-bottom: 1px solid #e0e0e0;
-    color: #131E29;
-    background: white;
+    color: var(--color-text-dark);
+    background: var(--color-surface);
 }
 
 .variable-table tbody tr:hover {

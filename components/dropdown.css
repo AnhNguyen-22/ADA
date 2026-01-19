@@ -12,8 +12,8 @@
 .dropdown-button {
     width: 100%;
     padding: 12px 16px;
-    background-color: rgba(79, 195, 247, 0.15);
-    border: 1px solid rgba(79, 195, 247, 0.3);
+    background-color: #e1f5fe;
+    border: none;
     border-radius: 8px;
     cursor: pointer;
     display: flex;
@@ -23,23 +23,20 @@
     font-size: 14px;
     color: #131e29;
     transition: all 0.3s ease;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
     outline: none;
 }
 
 .dropdown-button:hover {
-    background-color: rgba(79, 195, 247, 0.25);
-    border-color: rgba(79, 195, 247, 0.5);
+    background-color: #d4eefb;
 }
 
 .dropdown-button:focus {
-    border-color: rgba(79, 195, 247, 0.7);
-    box-shadow: 0px 2px 8px rgba(79, 195, 247, 0.3);
+    box-shadow: 0 0 0 2px rgba(79, 195, 247, 0.4);
 }
 
 .dropdown-button[aria-expanded="true"] {
-    background-color: rgba(79, 195, 247, 0.2);
-    border-color: rgba(79, 195, 247, 0.5);
+    background-color: #d9f0fb;
 }
 
 .dropdown-button-text {
@@ -52,7 +49,7 @@
 .dropdown-arrow {
     position: absolute;
     right: 12px;
-    font-size: 12px !important;
+    font-size: 16px !important;
     color: #131e29 !important;
     transition: transform 0.3s ease;
 }

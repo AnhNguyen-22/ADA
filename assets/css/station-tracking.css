@@ -14,7 +14,7 @@ html, body {
     position: relative;
     width: 100vw;
     min-height: 100vh;
-    background-image: linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)), url("../img/background.png");
+    background-image: var(--page-bg-overlay), var(--page-bg-image);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -25,11 +25,15 @@ html, body {
 }
 
 /* Main Content Area */
-.main-content {
-    margin-left: 291px;
-    padding: 48px 40px;
+.station-tracking-page .main-content {
+    margin: 48px 24px 24px 315px;
+    padding: 40px;
     position: relative;
-    min-height: 100vh;
+    min-height: var(--frame-min-height);
+    border-radius: 15px;
+    border: 1px solid var(--color-panel-border);
+    box-shadow: var(--shadow-frame);
+    background: var(--color-frame-bg);
 }
 
 /* Page Header */
@@ -91,15 +95,19 @@ html, body {
     grid-template-columns: 1fr 1fr;
     gap: 24px;
     margin-bottom: 40px;
+    align-items: stretch;
 }
 
 /* PM2.5 Station Section */
 .pm25-station-section {
-    background-color: #5b738b33;
+    background-color: var(--color-panel-bg);
     border-radius: 30px;
-    border: 1px solid #b0bec5e6;
+    border: 1px solid var(--color-panel-border);
     padding: 24px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--shadow-card);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .pm25-station-section .graph-container {
@@ -165,12 +173,15 @@ html, body {
 
 /* Station Info Section */
 .station-info-section {
-    background-color: #5b738b33;
+    background-color: var(--color-panel-bg);
     border-radius: 30px;
-    border: 1px solid #b0bec5e6;
+    border: 1px solid var(--color-panel-border);
     padding: 24px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--shadow-card);
     position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .station-info-section .section-header {
@@ -267,11 +278,11 @@ html, body {
 
 /* AQI Scale Section */
 .aqi-scale-section {
-    background-color: #5b738b33;
+    background-color: var(--color-panel-bg);
     border-radius: 30px;
-    border: 1px solid #b0bec5e6;
+    border: 1px solid var(--color-panel-border);
     padding: 24px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--shadow-card);
     margin-bottom: 40px;
 }
 
@@ -335,8 +346,8 @@ html, body {
 
 /* Responsive */
 @media (max-width: 1200px) {
-    .main-content {
-        margin-left: 267px;
+    .station-tracking-page .main-content {
+        margin: 40px 20px 20px 267px;
         padding: 32px 24px;
     }
     
@@ -346,8 +357,8 @@ html, body {
 }
 
 @media (max-width: 768px) {
-    .main-content {
-        margin-left: 0;
+    .station-tracking-page .main-content {
+        margin: 24px 16px;
         padding: 24px 16px;
     }
     
