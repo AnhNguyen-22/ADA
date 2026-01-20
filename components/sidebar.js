@@ -26,6 +26,7 @@
             this.initializeNavigation();
             this.initializeUserAction();
             this.initializeResizeHandler();
+            this.initializeStickyBehavior();
             this.restoreState();
             this.updateActivePage();
         }
@@ -47,6 +48,7 @@
             const isCollapsed = this.sidebar.classList.contains('collapsed');
             localStorage.setItem('sidebarCollapsed', isCollapsed);
             this.updateMainContentMargin(isCollapsed);
+            this.updateScrollFollow(true);
             
             window.dispatchEvent(new CustomEvent('sidebarToggle', {
                 detail: { collapsed: isCollapsed }
@@ -132,10 +134,10 @@
             
             const positions = {
                 'overview': '297px',
-                'station-tracking': '405px',
-                'recommendations': '498px',
-                'dataset': '591px',
-                'model-evaluation': '684px',
+                'station-tracking': '393px',
+                'recommendations': '489px',
+                'dataset': '585px',
+                'model-evaluation': '681px',
                 'policy-suggestions': '777px'
             };
             
@@ -179,8 +181,69 @@
                         const isCollapsed = this.sidebar.classList.contains('collapsed');
                         this.updateMainContentMargin(isCollapsed);
                     }
+                    this.updateScrollFollow(true);
                 }, 50);
             });
+        }
+
+        initializeStickyBehavior() {
+            this.scrollFollow = {
+                topSpacing: 48,
+                bottomSpacing: 24,
+                lastScrollY: window.scrollY,
+                currentTop: 48,
+                ticking: false
+            };
+            this.updateScrollFollow(true);
+            window.addEventListener('scroll', () => this.requestScrollFollowUpdate(), { passive: true });
+        }
+
+        requestScrollFollowUpdate() {
+            if (!this.sidebar || !this.scrollFollow || this.scrollFollow.ticking) return;
+            this.scrollFollow.ticking = true;
+            window.requestAnimationFrame(() => {
+                this.updateScrollFollow(false);
+                this.scrollFollow.ticking = false;
+            });
+        }
+
+        updateScrollFollow(force) {
+            if (!this.sidebar || !this.scrollFollow) return;
+
+            const viewportHeight = window.innerHeight;
+            const sidebarHeight = this.sidebar.offsetHeight;
+            const topSpacing = this.scrollFollow.topSpacing;
+            const bottomSpacing = this.scrollFollow.bottomSpacing;
+            const fitsViewport = sidebarHeight + topSpacing + bottomSpacing <= viewportHeight;
+            const minTop = viewportHeight - bottomSpacing - sidebarHeight;
+            const maxTop = topSpacing;
+
+            if (fitsViewport) {
+                this.sidebar.style.position = 'fixed';
+                this.sidebar.style.top = `${topSpacing}px`;
+                this.scrollFollow.currentTop = topSpacing;
+                this.scrollFollow.lastScrollY = window.scrollY;
+                return;
+            }
+
+            if (force) {
+                const idealTop = maxTop - window.scrollY;
+                this.scrollFollow.currentTop = Math.min(maxTop, Math.max(minTop, idealTop));
+                this.scrollFollow.lastScrollY = window.scrollY;
+            }
+
+            const scrollY = window.scrollY;
+            const delta = scrollY - this.scrollFollow.lastScrollY;
+
+            if (delta > 0) {
+                this.scrollFollow.currentTop = Math.max(minTop, this.scrollFollow.currentTop - delta);
+            } else if (delta < 0) {
+                this.scrollFollow.currentTop = Math.min(maxTop, this.scrollFollow.currentTop - delta);
+            }
+
+            this.sidebar.style.position = 'fixed';
+            this.sidebar.style.top = `${this.scrollFollow.currentTop}px`;
+            this.scrollFollow.lastScrollY = scrollY;
         }
 
         handleUserAction() {
@@ -225,6 +288,8 @@
                 }
                 this.updateUserStatus(savedMode);
             }
+
+            this.updateScrollFollow(true);
         }
 
         collapse() {

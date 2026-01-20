@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             display: false
                         },
                         ticks: {
-                            color: '#94A3B8',
+                            color: '#ffffff',
                             font: {
                                 size: 11
                             }
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             lineWidth: 1
                         },
                         ticks: {
-                            color: '#94A3B8',
+                            color: '#ffffff',
                             font: {
                                 size: 11
                             },
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             display: false
                         },
                         ticks: {
-                            color: '#94A3B8',
+                            color: '#ffffff',
                             font: {
                                 size: 11
                             }
@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             display: false
                         },
                         ticks: {
-                            color: '#1F2937',
+                            color: '#ffffff',
                             font: {
                                 size: 12,
                                 weight: '500'
@@ -186,20 +186,32 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Xử lý dropdown thay đổi
-    const timeSelect = document.querySelector('.chart-controls .control-select');
-    if (timeSelect) {
-        timeSelect.addEventListener('change', function() {
-            console.log('Time range changed:', this.value);
-            // Có thể cập nhật biểu đồ dựa trên khoảng thời gian được chọn
+    // Chart controls
+    const timeButton = document.getElementById('timeRangeButton');
+    if (timeButton) {
+        timeButton.addEventListener('click', function() {
+            console.log('Time range clicked:', timeButton.textContent);
         });
     }
 
-    const indexSelect = document.querySelectorAll('.chart-controls .control-select')[1];
-    if (indexSelect) {
-        indexSelect.addEventListener('change', function() {
-            console.log('Index changed:', this.value);
-            // Có thể cập nhật biểu đồ dựa trên chỉ số được chọn
+    const indexDropdownContainer = document.getElementById('index-dropdown');
+    if (indexDropdownContainer && typeof Dropdown !== 'undefined') {
+        new Dropdown('index-dropdown', {
+            items: [
+                { value: 'pm25', text: 'PM2.5' },
+                { value: 'co', text: 'CO' },
+                { value: 'co2', text: 'CO2' },
+                { value: 'so2', text: 'SO2' },
+                { value: 'tsp', text: 'TSP' },
+                { value: 'temperature', text: 'Nhiệt độ' },
+                { value: 'humidity', text: 'Độ ẩm' },
+                { value: 'o3', text: 'O3' }
+            ],
+            defaultItem: 'pm25',
+            onSelect: function(value, text) {
+                console.log('Index changed:', value);
+            }
         });
     }
+
 });

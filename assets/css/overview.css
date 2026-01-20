@@ -4,61 +4,74 @@
 .summary-cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: 0;
   margin-bottom: 32px;
-}
-
-.summary-card {
-  background: white;
   border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  background: var(--color-panel-bg);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
 }
 
-
-.card-value-large {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.card-actions {
-  margin-bottom: 12px;
-}
-
-.btn-select {
-  background: #0EA5E9;
-  color: white;
+.summary-cards .card {
+  background: transparent;
   border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.summary-cards .card + .card {
+  border-left: 1px solid rgba(176, 190, 197, 0.6);
+}
+
+.summary-band {
+  margin-top: 8px;
+}
+
+.summary-band .summary-band-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  justify-content: center;
+}
+
+.summary-band-title {
   font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s;
+  font-weight: 600;
+  color: #f8fafc;
 }
 
-.btn-select:hover {
-  background: #0284C7;
+.summary-band-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
 }
 
-.btn-select.active {
-  background: #0EA5E9;
+.summary-band-subtitle {
+  font-size: 12px;
+  color: rgba(248, 250, 252, 0.8);
 }
 
-.card-description {
-  font-size: 13px;
-  color: #94A3B8;
-}
-
-.trend-indicator {
+.summary-band-inline {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: #64748B;
+  gap: 10px;
+  flex-wrap: wrap;
 }
+
+.summary-band-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+}
+
 
 /* Middle Row */
 .middle-row {
@@ -66,20 +79,6 @@
   grid-template-columns: 1fr 1fr;
   gap: 24px;
   margin-bottom: 32px;
-}
-
-.content-card {
-  background: white;
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-.content-card h2 {
-  font-size: 18px;
-  font-weight: 600;
-  color: #1F2937;
-  margin-bottom: 20px;
 }
 
 /* Map Card */
@@ -96,13 +95,138 @@
   height: 100%;
 }
 
-.map-placeholder svg {
-  width: 100%;
+.map-visual {
+  position: relative;
   height: 100%;
 }
 
-.map-tooltip {
+.map-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.station-marker {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  transform: translate(-50%, -50%);
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.station-marker:focus-visible {
+  outline: 2px solid rgba(14, 165, 233, 0.8);
+  outline-offset: 4px;
+  border-radius: 999px;
+}
+
+.marker-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--marker-color, #f97316);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.95);
+  display: block;
+  transition: box-shadow 0.2s ease, transform 0.2s ease, filter 0.2s ease;
+}
+
+.station-marker::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 70%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.station-marker:hover .marker-dot,
+.station-marker:focus-visible .marker-dot {
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--marker-color, #f97316) 40%, transparent);
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+.station-marker:hover::after,
+.station-marker:focus-visible::after {
+  opacity: 1;
+}
+
+.marker-tooltip {
+  position: absolute;
+  left: 50%;
+  top: -8px;
+  transform: translate(-50%, -100%) scale(0.98);
+  background: rgba(15, 23, 42, 0.92);
+  color: #f8fafc;
+  padding: 10px 12px;
+  border-radius: 10px;
+  min-width: 180px;
+  font-size: 12px;
+  line-height: 1.4;
+  opacity: 0;
   pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.25);
+}
+
+.marker-tooltip::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  transform: translateX(-50%);
+  border-width: 6px 6px 0 6px;
+  border-style: solid;
+  border-color: rgba(15, 23, 42, 0.92) transparent transparent transparent;
+}
+
+.station-marker:hover .marker-tooltip,
+.station-marker:focus-visible .marker-tooltip {
+  opacity: 1;
+  transform: translate(-50%, -110%) scale(1);
+}
+
+.tooltip-title {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.tooltip-line {
+  display: block;
+}
+
+.rating-good {
+  color: #4ade80;
+  font-weight: 600;
+}
+
+.rating-warning {
+  color: #fbbf24;
+  font-weight: 600;
+}
+
+.rating-bad {
+  color: #f87171;
+  font-weight: 600;
+}
+
+.station-good {
+  --marker-color: #22c55e;
+}
+
+.station-warn {
+  --marker-color: #f97316;
+}
+
+.station-hot {
+  --marker-color: #ef4444;
 }
 
 /* Chart Card */
@@ -118,6 +242,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-width: 140px;
 }
 
 .control-group label {
@@ -126,27 +251,34 @@
   font-weight: 500;
 }
 
-.control-select {
-  background: #F1F5F9;
-  border: 1px solid #CBD5E1;
+.time-button {
+  background-color: #e1f5fe;
+  border: none;
   border-radius: 8px;
-  padding: 8px 12px;
+  padding: 12px 16px;
   font-size: 14px;
-  color: #1F2937;
+  font-weight: 600;
+  color: #131e29;
   cursor: pointer;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
   min-width: 120px;
+  text-align: center;
 }
 
-.control-select:focus {
+.time-button:hover {
+  background-color: #d4eefb;
+}
+
+.time-button:focus {
   outline: none;
-  border-color: #0EA5E9;
+  box-shadow: 0 0 0 2px rgba(79, 195, 247, 0.4);
 }
 
 .btn-refresh {
   background: #475569;
   color: white;
   border: none;
-  padding: 8px 20px;
+  padding: 12px 20px;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 500;
@@ -157,14 +289,6 @@
 
 .btn-refresh:hover {
   background: #334155;
-}
-
-.chart-container {
-  height: 300px;
-  position: relative;
-  background: linear-gradient(135deg, #1E293B 0%, #334155 100%);
-  border-radius: 12px;
-  padding: 16px;
 }
 
 /* Bottom Row */
@@ -235,10 +359,6 @@
 }
 
 @media (max-width: 768px) {
-  .sidebar {
-      width: 60px;
-  }
-  
   .main-content {
       margin-left: 60px;
       padding: 20px;
@@ -249,7 +369,7 @@
       align-items: stretch;
   }
   
-  .control-select {
+  .time-button {
       width: 100%;
   }
 }
