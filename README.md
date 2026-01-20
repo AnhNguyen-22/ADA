@@ -65,7 +65,7 @@ Hệ thống hỗ trợ 2 chế độ:
 - JavaScript
 
 ## Hướng dẫn sử dụng
-
+0. (nếu chưa tải fonts) Bấm vào `assets/fonts/72/TrueType` --> install tất cả các file .ttf
 1. Mở file `index.html` hoặc `pages/login.html` trong trình duyệt
 2. Đăng nhập vào hệ thống (nếu ở chế độ quản lý)
 3. Chọn trang cần xem từ menu điều hướng
@@ -73,10 +73,10 @@ Hệ thống hỗ trợ 2 chế độ:
 ## Components
 
 ### Sidebar/Dropdown (components/)
-- Sidebar vA? dropdown dA1ng chung cho cA?c trang
-- Style/logic n???m trong components/sidebar.css, components/sidebar.js, components/dropdown.css, components/dropdown.js
+- Sidebar và dropdown dùng chung cho các trang
+- Style/logic nằm trong components/sidebar.css, components/sidebar.js, components/dropdown.css, components/dropdown.js
 
-## Ghi chu
+## Ghi chú
 
 - Tất cả các trang hiện tại đang ở trạng thái trống, sẵn sàng để thêm nội dung
 - File CSS và JavaScript đã được thiết lập sẵn trong thư mục `assets/`
