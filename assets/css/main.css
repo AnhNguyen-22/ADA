@@ -7,6 +7,18 @@
 }
 :root {
     --font-family-base: "72", "Segoe UI", Arial, sans-serif;
+    --border-color: rgba(176, 190, 197, 0.9);
+    --page-bg-overlay: linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35));
+    --page-bg-image: url("../img/background.png");
+    --color-frame-bg: linear-gradient(180deg, rgba(79, 195, 247, 0.18) 0%, rgba(46, 114, 145, 0.18) 100%);
+    --color-panel-bg: rgba(91, 115, 139, 0.2);
+    --color-panel-border: #b0bec5e6;
+    --color-table-head-bg: rgba(225, 245, 254, 0.5);
+    --color-surface: #ffffff;
+    --color-text-dark: #131e29;
+    --shadow-frame: 0px 4px 4px #00000040;
+    --shadow-card: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    --frame-min-height: max(928px, calc(100vh - 72px));
 }
 body {
     font-family: var(--font-family-base);
@@ -29,7 +41,7 @@ body {
 .background-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35));
+    background: var(--page-bg-overlay);
 }
 
 .background-image {
@@ -55,11 +67,11 @@ body {
     padding: clamp(20px, 2.5vw, 30px);
     position: relative;
     z-index: 1;
-    min-height: 100vh;
+    min-height: var(--frame-min-height);
     border-radius: 15px;
-    border: 1px solid #b0bec5e6;
-    box-shadow: 0px 4px 4px #00000040;
-    background: linear-gradient(180deg, rgba(79, 195, 247, 0.18) 0%, rgba(46, 114, 145, 0.18) 100%);
+    border: 1px solid var(--color-panel-border);
+    box-shadow: var(--shadow-frame);
+    background: var(--color-frame-bg);
     padding: 20px;
     transition: margin-left 0.3s ease;
 }
@@ -117,11 +129,11 @@ body {
 
 /*card*/
 .card {
-    background: rgba(91, 115, 139, 0.2);
+    background: var(--color-panel-bg);
     border: 1px solid var(--border-color);
     border-radius: clamp(10px, 1.5vw, 15px);
     padding: clamp(20px, 2.5vw, 30px);
-    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-card);
 }
 
 .card-title {

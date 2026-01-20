@@ -16,12 +16,10 @@ Hệ thống quản lý và giám sát chất lượng không khí tại Thành 
 │   ├── model-evaluation.html # Trang đánh giá mô hình
 │   └── policy-suggestions.html # Trang gợi ý chính sách
 ├── components/                # Thư mục chứa các component tái sử dụng
-│   └── sidebar.html         # Component sidebar (thanh điều hướng)
 └── assets/                    # Thư mục tài nguyên
     ├── css/
     │   └── main.css          # File CSS chính
     └── js/
-        └── main.js           # File JavaScript chính
 ```
 
 ## Danh sách các trang
@@ -74,13 +72,17 @@ Hệ thống hỗ trợ 2 chế độ:
 
 ## Components
 
-### Sidebar (`components/sidebar.html`)
-- Component sidebar (thanh điều hướng) dùng chung cho các trang
-- Chứa logo, nút chuyển đổi chế độ (Công khai/Quản lý), menu điều hướng và thông tin người dùng
-- Có thể được include vào các trang bằng JavaScript hoặc server-side rendering
+### Sidebar/Dropdown (components/)
+- Sidebar vA? dropdown dA1ng chung cho cA?c trang
+- Style/logic n???m trong components/sidebar.css, components/sidebar.js, components/dropdown.css, components/dropdown.js
 
-## Ghi chú
+## Ghi chu
 
 - Tất cả các trang hiện tại đang ở trạng thái trống, sẵn sàng để thêm nội dung
 - File CSS và JavaScript đã được thiết lập sẵn trong thư mục `assets/`
 - Component sidebar được đặt trong thư mục `components/` để dễ quản lý và tái sử dụng
+
+
+
+
+
