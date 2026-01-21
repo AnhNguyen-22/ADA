@@ -72,6 +72,11 @@
   font-weight: 600;
 }
 
+/* Đảm bảo các phần tử có thuộc tính hidden bị ẩn hoàn toàn */
+[hidden] {
+  display: none !important;
+}
+
 
 /* Middle Row */
 .middle-row {
