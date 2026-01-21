@@ -124,7 +124,7 @@
     font-size: 36px;
     font-weight: 700;
     color: #131e29;
-    margin-top: -10px;
+    margin-top: -35px;
 }
 
 .gauge-unit {
@@ -207,6 +207,19 @@
     height: 80px;
     border-radius: 8px;
     overflow: hidden;
+    background: linear-gradient(to right, 
+        #9ccc65 0%, 
+        #9ccc65 16.67%, 
+        #ffeb3b 16.67%, 
+        #ffeb3b 33.33%, 
+        #ff9800 33.33%, 
+        #ff9800 50%, 
+        #ff6f00 50%, 
+        #ff6f00 66.67%, 
+        #ba68c8 66.67%, 
+        #ba68c8 83.33%, 
+        #7b1fa2 83.33%, 
+        #6a1b9a 100%);
 }
 
 .aqi-segment {
@@ -218,6 +231,9 @@
     font-weight: 600;
     text-align: center;
     padding: 8px 4px;
+    background: transparent;
+    position: relative;
+    z-index: 1;
 }
 
 .aqi-label {
@@ -231,28 +247,27 @@
 }
 
 .aqi-good {
-    background-color: #4caf50;
+    color: #333;
 }
 
 .aqi-moderate {
-    background-color: #ffeb3b;
     color: #333;
 }
 
 .aqi-poor {
-    background-color: #ff9800;
+    color: #fff;
 }
 
 .aqi-bad {
-    background-color: #f44336;
+    color: #fff;
 }
 
 .aqi-very-bad {
-    background-color: #9c27b0;
+    color: #fff;
 }
 
 .aqi-hazardous {
-    background-color: #7b1fa2;
+    color: #fff;
 }
 
 /* Responsive */

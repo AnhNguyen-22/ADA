@@ -278,17 +278,29 @@
   background: #475569;
   color: white;
   border: none;
-  padding: 12px 20px;
+  padding: 12px;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.2s;
   height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
 }
 
 .btn-refresh:hover {
   background: #334155;
+  transform: rotate(90deg);
+}
+
+.refresh-icon {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
 }
 
 /* Bottom Row */
@@ -316,7 +328,7 @@
 
 .explanation-list li {
   font-size: 14px;
-  color: #475569;
+  color: white;
   line-height: 1.6;
   padding-left: 24px;
   position: relative;

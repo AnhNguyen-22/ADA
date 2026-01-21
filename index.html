@@ -4,7 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AirSense HCMC</title>
+    <meta http-equiv="refresh" content="0; url=./pages/overview.html">
 </head>
 <body>
+    <noscript>
+        <p>Trình duyệt của bạn đang tắt JavaScript. Nhấn vào đây để vào trang mặc định: <a href="./pages/overview.html">Tổng quan</a>.</p>
+    </noscript>
+    <script>
+        // Trang mặc định của hệ thống: Overview (công khai)
+        try {
+            localStorage.setItem('currentMode', 'public');
+            localStorage.removeItem('pendingMode');
+            localStorage.removeItem('postLoginRedirect');
+        } catch (e) {
+            // ignore
+        }
+        window.location.replace('./pages/overview.html');
+    </script>
 </body>
 </html>

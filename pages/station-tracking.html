@@ -39,7 +39,7 @@
             <!-- Left Card: PM2.5 Station Section -->
             <div class="pm25-station-section">
                 <div class="section-header">
-                    <h2 class="section-title">Chỉ số PM2.5 tại Trạm</h2>
+                    <h2 class="card-title">Chỉ số PM2.5 tại Trạm</h2>
                     <p class="section-subtitle">Trung bình ~ 37.8 µg/m³</p>
                 </div>
                 
@@ -71,7 +71,7 @@
             <!-- Right Card: Station Information -->
             <div class="station-info-section">
                 <div class="section-header">
-                    <h2 class="section-title">Thông tin Trạm</h2>
+                    <h2 class="card-title">Thông tin Trạm</h2>
                     <div class="status-badge status-bad" style="position: absolute; top: 0; right: 0;">
                         Xấu
                     </div>
@@ -95,7 +95,7 @@
 
                 <!-- Comparison Bar Chart -->
                 <div class="comparison-chart-container">
-                    <h3 class="comparison-chart-title">So sánh chỉ số PM2.5 tại Trạm <span id="station-name-display">S1</span></h3>
+                    <h3 class="card-title">So sánh chỉ số PM2.5 tại Trạm <span id="station-name-display">S1</span></h3>
                     <canvas id="comparison-chart"></canvas>
                 </div>
             </div>
@@ -103,7 +103,7 @@
 
         <!-- AQI Scale Section -->
         <div class="aqi-scale-section">
-            <h2 class="section-title">Thang đo chỉ số chất lượng không khí (AQI)</h2>
+            <h2 class="card-title">Thang đo chỉ số chất lượng không khí (AQI)</h2>
             <div class="aqi-gradient-bar">
                 <div class="aqi-segment aqi-good" style="flex: 1;">
                     <div class="aqi-label">Tốt</div>
@@ -170,8 +170,8 @@
         </a>
         
         <a href="dataset.html" class="nav-link" data-page="dataset">
-            <img class="database" src="https://c.animaapp.com/aROkQ2yh/img/database@2x.png" alt="Dataset"/>
-            <div class="text-wrapper-80">Dataset</div>
+            <img class="database" src="https://c.animaapp.com/aROkQ2yh/img/database@2x.png" alt="Dữ liệu"/>
+            <div class="text-wrapper-80">Dữ liệu</div>
         </a>
         
         <a href="model-evaluation.html" class="nav-link" data-page="model-evaluation">
@@ -359,13 +359,13 @@
             // Clear canvas
             ctx.clearRect(0, 0, size, size);
             
-            // Draw gauge segments
+            // Draw gauge segments with continuous gradient colors
             const segments = [
-                { start: 0, end: 50, color: '#4caf50', label: 'Tốt' },
+                { start: 0, end: 50, color: '#9ccc65', label: 'Tốt' },
                 { start: 50, end: 100, color: '#ffeb3b', label: 'Trung bình' },
                 { start: 100, end: 150, color: '#ff9800', label: 'Kém' },
-                { start: 150, end: 200, color: '#f44336', label: 'Xấu' },
-                { start: 200, end: 300, color: '#9c27b0', label: 'Rất xấu' },
+                { start: 150, end: 200, color: '#ff6f00', label: 'Xấu' },
+                { start: 200, end: 300, color: '#ba68c8', label: 'Rất xấu' },
                 { start: 300, end: 500, color: '#7b1fa2', label: 'Nguy hại' }
             ];
             
@@ -374,16 +374,42 @@
             const endAngle = 0;
             const totalAngle = Math.PI;
             
-            segments.forEach(segment => {
+            segments.forEach((segment, index) => {
                 const startPercent = segment.start / maxValue;
                 const endPercent = segment.end / maxValue;
                 const segmentStartAngle = startAngle + (totalAngle * startPercent);
                 const segmentEndAngle = startAngle + (totalAngle * endPercent);
                 
+                // Get colors for smooth transition
+                let startColor = segment.color;
+                let endColor = segment.color;
+                
+                // Create smooth transitions between segments
+                if (index < segments.length - 1) {
+                    endColor = segments[index + 1].color;
+                }
+                if (index > 0) {
+                    startColor = segments[index - 1].color;
+                }
+                
+                // Create gradient for this segment
+                const gradientStartX = centerX + Math.cos(segmentStartAngle) * radius;
+                const gradientStartY = centerY + Math.sin(segmentStartAngle) * radius;
+                const gradientEndX = centerX + Math.cos(segmentEndAngle) * radius;
+                const gradientEndY = centerY + Math.sin(segmentEndAngle) * radius;
+                
+                const gradient = ctx.createLinearGradient(
+                    gradientStartX, gradientStartY,
+                    gradientEndX, gradientEndY
+                );
+                gradient.addColorStop(0, startColor);
+                gradient.addColorStop(0.5, segment.color);
+                gradient.addColorStop(1, endColor);
+                
                 ctx.beginPath();
                 ctx.arc(centerX, centerY, radius, segmentStartAngle, segmentEndAngle);
                 ctx.lineWidth = 20;
-                ctx.strokeStyle = segment.color;
+                ctx.strokeStyle = gradient;
                 ctx.stroke();
             });
             

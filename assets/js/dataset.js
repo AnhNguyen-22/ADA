@@ -156,8 +156,8 @@ function populateVariableTable() {
 function setupDropdowns() {
     const modeDropdown = new Dropdown('modeDropdown', {
         items: [
-            { value: 'list', text: 'Danh sA­ch' },
-            { value: 'grid', text: 'L’ø ¯>i' }
+            { value: 'list', text: 'Danh sách' },
+            { value: 'grid', text: 'Lưới' }
         ],
         defaultItem: 'list',
         onSelect: function(value) {

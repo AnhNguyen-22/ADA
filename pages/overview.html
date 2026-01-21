@@ -35,7 +35,7 @@
             </header>
 
             <!-- Summary Cards Row -->
-            <div class="summary-cards">
+            <div class="summary-cards" data-requires="management">
                 <div class="card summary-band-item">
                     <p class="summary-band-title">T&#7893;ng s&#7889; tr&#7841;m quan s&#225;t hi&#7879;n c&#243;</p>
                     <p class="summary-band-value">06 Tr&#7841;m</p>
@@ -56,9 +56,9 @@
             </div>
 
             <!-- Middle Row -->
-            <div class="middle-row">
+            <div class="middle-row" data-requires="management">
                 <div class="card">
-                    <h2>Bản đồ các trạm</h2>
+                    <h2 class="card-title">Bản đồ các trạm</h2>
                     <div class="map-container">
                         <div class="map-placeholder map-visual">
                             <img src="../assets/img/map.png" alt="B?n ?? c?c tr?m" class="map-image"/>
@@ -121,14 +121,14 @@
                 </div>
 
                 <div class="card">
-                    <h2>Biểu đồ xu hướng</h2>
+                    <h2 class="card-title">Biểu đồ xu hướng</h2>
                     <div class="chart-controls">
                         <div class="control-group">
-                            <label for="timeRangeButton" class="control-label">Khoang thoi gian</label>
+                            <label for="timeRangeButton" class="control-label">Khoảng thời gian</label>
                             <button class="time-button" type="button" id="timeRangeButton">24h</button>
                         </div>
                         <div class="control-group">
-                            <label for="indexDropdownButton" class="control-label">Chi so</label>
+                            <label for="indexDropdownButton" class="control-label">Chỉ số</label>
                             <div class="dropdown-container" id="index-dropdown">
                                 <button class="dropdown-button" id="indexDropdownButton" type="button" aria-haspopup="true" aria-expanded="false">
                                     <span class="dropdown-button-text">PM2.5</span>
@@ -137,7 +137,13 @@
                                 <div class="dropdown-menu" role="menu"></div>
                             </div>
                         </div>
-                        <button class="btn-refresh">Refresh</button>
+                        <button class="btn-refresh" type="button" aria-label="Refresh">
+                            <svg class="refresh-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 4V10H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M23 20V14H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10M23 14L18.36 18.36A9 9 0 0 1 3.51 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
                     </div>
                     <div class="chart">
                         <canvas id="trendChart"></canvas>
@@ -146,7 +152,7 @@
             </div>
 
 
-            <div class="summary-cards summary-band">
+            <div class="summary-cards summary-band" data-requires="management">
                 <div class="card summary-band-item">
                     <p class="summary-band-title">Tr&#7841;m t&#7879; nh&#7845;t h&#244;m nay</p>
                     <p class="summary-band-value">Tr&#7841;m S1</p>
@@ -168,16 +174,16 @@
             </div>
 
             <!-- Bottom Row -->
-            <div class="bottom-row">
+            <div class="bottom-row" data-requires="management">
                 <div class="card">
-                    <h2>Xếp hạng mức độ ô nhiễm theo trạm</h2>
+                    <h2 class="card-title">Xếp hạng mức độ ô nhiễm theo trạm</h2>
                     <div class="ranking-container">
                         <canvas id="rankingChart"></canvas>
                     </div>
                 </div>
 
                 <div class="card">
-                    <h2>Giải thích xu hướng</h2>
+                    <h2 class="card-title">Giải thích xu hướng</h2>
                     <div class="explanation-content">
                         <ul class="explanation-list">
                             <li>Maecenas quis velit nec ipsum sollicitudin mattis at quis sapien.</li>
@@ -228,8 +234,8 @@
         </a>
         
         <a href="dataset.html" class="nav-link active" data-page="dataset">
-            <img class="database" src="https://c.animaapp.com/aROkQ2yh/img/database@2x.png" alt="Dataset"/>
-            <div class="text-wrapper-80">Dataset</div>
+            <img class="database" src="https://c.animaapp.com/aROkQ2yh/img/database@2x.png" alt="Dữ liệu"/>
+            <div class="text-wrapper-80">Dữ liệu</div>
         </a>
         
         <a href="model-evaluation.html" class="nav-link" data-page="model-evaluation">

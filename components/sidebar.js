@@ -1,11 +1,68 @@
 (function() {
     'use strict';
 
+    const STORAGE_KEYS = {
+        MODE: 'currentMode',
+        SIDEBAR_COLLAPSED: 'sidebarCollapsed',
+        PENDING_MODE: 'pendingMode',
+        POST_LOGIN_REDIRECT: 'postLoginRedirect'
+    };
+
+    const MODES = {
+        PUBLIC: 'public',
+        MANAGEMENT: 'management'
+    };
+
+    // Public chỉ được xem 3 trang này
+    const PUBLIC_ALLOWED_PAGES = new Set([
+        'overview.html',
+        'station-tracking.html',
+        'recommendations.html'
+    ]);
+
+    function getCurrentPageFile() {
+        const file = window.location.pathname.split('/').pop();
+        return file && file.length ? file : 'index.html';
+    }
+
+    function getCurrentMode() {
+        // Mặc định là công khai nếu chưa từng set
+        const saved = localStorage.getItem(STORAGE_KEYS.MODE);
+        return saved || MODES.PUBLIC;
+    }
+
+    function setCurrentMode(mode) {
+        localStorage.setItem(STORAGE_KEYS.MODE, mode);
+    }
+
+    function goToLogin(redirectPageFile) {
+        const safeRedirect = typeof redirectPageFile === 'string' && redirectPageFile.length
+            ? redirectPageFile
+            : 'overview.html';
+
+        localStorage.setItem(STORAGE_KEYS.PENDING_MODE, MODES.MANAGEMENT);
+        localStorage.setItem(STORAGE_KEYS.POST_LOGIN_REDIRECT, safeRedirect);
+
+        // login.html nằm cùng thư mục pages/
+        window.location.href = `login.html?redirect=${encodeURIComponent(safeRedirect)}`;
+    }
+
+    function applyVisibilityByMode(mode) {
+        // Các block được gắn cờ trong HTML: data-requires="management" / "public"
+        const managementOnly = document.querySelectorAll('[data-requires="management"]');
+        const publicOnly = document.querySelectorAll('[data-requires="public"]');
+
+        const isManagement = mode === MODES.MANAGEMENT;
+        managementOnly.forEach(el => { el.hidden = !isManagement; });
+        publicOnly.forEach(el => { el.hidden = isManagement; });
+    }
+
     class SidebarManager {
         constructor() {
             this.sidebar = null;
             this.navItems = null;
             this.userAction = null;
+            this.profileSection = null;
             this.init();
         }
 
@@ -25,10 +82,12 @@
             this.initializeModeSwitcher();
             this.initializeNavigation();
             this.initializeUserAction();
+            this.initializeProfileAction();
             this.initializeResizeHandler();
             this.initializeStickyBehavior();
             this.restoreState();
             this.updateActivePage();
+            this.applyAccessControl(getCurrentMode(), true);
         }
 
         initializeToggle() {
@@ -79,14 +138,17 @@
                 publicMode.addEventListener('click', () => this.switchMode('public', rectangle27));
             }
             if (managementMode) {
-                managementMode.addEventListener('click', () => this.switchMode('management', rectangle27));
+                // Bấm "Quản lý" luôn đưa tới trang login
+                managementMode.addEventListener('click', () => {
+                    goToLogin(getCurrentPageFile());
+                });
             }
         }
 
         switchMode(mode, rectangle27) {
             if (!rectangle27) return;
             
-            localStorage.setItem('currentMode', mode);
+            setCurrentMode(mode);
             const publicModeText = document.querySelector('.text-wrapper-76');
             const managementModeText = document.querySelector('.text-wrapper-77');
             
@@ -101,6 +163,7 @@
             }
             
             this.updateUserStatus(mode);
+            this.applyAccessControl(mode, false);
             window.dispatchEvent(new CustomEvent('modeChanged', { detail: { mode } }));
         }
 
@@ -118,7 +181,17 @@
             const rectangle28 = document.querySelector('.rectangle-28');
             
             this.navItems.forEach(item => {
-                item.addEventListener('click', () => {
+                item.addEventListener('click', (e) => {
+                    const mode = getCurrentMode();
+                    const hrefFile = item.getAttribute('href')?.split('/').pop();
+
+                    // Nếu đang ở công khai và click vào trang bị giới hạn => chuyển sang login
+                    if (mode !== MODES.MANAGEMENT && hrefFile && !PUBLIC_ALLOWED_PAGES.has(hrefFile)) {
+                        e.preventDefault();
+                        goToLogin(hrefFile);
+                        return;
+                    }
+
                     this.navItems.forEach(nav => nav.classList.remove('active'));
                     item.classList.add('active');
                     this.updateActiveMenuBackground(item.getAttribute('data-page'), rectangle28);
@@ -168,7 +241,21 @@
         initializeUserAction() {
             this.userAction = document.querySelector('.logout-rounded');
             if (this.userAction) {
-                this.userAction.addEventListener('click', () => this.handleUserAction());
+                this.userAction.addEventListener('click', (e) => {
+                    // Tránh click "logout" bị bắt bởi click profile
+                    e.stopPropagation();
+                    this.handleUserAction();
+                });
+            }
+        }
+
+        initializeProfileAction() {
+            this.profileSection = document.querySelector('.group-11');
+            if (this.profileSection) {
+                this.profileSection.addEventListener('click', () => {
+                    // Bấm profile luôn mở trang login
+                    goToLogin(getCurrentPageFile());
+                });
             }
         }
 
@@ -260,8 +347,43 @@
             }));
         }
 
+        applyAccessControl(mode, isInitial) {
+            // 1) Guard: nếu đang công khai mà mở vào trang bị giới hạn => chuyển login
+            const currentFile = getCurrentPageFile();
+            if (mode !== MODES.MANAGEMENT) {
+                const isAllowed = PUBLIC_ALLOWED_PAGES.has(currentFile) || currentFile === 'index.html';
+                if (!isAllowed) {
+                    // tránh loop nếu ai đó nhúng sidebar vào login (hiện không có)
+                    goToLogin(currentFile);
+                    return;
+                }
+            }
+
+            // 2) Ẩn/hiện menu theo mode
+            if (this.navItems) {
+                this.navItems.forEach(link => {
+                    const hrefFile = link.getAttribute('href')?.split('/').pop();
+                    if (!hrefFile) return;
+
+                    const shouldShow = mode === MODES.MANAGEMENT || PUBLIC_ALLOWED_PAGES.has(hrefFile);
+                    link.style.display = shouldShow ? '' : 'none';
+                });
+            }
+
+            // 3) Ẩn/hiện nội dung theo mode (trên trang)
+            applyVisibilityByMode(mode);
+
+            // 4) Cập nhật status text trong profile
+            this.updateUserStatus(mode);
+
+            // 5) Khi init lần đầu và chưa có key mode, set mặc định công khai
+            if (isInitial && !localStorage.getItem(STORAGE_KEYS.MODE)) {
+                setCurrentMode(MODES.PUBLIC);
+            }
+        }
+
         restoreState() {
-            const savedCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+            const savedCollapsed = localStorage.getItem(STORAGE_KEYS.SIDEBAR_COLLAPSED) === 'true';
             if (this.sidebar) {
                 if (savedCollapsed) {
                     this.sidebar.classList.add('collapsed');
@@ -271,7 +393,7 @@
                 this.updateMainContentMargin(savedCollapsed);
             }
             
-            const savedMode = localStorage.getItem('currentMode') || 'management';
+            const savedMode = getCurrentMode();
             const rectangle27 = document.querySelector('.rectangle-27');
             const publicModeText = document.querySelector('.text-wrapper-76');
             const managementModeText = document.querySelector('.text-wrapper-77');
