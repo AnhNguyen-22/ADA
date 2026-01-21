@@ -65,10 +65,11 @@ Hệ thống hỗ trợ 2 chế độ:
 - JavaScript
 
 ## Hướng dẫn sử dụng
-0. (nếu chưa tải fonts) Bấm vào `assets/fonts/72/TrueType` --> install tất cả các file .ttf
-1. Mở file `index.html` hoặc `pages/login.html` trong trình duyệt
-2. Đăng nhập vào hệ thống (nếu ở chế độ quản lý)
-3. Chọn trang cần xem từ menu điều hướng
+0. +(nếu chưa tải fonts): Bấm vào `assets/fonts/72/TrueType` --> install tất cả các file .ttf
+   +(nếu chưa có extension chạy html): Tải extension "Live server" trên trình duyệt chạy code --> Chọn file index.html/ Overview/html --> bấm "Go live" ở dưới thanh điều hướng để chạy dự án
+2. Mở file `index.html` hoặc `pages/login.html` trong trình duyệt
+3. Đăng nhập vào hệ thống (nếu ở chế độ quản lý)
+4. Chọn trang cần xem từ menu điều hướng
 
 ## Components
 
