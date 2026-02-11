@@ -32,7 +32,7 @@
                 </div>
             </div>
         </header>
-        
+
 
         <!-- Two Column Layout -->
         <div class="two-column-layout">
@@ -42,7 +42,7 @@
                     <h2 class="card-title">Chỉ số PM2.5 tại Trạm</h2>
                     <p class="section-subtitle">Trung bình ~ 37.8 µg/m³</p>
                 </div>
-                
+
                 <div class="station-controls">
                     <!-- Station Dropdown Component -->
                     <div class="dropdown-container" id="station-dropdown" style="position: relative; width: 250px;">
@@ -131,17 +131,77 @@
                 </div>
             </div>
         </div>
-    </div>
+
+        <!-- ===================== ADDED: GOVERNMENT EXTRA (CHỈ HIỆN KHI ĐĂNG NHẬP) ===================== -->
+        <div class="aqi-scale-section" id="government-extra-section" style="display:none;">
+            <h2 class="card-title">Phân tích dành cho Cơ quan quản lý</h2>
+
+            <!-- Exceedance theo giờ -->
+            <div class="comparison-chart-container" style="margin-top: 16px;">
+                <h3 class="card-title">Vượt ngưỡng theo giờ (cao hơn WHO 15 µg/m³) — <span id="gov-station-name-exceedance">S1</span></h3>
+                <p style="margin: 6px 0 0; color: #666; font-size: 13px;">
+                    Chart minh hoạ: phần vượt ngưỡng WHO tại từng mốc giờ (0:00 → 22:00).
+                </p>
+                <canvas id="exceedance-hourly-chart" style="width:100%; display:block;"></canvas>
+            </div>
+
+            <!-- So sánh cùng loại (ADD dropdown) -->
+            <div class="comparison-chart-container" style="margin-top: 16px;">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+                    <div>
+                        <h3 class="card-title" style="margin:0;">So sánh với trạm cùng loại  — <span id="gov-station-name-same-type">S1</span></h3>
+                        <p style="margin: 6px 0 0; color: #666; font-size: 13px;">
+                            Chọn 1 trạm cùng loại để so sánh (hoặc “All” để xem toàn bộ cùng loại).
+                        </p>
+                    </div>
+
+                    <div class="dropdown-container" id="gov-same-type-dropdown" style="position: relative; width: 260px;">
+                        <button class="dropdown-button" type="button" aria-haspopup="true" aria-expanded="false">
+                            <span class="dropdown-button-text">Tất cả </span>
+                            <span class="dropdown-arrow">&#9662;</span>
+                        </button>
+                        <div class="dropdown-menu" role="menu"></div>
+                    </div>
+                </div>
+
+                <canvas id="same-type-comparison-chart" style="width:100%; display:block;"></canvas>
+            </div>
+
+            <!-- So sánh khác loại (ADD dropdown) -->
+            <div class="comparison-chart-container" style="margin-top: 16px;">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+                    <div>
+                        <h3 class="card-title" style="margin:0;">So sánh với trạm khác loại — <span id="gov-station-name-diff-type">S1</span></h3>
+                        <p style="margin: 6px 0 0; color: #666; font-size: 13px;">
+                            Chọn 1 trạm khác loại để so sánh trực tiếp với trạm đang chọn.
+                        </p>
+                    </div>
+
+                    <div class="dropdown-container" id="gov-diff-type-dropdown" style="position: relative; width: 260px;">
+                        <button class="dropdown-button" type="button" aria-haspopup="true" aria-expanded="false">
+                            <span class="dropdown-button-text">Chọn trạm khác loại</span>
+                            <span class="dropdown-arrow">&#9662;</span>
+                        </button>
+                        <div class="dropdown-menu" role="menu"></div>
+                    </div>
+                </div>
+
+                <canvas id="diff-type-comparison-chart" style="width:100%; display:block;"></canvas>
+            </div>
+        </div>
+        <!-- ===================== /ADDED: GOVERNMENT EXTRA ===================== -->
+
+    </main>
 
     <!-- Sidebar Component -->
     <aside class="side-ql-unchoose" id="sidebar">
         <!-- Logo ở trên cùng -->
         <img class="image-3 logo-large" src="../assets/img/logo_lon.png" alt="AirSense HCMC Logo" id="sidebar-logo"/>
         <img class="image-3 logo-small" src="../assets/img/logo_nho.png" alt="AirSense HCMC Logo Small" id="sidebar-logo-small" style="display: none;"/>
-        
+
         <!-- Toggle Button -->
         <img class="show-left-side-panel" id="sidebarToggle" src="https://c.animaapp.com/aROkQ2yh/img/show-left-side-panel@2x.png" alt="Toggle sidebar" style="cursor: pointer;"/>
-        
+
         <!-- Mode Switcher -->
         <div class="group-12">
             <div class="rectangle-26"></div>
@@ -149,41 +209,41 @@
             <div class="text-wrapper-76" data-mode="public">Công khai</div>
             <div class="text-wrapper-77" data-mode="management">Quản lý</div>
         </div>
-        
+
         <!-- Active Menu Item Background -->
         <div class="rectangle-28"></div>
-        
+
         <!-- Navigation Icons -->
         <a href="overview.html" class="nav-link" data-page="overview">
             <img class="analyze" src="https://c.animaapp.com/aROkQ2yh/img/analyze@2x.png" alt="Tổng quan"/>
             <div class="text-wrapper-78">Tổng quan</div>
         </a>
-        
+
         <a href="station-tracking.html" class="nav-link active" data-page="station-tracking">
             <img class="place-marker-2" src="https://c.animaapp.com/aROkQ2yh/img/place-marker-1@2x.png" alt="Theo dõi theo trạm"/>
             <div class="theo-d-i-tr-m">Theo dõi theo trạm</div>
         </a>
-        
+
         <a href="recommendations.html" class="nav-link" data-page="recommendations">
             <img class="good-quality" src="https://c.animaapp.com/aROkQ2yh/img/good-quality@2x.png" alt="Khuyến cáo"/>
             <div class="text-wrapper-79">Khuyến cáo</div>
         </a>
-        
+
         <a href="dataset.html" class="nav-link" data-page="dataset">
             <img class="database" src="https://c.animaapp.com/aROkQ2yh/img/database@2x.png" alt="Dữ liệu"/>
             <div class="text-wrapper-80">Dữ liệu</div>
         </a>
-        
+
         <a href="model-evaluation.html" class="nav-link" data-page="model-evaluation">
             <img class="intelligence" src="https://c.animaapp.com/aROkQ2yh/img/intelligence@2x.png" alt="Đánh giá mô hình"/>
             <div class="text-wrapper-81">Đánh giá mô hình</div>
         </a>
-        
+
         <a href="policy-suggestions.html" class="nav-link" data-page="policy-suggestions">
             <img class="light-on" src="https://c.animaapp.com/aROkQ2yh/img/light-on@2x.png" alt="Gợi ý chính sách"/>
             <div class="text-wrapper-82">Gợi ý chính sách</div>
         </a>
-        
+
         <!-- User Profile Section -->
         <div class="group-11">
             <div class="rectangle-25"></div>
@@ -197,6 +257,7 @@
 
 <script src="../components/sidebar.js"></script>
 <script src="../components/dropdown.js"></script>
+
 <script>
     // Khởi tạo khi trang load
     document.addEventListener('DOMContentLoaded', function() {
@@ -232,25 +293,25 @@
         function drawChart(selectedStationId) {
             const canvas = document.getElementById('pm25-chart');
             if (!canvas) return;
-            
+
             const ctx = canvas.getContext('2d');
             const width = canvas.width = canvas.offsetWidth;
             const height = canvas.height = 400;
-            
+
             // Clear canvas
             ctx.clearRect(0, 0, width, height);
-            
+
             // Chart settings
             const padding = { top: 50, right: 40, bottom: 60, left: 60 };
             const chartWidth = width - padding.left - padding.right;
             const chartHeight = height - padding.top - padding.bottom;
-            
+
             // Get data for selected station only
             const selectedData = stationPM25Data[selectedStationId];
             const minValue = Math.min(...selectedData) - 5;
             const maxValue = Math.max(...selectedData) + 5;
             const valueRange = maxValue - minValue;
-            
+
             // Draw grid lines
             ctx.strokeStyle = '#e0e0e0';
             ctx.lineWidth = 1;
@@ -262,7 +323,7 @@
                 ctx.lineTo(width - padding.right, y);
                 ctx.stroke();
             }
-            
+
             // Draw vertical grid lines for time
             const timePoints = timeLabels.length;
             for (let i = 0; i < timePoints; i++) {
@@ -272,7 +333,7 @@
                 ctx.lineTo(x, height - padding.bottom);
                 ctx.stroke();
             }
-            
+
             // Draw X-axis labels (thời gian)
             ctx.textAlign = 'center';
             ctx.fillStyle = '#666';
@@ -280,7 +341,7 @@
                 const x = padding.left + (chartWidth / (timePoints - 1)) * index;
                 ctx.fillText(label, x, height - padding.bottom + 20);
             });
-            
+
             // Chỉ vẽ line chart cho trạm được chọn
             const stationColors = {
                 's1': '#4fc3f7',
@@ -290,39 +351,39 @@
                 's5': '#ab47bc',
                 's6': '#26a69a'
             };
-            
+
             const data = selectedData;
             const color = stationColors[selectedStationId];
-            
+
             // Draw line
             ctx.beginPath();
             ctx.strokeStyle = color;
             ctx.lineWidth = 3;
-            
+
             data.forEach((value, index) => {
                 const x = padding.left + (chartWidth / (timePoints - 1)) * index;
                 const y = padding.top + chartHeight - ((value - minValue) / valueRange) * chartHeight;
-                
+
                 if (index === 0) {
                     ctx.moveTo(x, y);
                 } else {
                     ctx.lineTo(x, y);
                 }
             });
-            
+
             ctx.stroke();
-            
+
             // Draw data points
             data.forEach((value, index) => {
                 const x = padding.left + (chartWidth / (timePoints - 1)) * index;
                 const y = padding.top + chartHeight - ((value - minValue) / valueRange) * chartHeight;
-                
+
                 // Draw circle
                 ctx.beginPath();
                 ctx.fillStyle = color;
                 ctx.arc(x, y, 5, 0, Math.PI * 2);
                 ctx.fill();
-                
+
                 // Draw white border
                 ctx.beginPath();
                 ctx.strokeStyle = '#ffffff';
@@ -330,7 +391,7 @@
                 ctx.arc(x, y, 5, 0, Math.PI * 2);
                 ctx.stroke();
             });
-            
+
             // Draw Y-axis labels
             ctx.fillStyle = '#666';
             ctx.font = '12px Arial';
@@ -346,19 +407,19 @@
         function drawGaugeChart(value) {
             const canvas = document.getElementById('gauge-chart');
             if (!canvas) return;
-            
+
             const ctx = canvas.getContext('2d');
             const size = 200;
             canvas.width = size;
             canvas.height = size;
-            
+
             const centerX = size / 2;
             const centerY = size / 2;
             const radius = 80;
-            
+
             // Clear canvas
             ctx.clearRect(0, 0, size, size);
-            
+
             // Draw gauge segments with continuous gradient colors
             const segments = [
                 { start: 0, end: 50, color: '#9ccc65', label: 'Tốt' },
@@ -368,22 +429,22 @@
                 { start: 200, end: 300, color: '#ba68c8', label: 'Rất xấu' },
                 { start: 300, end: 500, color: '#7b1fa2', label: 'Nguy hại' }
             ];
-            
+
             const maxValue = 500;
             const startAngle = Math.PI;
             const endAngle = 0;
             const totalAngle = Math.PI;
-            
+
             segments.forEach((segment, index) => {
                 const startPercent = segment.start / maxValue;
                 const endPercent = segment.end / maxValue;
                 const segmentStartAngle = startAngle + (totalAngle * startPercent);
                 const segmentEndAngle = startAngle + (totalAngle * endPercent);
-                
+
                 // Get colors for smooth transition
                 let startColor = segment.color;
                 let endColor = segment.color;
-                
+
                 // Create smooth transitions between segments
                 if (index < segments.length - 1) {
                     endColor = segments[index + 1].color;
@@ -391,13 +452,13 @@
                 if (index > 0) {
                     startColor = segments[index - 1].color;
                 }
-                
+
                 // Create gradient for this segment
                 const gradientStartX = centerX + Math.cos(segmentStartAngle) * radius;
                 const gradientStartY = centerY + Math.sin(segmentStartAngle) * radius;
                 const gradientEndX = centerX + Math.cos(segmentEndAngle) * radius;
                 const gradientEndY = centerY + Math.sin(segmentEndAngle) * radius;
-                
+
                 const gradient = ctx.createLinearGradient(
                     gradientStartX, gradientStartY,
                     gradientEndX, gradientEndY
@@ -405,19 +466,19 @@
                 gradient.addColorStop(0, startColor);
                 gradient.addColorStop(0.5, segment.color);
                 gradient.addColorStop(1, endColor);
-                
+
                 ctx.beginPath();
                 ctx.arc(centerX, centerY, radius, segmentStartAngle, segmentEndAngle);
                 ctx.lineWidth = 20;
                 ctx.strokeStyle = gradient;
                 ctx.stroke();
             });
-            
+
             // Draw needle
             const valuePercent = Math.min(value / maxValue, 1);
             const needleAngle = startAngle + (totalAngle * valuePercent);
             const needleLength = radius - 10;
-            
+
             ctx.beginPath();
             ctx.moveTo(centerX, centerY);
             ctx.lineTo(
@@ -427,7 +488,7 @@
             ctx.strokeStyle = '#131e29';
             ctx.lineWidth = 3;
             ctx.stroke();
-            
+
             // Draw center circle
             ctx.beginPath();
             ctx.arc(centerX, centerY, 8, 0, Math.PI * 2);
@@ -439,26 +500,26 @@
         function drawComparisonChart(stationId) {
             const canvas = document.getElementById('comparison-chart');
             if (!canvas) return;
-            
+
             const ctx = canvas.getContext('2d');
             const width = canvas.width = canvas.offsetWidth;
             const height = canvas.height = 200;
-            
+
             ctx.clearRect(0, 0, width, height);
-            
+
             const padding = { top: 40, right: 40, bottom: 60, left: 60 };
             const chartWidth = width - padding.left - padding.right;
             const chartHeight = height - padding.top - padding.bottom;
-            
+
             // Data
             const whoGuideline = 15;
             const stationValue = calculateAverage(stationPM25Data[stationId]);
             const hcmcAverage = 35;
-            
+
             const labels = ['0', 'WHO', `Trạm ${stationId.toUpperCase()}`, 'TP.HCM'];
             const values = [0, whoGuideline, stationValue, hcmcAverage];
             const maxValue = Math.max(...values) + 10;
-            
+
             // Draw grid
             ctx.strokeStyle = '#e0e0e0';
             ctx.lineWidth = 1;
@@ -469,7 +530,7 @@
                 ctx.lineTo(width - padding.right, y);
                 ctx.stroke();
             }
-            
+
             // Draw Y-axis labels
             ctx.fillStyle = '#666';
             ctx.font = '12px Arial';
@@ -479,28 +540,28 @@
                 const y = padding.top + (chartHeight / 5) * i;
                 ctx.fillText(Math.round(value), padding.left - 10, y + 4);
             }
-            
+
             // Draw bars
             const barWidth = chartWidth / labels.length;
             labels.forEach((label, index) => {
                 if (index === 0) return; // Skip first bar (0)
-                
+
                 const value = values[index];
                 const barHeight = (value / maxValue) * chartHeight;
                 const x = padding.left + index * barWidth + barWidth * 0.2;
                 const y = padding.top + chartHeight - barHeight;
                 const w = barWidth * 0.6;
-                
+
                 ctx.fillStyle = '#9e9e9e';
                 ctx.fillRect(x, y, w, barHeight);
-                
+
                 // Label
                 ctx.fillStyle = '#666';
                 ctx.font = '12px Arial';
                 ctx.textAlign = 'center';
                 ctx.fillText(label, x + w/2, height - padding.bottom + 20);
             });
-            
+
             // Y-axis label
             ctx.save();
             ctx.translate(padding.left - 30, padding.top + chartHeight / 2);
@@ -527,12 +588,11 @@
             onSelect: function(value, text) {
                 console.log('Đã chọn trạm:', value, text);
                 currentStation = value;
-                // Cập nhật giá trị trung bình và status badge
+
                 const data = stationPM25Data[value];
                 const avgValue = calculateAverage(data);
                 document.querySelector('.section-subtitle').textContent = `Trung bình ~ ${avgValue} µg/m³`;
-                
-                // Cập nhật status badge (cả 2 badge)
+
                 const statusBadges = document.querySelectorAll('.status-badge');
                 statusBadges.forEach(badge => {
                     badge.className = 'status-badge';
@@ -547,28 +607,22 @@
                         badge.textContent = 'Tốt';
                     }
                 });
-                
-                // Cập nhật tên trạm trong comparison chart
+
                 document.getElementById('station-name-display').textContent = value.toUpperCase();
-                
-                // Cập nhật gauge value
                 document.getElementById('gauge-value').textContent = Math.round(avgValue);
-                
-                // Vẽ lại tất cả các chart
+
                 drawChart(value);
                 drawGaugeChart(avgValue);
                 drawComparisonChart(value);
             }
         });
 
-        // Vẽ charts ban đầu
         const initialAvg = calculateAverage(stationPM25Data['s1']);
         document.getElementById('gauge-value').textContent = Math.round(initialAvg);
         drawChart('s1');
         drawGaugeChart(initialAvg);
         drawComparisonChart('s1');
-        
-        // Redraw chart on window resize
+
         let resizeTimer;
         window.addEventListener('resize', function() {
             clearTimeout(resizeTimer);
@@ -582,5 +636,296 @@
         });
     });
 </script>
+
+<!-- ===================== ADDED: GOVERNMENT LOGIC + DROPDOWNS + CHARTS (FIX CANVAS) ===================== -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const govSection = document.getElementById('government-extra-section');
+    const btnPublic = document.querySelector('.text-wrapper-76[data-mode="public"]');
+    const btnMgmt = document.querySelector('.text-wrapper-77[data-mode="management"]');
+
+    function getCurrentStationId() {
+        const stationText = (document.getElementById('station-name-display')?.textContent || 'S1').trim();
+        return stationText.toLowerCase();
+    }
+
+    function setGovVisible(isVisible) {
+        if (!govSection) return;
+        govSection.style.display = isVisible ? 'block' : 'none';
+        localStorage.setItem('airsense_role', isVisible ? 'government' : 'public');
+
+        // FIX: đợi layout render xong -> canvas mới có width
+        if (isVisible) {
+            requestAnimationFrame(() => {
+                updateGovernmentUI(getCurrentStationId());
+            });
+        }
+    }
+
+    if (btnPublic) btnPublic.addEventListener('click', function () { setGovVisible(false); });
+    if (btnMgmt) btnMgmt.addEventListener('click', function () { setGovVisible(true); });
+
+    const savedRole = localStorage.getItem('airsense_role') || 'public';
+    setGovVisible(savedRole === 'government');
+
+    const WHO_GUIDELINE = 15;
+    const timeLabelsGov = ['0:00', '2:00', '4:00', '6:00', '8:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'];
+    const stationPM25DataGov = {
+        's1': [32, 34, 36, 38, 40, 42, 41, 39, 37, 35, 33, 32],
+        's2': [25, 27, 29, 31, 30, 32, 31, 29, 28, 27, 26, 25],
+        's3': [35, 37, 39, 41, 43, 45, 44, 42, 40, 38, 36, 35],
+        's4': [45, 47, 49, 51, 53, 55, 54, 52, 50, 48, 46, 45],
+        's5': [30, 32, 34, 36, 35, 37, 36, 34, 33, 32, 31, 30],
+        's6': [22, 24, 26, 28, 27, 29, 28, 26, 25, 24, 23, 22]
+    };
+
+    const stationType = {
+        s1: 'traffic',
+        s2: 'residential',
+        s3: 'traffic',
+        s4: 'industrial',
+        s5: 'traffic',
+        s6: 'residential'
+    };
+
+    const typeLabelVi = {
+        traffic: 'Giao thông',
+        residential: 'Khu dân cư',
+        industrial: 'Khu công nghiệp'
+    };
+
+    function average(arr) {
+        return Math.round((arr.reduce((a, b) => a + b, 0) / arr.length) * 10) / 10;
+    }
+
+    // FIX: width fallback + never 0
+    function prepareCanvas(canvasId, height) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return null;
+
+        const ctx = canvas.getContext('2d');
+
+        const w1 = canvas.offsetWidth;
+        const w2 = canvas.parentElement ? canvas.parentElement.clientWidth : 0;
+        const width = canvas.width = (w1 && w1 > 10) ? w1 : ((w2 && w2 > 10) ? w2 : 600);
+
+        canvas.height = height;
+        ctx.clearRect(0, 0, width, height);
+        return { ctx, width, height };
+    }
+
+    function drawBarChart({ canvasId, title, labels, values, yLabel, valueSuffix = '' }) {
+        const pack = prepareCanvas(canvasId, 240);
+        if (!pack) return;
+
+        const { ctx, width, height } = pack;
+        const padding = { top: 40, right: 30, bottom: 60, left: 60 };
+        const chartW = width - padding.left - padding.right;
+        const chartH = height - padding.top - padding.bottom;
+
+        const maxVal = Math.max(...values, 0) + 5;
+
+        ctx.fillStyle = '#131e29';
+        ctx.font = '600 14px Arial';
+        ctx.textAlign = 'left';
+        ctx.fillText(title, padding.left, 22);
+
+        ctx.strokeStyle = '#e0e0e0';
+        ctx.lineWidth = 1;
+        const ticks = 5;
+        ctx.font = '12px Arial';
+        ctx.fillStyle = '#666';
+        ctx.textAlign = 'right';
+        for (let i = 0; i <= ticks; i++) {
+            const y = padding.top + (chartH / ticks) * i;
+            const v = maxVal - (maxVal / ticks) * i;
+            ctx.beginPath();
+            ctx.moveTo(padding.left, y);
+            ctx.lineTo(width - padding.right, y);
+            ctx.stroke();
+            ctx.fillText(Math.round(v), padding.left - 10, y + 4);
+        }
+
+        const barW = chartW / labels.length;
+        ctx.textAlign = 'center';
+        labels.forEach((lb, i) => {
+            const val = values[i];
+            const h = (val / maxVal) * chartH;
+            const x = padding.left + i * barW + barW * 0.2;
+            const y = padding.top + chartH - h;
+            const w = barW * 0.6;
+
+            ctx.fillStyle = '#9e9e9e';
+            ctx.fillRect(x, y, w, h);
+
+            ctx.fillStyle = '#131e29';
+            ctx.font = '12px Arial';
+            ctx.fillText(`${Math.round(val)}${valueSuffix}`, x + w / 2, y - 6);
+
+            ctx.fillStyle = '#666';
+            ctx.font = '12px Arial';
+            ctx.fillText(lb, x + w / 2, height - padding.bottom + 20);
+        });
+
+        ctx.save();
+        ctx.translate(padding.left - 35, padding.top + chartH / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.fillStyle = '#666';
+        ctx.font = '12px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(yLabel, 0, 0);
+        ctx.restore();
+    }
+
+    let govSameTypeDropdown = null;
+    let govDiffTypeDropdown = null;
+
+    let sameTypeMode = 'all';
+    let diffTypeStation = null;
+
+    function buildSameTypeItems(currentStationId) {
+        const t = stationType[currentStationId];
+        const sameStations = Object.keys(stationType).filter(s => stationType[s] === t);
+        const items = [{ value: 'all', text: 'Tất cả' }];
+        sameStations.forEach(s => items.push({ value: s, text: `${s.toUpperCase()} - ${typeLabelVi[t] || t}` }));
+        return items;
+    }
+
+    function buildDiffTypeItems(currentStationId) {
+        const t = stationType[currentStationId];
+        const diffStations = Object.keys(stationType).filter(s => stationType[s] !== t);
+        return diffStations.map(s => {
+            const tp = stationType[s];
+            return { value: s, text: `${s.toUpperCase()} - ${typeLabelVi[tp] || tp}` };
+        });
+    }
+
+    function drawExceedanceHourly(stationId) {
+        const exceed = stationPM25DataGov[stationId].map(v => Math.max(v - WHO_GUIDELINE, 0));
+        drawBarChart({
+            canvasId: 'exceedance-hourly-chart',
+            title: `Above WHO (${WHO_GUIDELINE}) by hour — ${stationId.toUpperCase()}`,
+            labels: timeLabelsGov,
+            values: exceed,
+            yLabel: 'µg/m³ above'
+        });
+    }
+
+    function drawSameTypeComparison(currentStationId) {
+        const t = stationType[currentStationId];
+        const currentAvg = average(stationPM25DataGov[currentStationId]);
+
+        if (sameTypeMode === 'all') {
+            const sameStations = Object.keys(stationType).filter(s => stationType[s] === t);
+            drawBarChart({
+                canvasId: 'same-type-comparison-chart',
+                title: `Same type: ${typeLabelVi[t] || t} — Daily average`,
+                labels: sameStations.map(s => s.toUpperCase()),
+                values: sameStations.map(s => average(stationPM25DataGov[s])),
+                yLabel: 'µg/m³ (avg)'
+            });
+            return;
+        }
+
+        const other = sameTypeMode;
+        drawBarChart({
+            canvasId: 'same-type-comparison-chart',
+            title: `Same type compare (avg): WHO vs ${currentStationId.toUpperCase()} vs ${other.toUpperCase()}`,
+            labels: ['WHO', currentStationId.toUpperCase(), other.toUpperCase()],
+            values: [WHO_GUIDELINE, currentAvg, average(stationPM25DataGov[other])],
+            yLabel: 'µg/m³ (avg)'
+        });
+    }
+
+    function drawDiffTypeComparison(currentStationId) {
+        const currentAvg = average(stationPM25DataGov[currentStationId]);
+        const fallback = Object.keys(stationType).find(s => stationType[s] !== stationType[currentStationId]);
+        const other = diffTypeStation || fallback || currentStationId;
+
+        drawBarChart({
+            canvasId: 'diff-type-comparison-chart',
+            title: `Different type compare (avg): WHO vs ${currentStationId.toUpperCase()} vs ${other.toUpperCase()}`,
+            labels: ['WHO', currentStationId.toUpperCase(), other.toUpperCase()],
+            values: [WHO_GUIDELINE, currentAvg, average(stationPM25DataGov[other])],
+            yLabel: 'µg/m³ (avg)'
+        });
+    }
+
+    function updateGovernmentTitles(stationId) {
+        const stationUpper = stationId.toUpperCase();
+        const el1 = document.getElementById('gov-station-name-exceedance');
+        const el2 = document.getElementById('gov-station-name-same-type');
+        const el3 = document.getElementById('gov-station-name-diff-type');
+        if (el1) el1.textContent = stationUpper;
+        if (el2) el2.textContent = stationUpper;
+        if (el3) el3.textContent = stationUpper;
+    }
+
+    function initOrUpdateGovDropdowns(currentStationId) {
+        const sameItems = buildSameTypeItems(currentStationId);
+        const defaultSame = (sameTypeMode && sameItems.some(it => it.value === sameTypeMode)) ? sameTypeMode : 'all';
+        sameTypeMode = defaultSame;
+
+        govSameTypeDropdown = new Dropdown('gov-same-type-dropdown', {
+            items: sameItems,
+            defaultItem: defaultSame,
+            onSelect: function (value, text) {
+                sameTypeMode = value;
+                drawSameTypeComparison(currentStationId);
+            }
+        });
+
+        const diffItems = buildDiffTypeItems(currentStationId);
+        const defaultDiff = (diffTypeStation && diffItems.some(it => it.value === diffTypeStation))
+            ? diffTypeStation
+            : (diffItems[0]?.value || null);
+        diffTypeStation = defaultDiff;
+
+        govDiffTypeDropdown = new Dropdown('gov-diff-type-dropdown', {
+            items: diffItems,
+            defaultItem: defaultDiff,
+            onSelect: function (value, text) {
+                diffTypeStation = value;
+                drawDiffTypeComparison(currentStationId);
+            }
+        });
+    }
+
+    function updateGovernmentCharts(currentStationId) {
+        if (!stationPM25DataGov[currentStationId]) currentStationId = 's1';
+        updateGovernmentTitles(currentStationId);
+        drawExceedanceHourly(currentStationId);
+        drawSameTypeComparison(currentStationId);
+        drawDiffTypeComparison(currentStationId);
+    }
+
+    function updateGovernmentUI(currentStationId) {
+        initOrUpdateGovDropdowns(currentStationId);
+        updateGovernmentCharts(currentStationId);
+    }
+
+    const stationNameEl = document.getElementById('station-name-display');
+    if (stationNameEl) {
+        const obs = new MutationObserver(function () {
+            const isGov = (localStorage.getItem('airsense_role') === 'government');
+            if (!isGov) return;
+            requestAnimationFrame(() => updateGovernmentUI(getCurrentStationId()));
+        });
+        obs.observe(stationNameEl, { childList: true, characterData: true, subtree: true });
+    }
+
+    let resizeTimer2;
+    window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer2);
+        resizeTimer2 = setTimeout(function () {
+            const isGov = (localStorage.getItem('airsense_role') === 'government');
+            if (!isGov) return;
+            updateGovernmentCharts(getCurrentStationId());
+        }, 250);
+    });
+});
+</script>
+<!-- ===================== /ADDED: GOVERNMENT LOGIC + DROPDOWNS + CHARTS ===================== -->
+
 </body>
 </html>
