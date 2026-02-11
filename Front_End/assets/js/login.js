@@ -58,20 +58,44 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // Here you would typically send the data to a server
+            // Log thử để kiểm tra
             console.log('Login attempt:', { email, password });
 
-            // Demo logic: đăng nhập thành công => chuyển sang chế độ quản lý
-            localStorage.setItem(STORAGE_KEYS.MODE, MODES.MANAGEMENT);
-            localStorage.removeItem(STORAGE_KEYS.PENDING_MODE);
-
-            const target = getRedirectTarget();
-            localStorage.removeItem(STORAGE_KEYS.POST_LOGIN_REDIRECT);
-            window.location.href = target;
-        });
+            // GỌI API BACK-END
+            fetch('http://127.0.0.1:5000/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: email, password: password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Nếu BE trả về thành công
+                    alert('Đăng nhập thành công!');
+                    
+                    // Lưu trạng thái vào localStorage
+                    localStorage.setItem(STORAGE_KEYS.MODE, MODES.MANAGEMENT);
+                    localStorage.removeItem(STORAGE_KEYS.PENDING_MODE);
+                    
+                    // Chuyển hướng
+                    const target = getRedirectTarget();
+                    localStorage.removeItem(STORAGE_KEYS.POST_LOGIN_REDIRECT);
+                    window.location.href = target;
+                } else {
+                    // Nếu sai email hoặc mật khẩu
+                    alert(data.message || 'Sai thông tin đăng nhập. Vui lòng thử lại!');
+                }
+            })
+            .catch(error => {
+                console.error('Lỗi kết nối Server:', error);
+                alert('Không thể kết nối đến máy chủ. Vui lòng thử lại sau.');
+            });
+        }); // <-- LỖI CỦA BẠN LÀ THIẾU DÒNG NÀY
     }
     
-    // Add focus effects to inputs
+    // ĐOẠN CODE BỊ XÓA MẤT: Add focus effects to inputs
     const inputs = document.querySelectorAll('.form-input');
     inputs.forEach(input => {
         input.addEventListener('focus', function() {
@@ -83,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Link "Quay về trang công khai"
+    // ĐOẠN CODE BỊ XÓA MẤT: Link "Quay về trang công khai"
     const publicLink = document.querySelector('.public-page-link');
     if (publicLink) {
         publicLink.addEventListener('click', function(e) {
