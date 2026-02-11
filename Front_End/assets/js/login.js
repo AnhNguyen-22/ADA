@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = 'overview.html';
     }
     
+    // --- XỬ LÝ ĐĂNG NHẬP ---
     if (loginForm) {
         loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -72,19 +73,15 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    // Nếu BE trả về thành công
                     alert('Đăng nhập thành công!');
                     
-                    // Lưu trạng thái vào localStorage
                     localStorage.setItem(STORAGE_KEYS.MODE, MODES.MANAGEMENT);
                     localStorage.removeItem(STORAGE_KEYS.PENDING_MODE);
                     
-                    // Chuyển hướng
                     const target = getRedirectTarget();
                     localStorage.removeItem(STORAGE_KEYS.POST_LOGIN_REDIRECT);
                     window.location.href = target;
                 } else {
-                    // Nếu sai email hoặc mật khẩu
                     alert(data.message || 'Sai thông tin đăng nhập. Vui lòng thử lại!');
                 }
             })
@@ -92,10 +89,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Lỗi kết nối Server:', error);
                 alert('Không thể kết nối đến máy chủ. Vui lòng thử lại sau.');
             });
-        }); // <-- LỖI CỦA BẠN LÀ THIẾU DÒNG NÀY
+        }); 
     }
     
-    // ĐOẠN CODE BỊ XÓA MẤT: Add focus effects to inputs
+    // --- HIỆU ỨNG GIAO DIỆN (UI EFFECTS) ---
+
+    // 1. Ẩn/hiện mật khẩu
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener('click', function() {
+            // Kiểm tra trạng thái hiện tại
+            const isPassword = passwordInput.getAttribute('type') === 'password';
+            
+            // Thay đổi type của input
+            passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+            
+            // Cập nhật icon tương ứng
+            this.src = isPassword ? '../assets/img/login_password_unhide.png' : '../assets/img/login_password_hide.png';
+        });
+    }
+
+    // 2. Hiệu ứng focus vào ô input
     const inputs = document.querySelectorAll('.form-input');
     inputs.forEach(input => {
         input.addEventListener('focus', function() {
@@ -107,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // ĐOẠN CODE BỊ XÓA MẤT: Link "Quay về trang công khai"
+    // 3. Link "Quay về trang công khai"
     const publicLink = document.querySelector('.public-page-link');
     if (publicLink) {
         publicLink.addEventListener('click', function(e) {
