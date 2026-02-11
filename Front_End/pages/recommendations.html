@@ -4,109 +4,197 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charset="utf-8" />
     <title>AirSense HCMC - Khuyến cáo</title>
+
     <link rel="stylesheet" href="../assets/css/recommendations.css" />
     <link rel="stylesheet" href="../components/sidebar.css" />
-    <link rel="stylesheet" href="../components/dropdown.css" />
     <link rel="stylesheet" href="../assets/css/main.css" />
   </head>
+
   <body>
-    
     <div class="NB-c-khuyencao">
       <!-- Background -->
       <div class="background" aria-hidden="true">
         <div class="background-overlay"></div>
-        <img src="../assets/img/background.png" alt="" class="background-image">
-    </div>
+        <img src="../assets/img/background.png" alt="" class="background-image" />
+      </div>
+
       <!-- Main Content -->
       <main class="main-content">
         <!-- Header -->
         <header class="content-header">
-            <h1 class="main-title">KHUYẾN CÁO</h1>
-            <div class="header-info">
-                <div class="header-meta-item">
-                    <img class="header-meta-icon" src="https://c.animaapp.com/aROkQ2yh/img/place-marker@2x.png" alt="" aria-hidden="true"/>
-                    <span class="location-text">Thành phố Hồ Chí Minh</span>
-                </div>
-                <div class="header-meta-item">
-                    <img class="header-meta-icon" src="https://c.animaapp.com/aROkQ2yh/img/world-health-organization@2x.png" alt="" aria-hidden="true"/>
-                    <span class="guideline-text">WHO guideline: PM2.5 24h = 15 µg/m³</span>
-                </div>
+          <h1 class="main-title">KHUYẾN CÁO</h1>
+          <div class="header-info">
+            <div class="header-meta-item">
+              <img
+                class="header-meta-icon"
+                src="https://c.animaapp.com/aROkQ2yh/img/place-marker@2x.png"
+                alt=""
+                aria-hidden="true"
+              />
+              <span class="location-text">Thành phố Hồ Chí Minh</span>
             </div>
+            <div class="header-meta-item">
+              <img
+                class="header-meta-icon"
+                src="https://c.animaapp.com/aROkQ2yh/img/world-health-organization@2x.png"
+                alt=""
+                aria-hidden="true"
+              />
+              <span class="guideline-text">WHO guideline: PM2.5 24h = 15 µg/m³</span>
+            </div>
+          </div>
         </header>
 
         <div class="page-grid">
-          <section class="card">
+          <!-- ===================== FORECAST CARD ===================== -->
+          <section class="card forecast-card">
             <div class="card-title-row">
-              <h2 class="card-title">Dự báo PM2.5 theo trạm x thời gian</h2>
-              <div class="dropdown-container hour-dropdown" id="hour-dropdown">
-                <button class="dropdown-button" type="button" aria-haspopup="true" aria-expanded="false">
-                  <span class="dropdown-button-text">24 giờ</span>
-                  <span class="dropdown-arrow">&#9662;</span>
-                </button>
-                <div class="dropdown-menu" role="menu"></div>
+              <h2 class="card-title">Dự báo PM2.5 theo khu vực x thời gian</h2>
+
+              <!-- ✅ BỎ DROPDOWN -->
+              <div class="forecast-hint">Di chuột vào cột 3h/6h/12h/24h để highlight</div>
+            </div>
+
+            <!-- Legend + WHO -->
+            <div class="public-meta-grid">
+              <!-- Legend -->
+              <div class="public-box">
+                <div class="public-box-title">Cảnh báo màu (tham khảo)</div>
+
+                <div class="legend-row">
+                  <span class="value-pill pill-green legend-pill">Tốt</span>
+                  <span class="legend-range">0–15</span>
+
+                  <span class="value-pill pill-yellow legend-pill">Trung bình</span>
+                  <span class="legend-range">&gt;15–35</span>
+
+                  <span class="value-pill pill-orange legend-pill">Kém</span>
+                  <span class="legend-range">&gt;35–55</span>
+
+                  <span class="value-pill pill-red legend-pill">Xấu</span>
+                  <span class="legend-range">&gt;55</span>
+                </div>
+
+                <div class="public-note">
+                  * Chỉ là minh hoạ UI: bạn có thể chỉnh lại ngưỡng theo tiêu chuẩn bạn dùng.
+                </div>
+              </div>
+
+              <!-- WHO -->
+              <div class="public-box">
+                <div class="public-box-title">Bảng ngưỡng WHO (PM2.5)</div>
+
+                <div class="who-grid">
+                  <div class="who-item">
+                    <div class="who-label">24 giờ</div>
+                    <div class="who-value">15 µg/m³</div>
+                  </div>
+                  <div class="who-item">
+                    <div class="who-label">Hằng năm</div>
+                    <div class="who-value">5 µg/m³</div>
+                  </div>
+                </div>
+
+                <div class="public-note">
+                  * WHO guideline hiển thị để người dân dễ hiểu “ngưỡng khuyến nghị”.
+                </div>
               </div>
             </div>
-            <div class="table">
-              <div class="table-header">
-                <div>Trạm</div>
+
+            <!-- TABLE -->
+            <div class="table" id="forecast-table">
+              <div class="table-header" id="forecast-table-header">
+                <div>Khu vực</div>
                 <div></div>
-                <div>3h</div>
-                <div>6h</div>
-                <div>12h</div>
-                <div>24h</div>
+
+                <div class="hoverable-col" data-col="3h"><span>3h</span></div>
+                <div class="hoverable-col" data-col="6h"><span>6h</span></div>
+                <div class="hoverable-col" data-col="12h"><span>12h</span></div>
+                <div class="hoverable-col" data-col="24h"><span>24h</span></div>
               </div>
-              <div class="table-row">
+
+              <!-- ✅ PUBLIC: chỉ 1 dòng tổng thể -->
+              <div class="table-row" id="hcmc-summary-row">
+                <div class="station">TP.HCM</div>
+                <div>Tổng hợp</div>
+
+                <div class="value-pill pill-yellow" data-col="3h">33.2</div>
+                <div class="value-pill pill-yellow" data-col="6h">34.5</div>
+                <div class="value-pill pill-orange" data-col="12h">38.1</div>
+                <div class="value-pill pill-orange" data-col="24h">41.0</div>
+              </div>
+
+              <!-- ✅ GOVERNMENT: theo trạm (ẩn khi public) -->
+              <div class="table-row station-row" data-series="S1">
                 <div class="station">S1</div>
                 <div>Giao thông</div>
-                <div class="value-pill pill-red">49.1</div>
-                <div class="value-pill pill-yellow">32.7</div>
-                <div class="value-pill pill-green">15</div>
-                <div class="value-pill pill-orange">49.1</div>
+                <div class="value-pill pill-red" data-col="3h">49.1</div>
+                <div class="value-pill pill-yellow" data-col="6h">32.7</div>
+                <div class="value-pill pill-green" data-col="12h">15.0</div>
+                <div class="value-pill pill-orange" data-col="24h">49.1</div>
               </div>
-              <div class="table-row">
+
+              <div class="table-row station-row" data-series="S2">
                 <div class="station">S2</div>
                 <div>Dân cư</div>
-                <div class="value-pill pill-green">49.1</div>
-                <div class="value-pill pill-yellow">32.7</div>
-                <div class="value-pill pill-green">15</div>
-                <div class="value-pill pill-orange">49.1</div>
+                <div class="value-pill pill-green" data-col="3h">21.6</div>
+                <div class="value-pill pill-yellow" data-col="6h">28.4</div>
+                <div class="value-pill pill-yellow" data-col="12h">31.2</div>
+                <div class="value-pill pill-orange" data-col="24h">36.7</div>
               </div>
-              <div class="table-row">
+
+              <div class="table-row station-row" data-series="S3">
                 <div class="station">S3</div>
                 <div>Công nghiệp</div>
-                <div class="value-pill pill-orange">49.1</div>
-                <div class="value-pill pill-red">32.7</div>
-                <div class="value-pill pill-purple">15</div>
-                <div class="value-pill pill-plum">49.1</div>
+                <div class="value-pill pill-orange" data-col="3h">40.8</div>
+                <div class="value-pill pill-red" data-col="6h">56.2</div>
+                <div class="value-pill pill-plum" data-col="12h">68.0</div>
+                <div class="value-pill pill-plum" data-col="24h">70.1</div>
               </div>
-              <div class="table-row">
-                <div class="station">S1</div>
-                <div>Giao thông</div>
-                <div class="value-pill pill-red">49.1</div>
-                <div class="value-pill pill-yellow">32.7</div>
-                <div class="value-pill pill-green">15</div>
-                <div class="value-pill pill-orange">49.1</div>
+            </div>
+
+            <!-- ✅ CHART nằm đúng vùng trống dưới bảng (CHỈ GOVERNMENT) -->
+            <div class="gov-compare-chart" id="gov-compare-chart" aria-hidden="true">
+              <div class="gov-chart-header">
+                <div>
+                  <div class="gov-chart-title">So sánh dự báo: TP.HCM vs các trạm</div>
+                  <div class="gov-chart-sub">
+                    Click để bật/tắt từng đường (dữ liệu lấy trực tiếp từ bảng).
+                  </div>
+                </div>
+
+                <div class="gov-chart-toggles" id="gov-chart-toggles">
+                  <button class="toggle-btn is-on" data-series="HCMC" type="button">TP.HCM</button>
+                  <button class="toggle-btn is-on" data-series="S1" type="button">S1</button>
+                  <button class="toggle-btn is-on" data-series="S2" type="button">S2</button>
+                  <button class="toggle-btn is-on" data-series="S3" type="button">S3</button>
+                </div>
               </div>
-              <div class="table-row">
-                <div class="station">S2</div>
-                <div>Dân cư</div>
-                <div class="value-pill pill-green">49.1</div>
-                <div class="value-pill pill-yellow">32.7</div>
-                <div class="value-pill pill-green">15</div>
-                <div class="value-pill pill-orange">49.1</div>
+
+              <div class="gov-chart-canvas-wrap">
+                <canvas id="compare-line-chart"></canvas>
               </div>
-              <div class="table-row">
-                <div class="station">S3</div>
-                <div>Công nghiệp</div>
-                <div class="value-pill pill-orange">49.1</div>
-                <div class="value-pill pill-red">32.7</div>
-                <div class="value-pill pill-purple">15</div>
-                <div class="value-pill pill-plum">49.1</div>
+
+              <div class="public-note">
+                * Line chart chỉ hiển thị trong chế độ Quản lý để so sánh mức chênh giữa tổng thể và từng trạm.
               </div>
             </div>
           </section>
 
+          <!-- RIGHT STACK -->
           <aside class="right-stack">
+            <div class="card">
+              <h3 class="info-title">VÌ SAO PM2.5 TĂNG?</h3>
+              <ul class="info-list" id="public-top-reasons">
+                <li><b>PM2.5 giờ trước cao:</b> nồng độ nền đang cao nên dễ “kéo” dự báo tăng.</li>
+                <li><b>NO₂ tăng:</b> thường liên quan giao thông/đốt nhiên liệu, góp phần tăng bụi mịn thứ cấp.</li>
+                <li><b>Độ ẩm thấp:</b> hạt bụi lơ lửng lâu hơn, dễ tích tụ trong không khí.</li>
+              </ul>
+              <div class="public-note">
+                * Đây là mô tả dễ hiểu cho người dân (minh hoạ). Khi có dữ liệu thật, bạn thay text bằng kết quả model.
+              </div>
+            </div>
+
             <div class="card">
               <h3 class="info-title">1. GIÓ</h3>
               <ul class="info-list">
@@ -117,6 +205,7 @@
                 <li>Morbi quis libero tempor, accumsan diam lacinia, dignissim nulla.</li>
               </ul>
             </div>
+
             <div class="card">
               <h3 class="info-title">2. NHIỆT ĐỘ & ĐỘ ẨM</h3>
               <ul class="info-list">
@@ -127,6 +216,7 @@
                 <li>Morbi quis libero tempor, accumsan diam lacinia, dignissim nulla.</li>
               </ul>
             </div>
+
             <div class="card">
               <h3 class="info-title">3. GIAO THÔNG</h3>
               <ul class="info-list">
@@ -140,6 +230,7 @@
           </aside>
         </div>
 
+        <!-- PUBLIC RECOMMENDATIONS -->
         <section class="card bottom-card">
           <h3 class="bottom-title">Khuyến cáo cho người dân</h3>
           <div class="bottom-columns">
@@ -165,126 +256,435 @@
             </div>
           </div>
         </section>
-        </main>
-      </div>
 
-      <!-- Sidebar Component -->
-      <aside class="side-ql-unchoose" id="sidebar">
-        <!-- Logo ở trên cùng -->
-        <img class="image-3 logo-large" src="../assets/img/logo_lon.png" alt="AirSense HCMC Logo" id="sidebar-logo"/>
-        <img class="image-3 logo-small" src="../assets/img/logo_nho.png" alt="AirSense HCMC Logo Small" id="sidebar-logo-small" style="display: none;"/>
-        
-        <!-- Toggle Button -->
-        <img class="show-left-side-panel" id="sidebarToggle" src="https://c.animaapp.com/aROkQ2yh/img/show-left-side-panel@2x.png" alt="Toggle sidebar" style="cursor: pointer;"/>
-        
-        <!-- Mode Switcher -->
-        <div class="group-12">
-          <div class="rectangle-26"></div>
-          <div class="rectangle-27"></div>
-          <div class="text-wrapper-76" data-mode="public">Công khai</div>
-          <div class="text-wrapper-77" data-mode="management">Quản lý</div>
-        </div>
-        
-        <!-- Active Menu Item Background -->
-        <div class="rectangle-28"></div>
-        
-        <!-- Navigation Icons -->
-        <a href="overview.html" class="nav-link" data-page="overview">
-          <img class="analyze" src="https://c.animaapp.com/aROkQ2yh/img/analyze@2x.png" alt="Tổng quan"/>
-          <div class="text-wrapper-78">Tổng quan</div>
-        </a>
-        
-        <a href="station-tracking.html" class="nav-link" data-page="station-tracking">
-          <img class="place-marker-2" src="https://c.animaapp.com/aROkQ2yh/img/place-marker-1@2x.png" alt="Theo dõi theo trạm"/>
-          <div class="theo-d-i-tr-m">Theo dõi theo trạm</div>
-        </a>
-        
-        <a href="recommendations.html" class="nav-link active" data-page="recommendations">
-          <img class="good-quality" src="https://c.animaapp.com/aROkQ2yh/img/good-quality@2x.png" alt="Khuyến cáo"/>
-          <div class="text-wrapper-79">Khuyến cáo</div>
-        </a>
-        
-        <a href="dataset.html" class="nav-link" data-page="dataset">
-          <img class="database" src="https://c.animaapp.com/aROkQ2yh/img/database@2x.png" alt="Dữ liệu"/>
-          <div class="text-wrapper-80">Dữ liệu</div>
-        </a>
-        
-        <a href="model-evaluation.html" class="nav-link" data-page="model-evaluation">
-          <img class="intelligence" src="https://c.animaapp.com/aROkQ2yh/img/intelligence@2x.png" alt="Đánh giá mô hình"/>
-          <div class="text-wrapper-81">Đánh giá mô hình</div>
-        </a>
-        
-        <a href="policy-suggestions.html" class="nav-link" data-page="policy-suggestions">
-          <img class="light-on" src="https://c.animaapp.com/aROkQ2yh/img/light-on@2x.png" alt="Gợi ý chính sách"/>
-          <div class="text-wrapper-82">Gợi ý chính sách</div>
-        </a>
-        
-        <!-- User Profile Section -->
-        <div class="group-11">
-          <div class="rectangle-25"></div>
-          <img class="image-2" src="../assets/img/avatar.jpeg" alt="Avatar"/>
-          <div class="text-wrapper-74">Quản lý</div>
-          <p class="text-wrapper-75">Bạn đang ở trang quản lý</p>
-          <img class="logout-rounded" src="https://c.animaapp.com/aROkQ2yh/img/logout-rounded@2x.png" alt="Logout" style="cursor: pointer;"/>
-        </div>
-      </aside>
+        <!-- GOVERNMENT SECTION -->
+        <section class="card bottom-card" id="government-section" style="display:none;">
+          <h3 class="bottom-title">Dành cho Cơ quan quản lý</h3>
+
+          <div class="gov-grid">
+            <div class="gov-box">
+              <div class="gov-row">
+                <div>
+                  <div class="gov-title">Tải CSV dự báo</div>
+                  <div class="gov-desc">Xuất dữ liệu dự báo từ bảng (TP.HCM + theo trạm, 3h/6h/12h/24h).</div>
+                </div>
+                <button id="btn-download-csv" class="btn-primary">Tải CSV</button>
+              </div>
+              <div class="public-note">
+                * Export phía client (demo). Khi nối backend, bạn đổi sang API download.
+              </div>
+            </div>
+
+            <div class="gov-box">
+              <div class="gov-title">Đánh giá độ tin cậy dự báo</div>
+              <div class="gov-desc">Minh hoạ: “Confidence score” theo các mốc dự báo (3h/6h/12h/24h).</div>
+              <canvas id="reliability-chart"></canvas>
+            </div>
+          </div>
+
+          <div class="public-note">
+            * Government “thấy thêm”: tải dữ liệu + đánh giá độ tin cậy (UI demo)
+          </div>
+        </section>
+      </main>
     </div>
 
-    <script src="../components/sidebar.js"></script>
-    <script src="../components/dropdown.js"></script>
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const hourDropdown = new Dropdown('hour-dropdown', {
-          items: [
-            { value: '3h', text: '3 giờ' },
-            { value: '6h', text: '6 giờ' },
-            { value: '12h', text: '12 giờ' },
-            { value: '24h', text: '24 giờ' }
-          ],
-          defaultItem: '24h'
-        });
+    <!-- Sidebar -->
+    <aside class="side-ql-unchoose" id="sidebar">
+      <img class="image-3 logo-large" src="../assets/img/logo_lon.png" alt="AirSense HCMC Logo" id="sidebar-logo"/>
+      <img class="image-3 logo-small" src="../assets/img/logo_nho.png" alt="AirSense HCMC Logo Small" id="sidebar-logo-small" style="display: none;"/>
 
+      <img class="show-left-side-panel" id="sidebarToggle" src="https://c.animaapp.com/aROkQ2yh/img/show-left-side-panel@2x.png" alt="Toggle sidebar" style="cursor: pointer;"/>
+
+      <!-- Mode Switcher -->
+      <div class="group-12">
+        <div class="rectangle-26"></div>
+        <div class="rectangle-27"></div>
+        <div class="text-wrapper-76" data-mode="public">Công khai</div>
+        <div class="text-wrapper-77" data-mode="management">Quản lý</div>
+      </div>
+
+      <div class="rectangle-28"></div>
+
+      <a href="overview.html" class="nav-link" data-page="overview">
+        <img class="analyze" src="https://c.animaapp.com/aROkQ2yh/img/analyze@2x.png" alt="Tổng quan"/>
+        <div class="text-wrapper-78">Tổng quan</div>
+      </a>
+
+      <a href="station-tracking.html" class="nav-link" data-page="station-tracking">
+        <img class="place-marker-2" src="https://c.animaapp.com/aROkQ2yh/img/place-marker-1@2x.png" alt="Theo dõi theo trạm"/>
+        <div class="theo-d-i-tr-m">Theo dõi theo trạm</div>
+      </a>
+
+      <a href="recommendations.html" class="nav-link active" data-page="recommendations">
+        <img class="good-quality" src="https://c.animaapp.com/aROkQ2yh/img/good-quality@2x.png" alt="Khuyến cáo"/>
+        <div class="text-wrapper-79">Khuyến cáo</div>
+      </a>
+
+      <a href="dataset.html" class="nav-link" data-page="dataset">
+        <img class="database" src="https://c.animaapp.com/aROkQ2yh/img/database@2x.png" alt="Dữ liệu"/>
+        <div class="text-wrapper-80">Dữ liệu</div>
+      </a>
+
+      <a href="model-evaluation.html" class="nav-link" data-page="model-evaluation">
+        <img class="intelligence" src="https://c.animaapp.com/aROkQ2yh/img/intelligence@2x.png" alt="Đánh giá mô hình"/>
+        <div class="text-wrapper-81">Đánh giá mô hình</div>
+      </a>
+
+      <a href="policy-suggestions.html" class="nav-link" data-page="policy-suggestions">
+        <img class="light-on" src="https://c.animaapp.com/aROkQ2yh/img/light-on@2x.png" alt="Gợi ý chính sách"/>
+        <div class="text-wrapper-82">Gợi ý chính sách</div>
+      </a>
+
+      <div class="group-11">
+        <div class="rectangle-25"></div>
+        <img class="image-2" src="../assets/img/avatar.jpeg" alt="Avatar"/>
+        <div class="text-wrapper-74">Quản lý</div>
+        <p class="text-wrapper-75">Bạn đang ở trang quản lý</p>
+        <img class="logout-rounded" src="https://c.animaapp.com/aROkQ2yh/img/logout-rounded@2x.png" alt="Logout" style="cursor: pointer;"/>
+      </div>
+    </aside>
+
+    <script src="../components/sidebar.js"></script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        // ===== Active menu highlight =====
         const recommendationsLink = document.querySelector('a[href="recommendations.html"]');
         if (recommendationsLink) {
           recommendationsLink.classList.add('active');
           document.querySelectorAll('.nav-link').forEach(link => {
-            if (link !== recommendationsLink) {
-              link.classList.remove('active');
-            }
+            if (link !== recommendationsLink) link.classList.remove('active');
           });
         }
 
-        const sidebar = document.getElementById('sidebar');
-        const frame = document.querySelector('.frame');
-        
-        if (sidebar && frame) {
-          function updateFramePosition() {
-            const isCollapsed = sidebar.classList.contains('collapsed');
-            frame.style.left = isCollapsed ? '118px' : '315px';
-          }
+        // ===== Hover highlight theo cột =====
+        const header = document.getElementById('forecast-table-header');
+        const table = document.getElementById('forecast-table');
 
-          const sidebarToggle = document.getElementById('sidebarToggle');
-          if (sidebarToggle) {
-            sidebarToggle.addEventListener('click', function() {
-              setTimeout(updateFramePosition, 50);
-            });
-          }
+        function clearHighlight() {
+          table.querySelectorAll('.col-highlight').forEach(el => el.classList.remove('col-highlight'));
+          header.querySelectorAll('.col-highlight-header').forEach(el => el.classList.remove('col-highlight-header'));
+        }
 
-          updateFramePosition();
+        function highlightCol(colKey) {
+          clearHighlight();
 
-          const observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-              if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-                updateFramePosition();
-              }
-            });
-          });
+          const headSpan = header.querySelector(`.hoverable-col[data-col="${colKey}"] span`);
+          if (headSpan) headSpan.classList.add('col-highlight-header');
 
-          observer.observe(sidebar, {
-            attributes: true,
-            attributeFilter: ['class']
+          table.querySelectorAll(`[data-col="${colKey}"]`).forEach(cell => {
+            cell.classList.add('col-highlight');
           });
         }
+
+        header.querySelectorAll('.hoverable-col').forEach(col => {
+          col.addEventListener('mouseenter', () => highlightCol(col.dataset.col));
+          col.addEventListener('mouseleave', clearHighlight);
+        });
+
+        // ===== Government visibility =====
+        const govSection = document.getElementById('government-section');
+        const govCompare = document.getElementById('gov-compare-chart');
+        const btnPublic = document.querySelector('.text-wrapper-76[data-mode="public"]');
+        const btnMgmt = document.querySelector('.text-wrapper-77[data-mode="management"]');
+
+        function setGovVisible(isVisible) {
+          document.body.classList.toggle('is-government', isVisible);
+          if (govSection) govSection.style.display = isVisible ? 'block' : 'none';
+          if (govCompare) govCompare.style.display = isVisible ? 'block' : 'none';
+          localStorage.setItem('airsense_role_reco', isVisible ? 'government' : 'public');
+
+          if (isVisible) {
+            drawReliabilityChart();
+            drawCompareChartFromTable();
+          }
+        }
+
+        if (btnPublic) btnPublic.addEventListener('click', () => setGovVisible(false));
+        if (btnMgmt) btnMgmt.addEventListener('click', () => setGovVisible(true));
+
+        const savedRole = localStorage.getItem('airsense_role_reco') || 'public';
+        setGovVisible(savedRole === 'government');
+
+        // ===== CSV Download (client-side) =====
+        function tableToCSV() {
+          const t = document.getElementById('forecast-table');
+          if (!t) return '';
+          const rows = t.querySelectorAll('.table-header, .table-row');
+          const csvLines = [];
+
+          rows.forEach(row => {
+            const style = window.getComputedStyle(row);
+            if (style.display === 'none') return;
+
+            const cells = row.querySelectorAll('div');
+            const values = [];
+            cells.forEach(cell => {
+              const text = (cell.textContent || '').trim();
+              values.push('"' + text.replace(/"/g, '""') + '"');
+            });
+            csvLines.push(values.join(','));
+          });
+
+          return csvLines.join('\n');
+        }
+
+        function downloadCSV(filename, content) {
+          const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }
+
+        const btnDownload = document.getElementById('btn-download-csv');
+        if (btnDownload) {
+          btnDownload.addEventListener('click', function () {
+            const csv = tableToCSV();
+            downloadCSV('forecast_pm25.csv', csv);
+          });
+        }
+
+        // ===== Reliability chart (canvas demo) =====
+        function prepareCanvas(canvasId, height) {
+          const canvas = document.getElementById(canvasId);
+          if (!canvas) return null;
+          const ctx = canvas.getContext('2d');
+          const width = (canvas.width = canvas.offsetWidth);
+          canvas.height = height;
+          ctx.clearRect(0, 0, width, height);
+          return { ctx, width, height };
+        }
+
+        function drawBarChart(canvasId, labels, values, title) {
+          const pack = prepareCanvas(canvasId, 220);
+          if (!pack) return;
+          const { ctx, width, height } = pack;
+
+          const padding = { top: 42, right: 26, bottom: 52, left: 56 };
+          const chartW = width - padding.left - padding.right;
+          const chartH = height - padding.top - padding.bottom;
+
+          ctx.fillStyle = '#131e29';
+          ctx.font = '700 14px Arial';
+          ctx.textAlign = 'left';
+          ctx.fillText(title, padding.left, 22);
+
+          const maxV = 100;
+          const ticks = 5;
+
+          ctx.strokeStyle = '#e0e0e0';
+          ctx.lineWidth = 1;
+          ctx.font = '12px Arial';
+          ctx.fillStyle = '#666';
+          ctx.textAlign = 'right';
+
+          for (let i = 0; i <= ticks; i++) {
+            const y = padding.top + (chartH / ticks) * i;
+            const v = maxV - (maxV / ticks) * i;
+
+            ctx.beginPath();
+            ctx.moveTo(padding.left, y);
+            ctx.lineTo(width - padding.right, y);
+            ctx.stroke();
+
+            ctx.fillText(Math.round(v) + '%', padding.left - 10, y + 4);
+          }
+
+          const barW = chartW / labels.length;
+          ctx.textAlign = 'center';
+
+          labels.forEach((lb, i) => {
+            const val = values[i];
+            const h = (val / maxV) * chartH;
+
+            const x = padding.left + i * barW + barW * 0.2;
+            const y = padding.top + chartH - h;
+            const w = barW * 0.6;
+
+            ctx.fillStyle = '#9e9e9e';
+            ctx.fillRect(x, y, w, h);
+
+            ctx.fillStyle = '#131e29';
+            ctx.font = '12px Arial';
+            ctx.fillText(Math.round(val) + '%', x + w / 2, y - 6);
+
+            ctx.fillStyle = '#666';
+            ctx.font = '12px Arial';
+            ctx.fillText(lb, x + w / 2, height - padding.bottom + 20);
+          });
+
+          ctx.save();
+          ctx.translate(padding.left - 36, padding.top + chartH / 2);
+          ctx.rotate(-Math.PI / 2);
+          ctx.fillStyle = '#666';
+          ctx.font = '12px Arial';
+          ctx.textAlign = 'center';
+          ctx.fillText('Độ tin cậy (%)', 0, 0);
+          ctx.restore();
+        }
+
+        function drawReliabilityChart() {
+          const labels = ['3h', '6h', '12h', '24h'];
+          const values = [86, 78, 66, 58]; // demo %
+          drawBarChart('reliability-chart', labels, values, 'Confidence score theo mốc dự báo');
+        }
+
+        // ===== Compare line chart (TP.HCM vs trạm) =====
+        const compareState = { HCMC: true, S1: true, S2: true, S3: true };
+
+        function parseRowSeries(rowEl) {
+          const getNum = (col) => {
+            const el = rowEl.querySelector(`[data-col="${col}"]`);
+            if (!el) return null;
+            const v = parseFloat((el.textContent || '').trim());
+            return Number.isFinite(v) ? v : null;
+          };
+          return [getNum('3h'), getNum('6h'), getNum('12h'), getNum('24h')];
+        }
+
+        function getSeriesData() {
+          const data = {};
+
+          const hcmc = document.getElementById('hcmc-summary-row');
+          if (hcmc) data.HCMC = parseRowSeries(hcmc);
+
+          document.querySelectorAll('.station-row').forEach(row => {
+            const key = row.getAttribute('data-series');
+            if (key) data[key] = parseRowSeries(row);
+          });
+
+          return data;
+        }
+
+        function drawLine(ctx, points, x0, y0, w, h, ymin, ymax) {
+          const n = points.length;
+          const xStep = w / (n - 1);
+
+          ctx.beginPath();
+          points.forEach((v, i) => {
+            if (v == null) return;
+            const x = x0 + i * xStep;
+            const y = y0 + h - ((v - ymin) / (ymax - ymin)) * h;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          });
+          ctx.stroke();
+        }
+
+        function drawCompareChartFromTable() {
+          const pack = prepareCanvas('compare-line-chart', 240);
+          if (!pack) return;
+
+          const { ctx, width, height } = pack;
+
+          const labels = ['3h', '6h', '12h', '24h'];
+          const padding = { top: 18, right: 18, bottom: 38, left: 46 };
+          const chartW = width - padding.left - padding.right;
+          const chartH = height - padding.top - padding.bottom;
+
+          const seriesData = getSeriesData();
+
+          // gom điểm để tính min/max
+          const allVals = [];
+          Object.keys(seriesData).forEach(k => {
+            if (!compareState[k]) return;
+            seriesData[k].forEach(v => {
+              if (v != null) allVals.push(v);
+            });
+          });
+
+          // fallback
+          const ymin = allVals.length ? Math.min(...allVals) : 0;
+          const ymax = allVals.length ? Math.max(...allVals) : 100;
+          const minY = Math.floor(ymin * 0.9);
+          const maxY = Math.ceil(ymax * 1.1);
+
+          // background grid
+          ctx.strokeStyle = 'rgba(0,0,0,0.10)';
+          ctx.lineWidth = 1;
+
+          const ticks = 4;
+          ctx.font = '12px Arial';
+          ctx.fillStyle = '#666';
+          ctx.textAlign = 'right';
+          for (let i = 0; i <= ticks; i++) {
+            const y = padding.top + (chartH / ticks) * i;
+            const v = maxY - ((maxY - minY) / ticks) * i;
+
+            ctx.beginPath();
+            ctx.moveTo(padding.left, y);
+            ctx.lineTo(width - padding.right, y);
+            ctx.stroke();
+
+            ctx.fillText(v.toFixed(0), padding.left - 8, y + 4);
+          }
+
+          // x labels
+          ctx.textAlign = 'center';
+          labels.forEach((lb, i) => {
+            const x = padding.left + (chartW / (labels.length - 1)) * i;
+            ctx.fillText(lb, x, height - 14);
+          });
+
+          // draw series (màu trung tính, phân biệt bằng pattern nét)
+          const styles = {
+            HCMC: { color: '#131e29', width: 2.5, dash: [] },
+            S1: { color: '#6b6b6b', width: 2, dash: [6, 4] },
+            S2: { color: '#8a8a8a', width: 2, dash: [2, 3] },
+            S3: { color: '#4f4f4f', width: 2, dash: [10, 6] },
+          };
+
+          Object.keys(styles).forEach(key => {
+            if (!compareState[key]) return;
+            const pts = seriesData[key];
+            if (!pts) return;
+
+            ctx.strokeStyle = styles[key].color;
+            ctx.lineWidth = styles[key].width;
+            ctx.setLineDash(styles[key].dash);
+
+            drawLine(ctx, pts, padding.left, padding.top, chartW, chartH, minY, maxY);
+          });
+
+          ctx.setLineDash([]);
+
+          // simple note axis
+          ctx.fillStyle = '#666';
+          ctx.font = '12px Arial';
+          ctx.textAlign = 'left';
+          ctx.fillText('µg/m³', 6, padding.top + 10);
+        }
+
+        // toggle buttons
+        const toggles = document.getElementById('gov-chart-toggles');
+        if (toggles) {
+          toggles.querySelectorAll('.toggle-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const key = btn.getAttribute('data-series');
+              compareState[key] = !compareState[key];
+              btn.classList.toggle('is-on', compareState[key]);
+              drawCompareChartFromTable();
+            });
+          });
+        }
+
+        // redraw on resize (gov mode)
+        let timer;
+        window.addEventListener('resize', function () {
+          clearTimeout(timer);
+          timer = setTimeout(function () {
+            const isGov = localStorage.getItem('airsense_role_reco') === 'government';
+            if (!isGov) return;
+            drawReliabilityChart();
+            drawCompareChartFromTable();
+          }, 250);
+        });
       });
     </script>
   </body>

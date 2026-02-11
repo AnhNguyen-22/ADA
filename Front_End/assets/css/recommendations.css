@@ -1,5 +1,3 @@
-
-
 @supports selector(:has(*)) {
   .NB-c-khuyencao:has(.side-ql-unchoose.collapsed) .frame {
     left: 118px;
@@ -73,10 +71,85 @@
   margin: 0;
 }
 
-.hour-dropdown {
-  max-width: 110px;
+/* ===================== PUBLIC COMPACT + META BOXES ===================== */
+.forecast-card {
+  padding-bottom: 14px;
 }
 
+.forecast-hint {
+  font-size: 12.5px;
+  color: #666;
+  opacity: 0.9;
+  white-space: nowrap;
+}
+
+.public-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 10px 0 14px;
+}
+
+.public-box {
+  padding: 10px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.public-box-title {
+  font-weight: 700;
+  color: #131e29;
+  margin-bottom: 6px;
+}
+
+.legend-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.legend-pill {
+  min-width: auto;
+}
+
+.legend-range {
+  color: #666;
+  font-size: 13px;
+}
+
+.public-note {
+  margin-top: 8px;
+  color: #666;
+  font-size: 12.5px;
+}
+
+.who-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  font-size: 13px;
+  color: #444;
+}
+
+.who-item {
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.who-label {
+  font-weight: 700;
+  color: #131e29;
+}
+
+.who-value {
+  color: #444;
+}
+
+/* ===================== TABLE ===================== */
 .NB-c-khuyencao .table {
   display: flex;
   flex-direction: column;
@@ -86,10 +159,10 @@
 .NB-c-khuyencao .table-header,
 .NB-c-khuyencao .table-row {
   display: grid;
-  grid-template-columns: 50px 120px repeat(4, 1fr);
+  grid-template-columns: 90px 160px repeat(4, 1fr);
   align-items: center;
   gap: 10px;
-  padding: 7px 10px;
+  padding: 10px 12px;
   border-radius: 12px;
 }
 
@@ -121,6 +194,7 @@
   color: var(--color-text-dark);
 }
 
+/* Pills colors */
 .pill-red {
   background: rgba(246, 104, 106, 0.55);
 }
@@ -145,17 +219,123 @@
   background: rgba(159, 118, 132, 0.45);
 }
 
+/* ===================== HOVER COLUMN HIGHLIGHT ===================== */
+#forecast-table .table-header .hoverable-col {
+  cursor: pointer;
+  user-select: none;
+}
+
+.col-highlight {
+  background: rgba(255, 255, 255, 0.35) !important;
+  border: 2px solid rgba(19, 30, 41, 0.35) !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08) !important;
+  transform: translateY(-1px);
+  transition: 120ms ease;
+}
+
+.col-highlight-header {
+  background: rgba(255, 255, 255, 0.28) !important;
+  border-radius: 999px;
+  padding: 6px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(19, 30, 41, 0.25);
+}
+
+/* ===================== PUBLIC vs GOVERNMENT VISIBILITY ===================== */
+.station-row {
+  display: none; /* public default */
+}
+
+body.is-government .station-row {
+  display: grid; /* gov show station rows */
+}
+
+/* TP.HCM vẫn hiện ở gov (theo yêu cầu mới) -> KHÔNG ẩn summary */
+body.is-government #hcmc-summary-row {
+  display: grid;
+}
+
+/* ===================== GOVERNMENT COMPARE CHART (nằm dưới bảng) ===================== */
+.gov-compare-chart {
+  display: none; /* chỉ hiện khi gov */
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: rgba(255, 255, 255, 0.55);
+}
+
+body.is-government .gov-compare-chart {
+  display: block;
+}
+
+.gov-chart-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.gov-chart-title {
+  font-weight: 800;
+  color: #131e29;
+  margin-bottom: 2px;
+}
+
+.gov-chart-sub {
+  font-size: 12.5px;
+  color: #666;
+}
+
+.gov-chart-toggles {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.toggle-btn {
+  border: 1px solid rgba(19, 30, 41, 0.18);
+  background: rgba(255, 255, 255, 0.75);
+  color: #131e29;
+  border-radius: 999px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 12px;
+  transition: 120ms ease;
+}
+
+.toggle-btn:hover {
+  transform: translateY(-1px);
+}
+
+.toggle-btn.is-on {
+  border-color: rgba(19, 30, 41, 0.35);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.toggle-btn:not(.is-on) {
+  opacity: 0.45;
+}
+
+.gov-chart-canvas-wrap {
+  width: 100%;
+}
+
+#compare-line-chart {
+  width: 100%;
+  display: block;
+}
+
+/* ===================== RIGHT STACK ===================== */
 .NB-c-khuyencao .right-stack {
   display: flex;
   flex-direction: column;
   gap: 16px;
-}
-
-.NB-c-khuyencao .info-card {
-  background: var(--color-panel-bg);
-  border: 1px solid var(--color-panel-border);
-  border-radius: 16px;
-  padding: 14px 16px;
 }
 
 .NB-c-khuyencao .info-title {
@@ -173,6 +353,7 @@
   line-height: 1.5;
 }
 
+/* ===================== BOTTOM ===================== */
 .NB-c-khuyencao .bottom-card {
   margin-top: 12px;
 }
@@ -206,6 +387,54 @@
   line-height: 1.5;
 }
 
+/* ===================== GOVERNMENT UI ===================== */
+.gov-grid {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.gov-box {
+  flex: 1;
+  min-width: 320px;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.gov-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.gov-title {
+  font-weight: 800;
+  color: #131e29;
+  margin-bottom: 4px;
+}
+
+.gov-desc {
+  color: #666;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.btn-primary {
+  border: none;
+  cursor: pointer;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #131e29;
+  color: #fff;
+  font-weight: 700;
+}
+
+/* ===================== RESPONSIVE ===================== */
 @media (max-width: 1200px) {
   .page-grid {
     grid-template-columns: 1fr;
@@ -213,6 +442,10 @@
 
   .page-meta {
     align-items: flex-start;
+  }
+
+  .public-meta-grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -223,13 +456,13 @@
     padding: 18px;
   }
 
-  .table-header,
-  .table-row {
-    grid-template-columns: 40px 1fr repeat(4, 1fr);
+  .NB-c-khuyencao .table-header,
+  .NB-c-khuyencao .table-row {
+    grid-template-columns: 70px 1fr repeat(4, 1fr);
     font-size: 11px;
   }
 
-  .bottom-columns {
+  .NB-c-khuyencao .bottom-columns {
     grid-template-columns: 1fr;
   }
 }
@@ -244,5 +477,9 @@
 
   .page-header {
     flex-direction: column;
+  }
+
+  .forecast-hint {
+    display: none;
   }
 }
