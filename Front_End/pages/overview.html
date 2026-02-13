@@ -37,21 +37,24 @@
             <!-- Summary Cards Row -->
             <div class="summary-cards">
                 <div class="card summary-band-item">
-                    <p class="summary-band-title">T&#7893;ng s&#7889; tr&#7841;m quan s&#225;t hi&#7879;n c&#243;</p>
-                    <p class="summary-band-value">06 Tr&#7841;m</p>
-                    <p class="summary-band-subtitle">Giao th&#244;ng/Khu d&#226;n c&#432;/Khu c&#244;ng nghi&#7879;p</p>
+                    <p class="summary-band-title">Tổng số trạm quan sát hiện có</p>
+                    <p class="summary-band-value"></p>
                 </div>
                 <div class="card summary-band-item">
-                    <p class="summary-band-title">Tr&#7841;m c&#243; m&#7913;c &#273;&#7897; &#244; nhi&#7877;m cao nh&#7845;t</p>
-                    <p class="summary-band-value">Tr&#7841;m S1 (52.1 &micro;g/m&sup3;)</p>
-                    <p class="summary-band-subtitle">Giao th&#244;ng</p>
+                    <p class="summary-band-title">Trạm có mức độ ô nhiễm cao nhất</p>
+                    <p class="summary-band-value"></p>
+                    <p class="summary-band-subtitle"></p>
                 </div>
                 <div class="card summary-band-item">
-                    <p class="summary-band-title">Ch&#7881; s&#7889; PM2.5 trung b&#236;nh (24h)</p>
+                    <p class="summary-band-title">Chỉ số PM2.5 trung bình (24h)</p>
                     <div class="summary-band-inline">
-                        <span class="summary-band-value">35.1 &micro;g/m&sup3;</span>
-                        <span class="summary-band-pill">&#8593; 6% so v&#7899;i h&#244;m qua</span>
+                        <span class="summary-band-value"></span>
+                        <span class="summary-band-pill"></span>
                     </div>
+                    <!-- Chỉ hiển thị guideline chi tiết ở chế độ quản lý -->
+                    <p class="summary-band-subtitle" data-requires="management">
+                        WHO guideline: PM2.5 24h = 15 µg/m³
+                    </p>
                 </div>
             </div>
 
@@ -61,61 +64,8 @@
                     <h2 class="card-title">Bản đồ các trạm</h2>
                     <div class="map-container">
                         <div class="map-placeholder map-visual">
-                            <img src="../assets/img/map.png" alt="B?n ?? c?c tr?m" class="map-image"/>
-                            <button class="station-marker station-hot" style="--x: 22%; --y: 28%;" type="button">
-                                <span class="marker-dot"></span>
-                                <span class="marker-tooltip">
-                                    <span class="tooltip-title">Tr?m S1</span>
-                                    <span class="tooltip-line">Lo?i khu v?c: Giao th?ng</span>
-                                    <span class="tooltip-line">PM2.5: 52.1 ?g/m?</span>
-                                    <span class="tooltip-line rating-bad">X?p lo?i: K?m</span>
-                                </span>
-                            </button>
-                            <button class="station-marker station-warn" style="--x: 45%; --y: 34%;" type="button">
-                                <span class="marker-dot"></span>
-                                <span class="marker-tooltip">
-                                    <span class="tooltip-title">Tr?m S2</span>
-                                    <span class="tooltip-line">Lo?i khu v?c: D?n c?</span>
-                                    <span class="tooltip-line">PM2.5: 41.7 ?g/m?</span>
-                                    <span class="tooltip-line rating-warning">X?p lo?i: Trung b?nh</span>
-                                </span>
-                            </button>
-                            <button class="station-marker station-warn" style="--x: 67%; --y: 44%;" type="button">
-                                <span class="marker-dot"></span>
-                                <span class="marker-tooltip">
-                                    <span class="tooltip-title">Tr?m S3</span>
-                                    <span class="tooltip-line">Lo?i khu v?c: C?ng nghi?p</span>
-                                    <span class="tooltip-line">PM2.5: 36.4 ?g/m?</span>
-                                    <span class="tooltip-line rating-warning">X?p lo?i: Trung b?nh</span>
-                                </span>
-                            </button>
-                            <button class="station-marker station-good" style="--x: 36%; --y: 70%;" type="button">
-                                <span class="marker-dot"></span>
-                                <span class="marker-tooltip">
-                                    <span class="tooltip-title">Tr?m S4</span>
-                                    <span class="tooltip-line">Lo?i khu v?c: D?n c?</span>
-                                    <span class="tooltip-line">PM2.5: 24.6 ?g/m?</span>
-                                    <span class="tooltip-line rating-good">X?p lo?i: T?t</span>
-                                </span>
-                            </button>
-                            <button class="station-marker station-warn" style="--x: 58%; --y: 62%;" type="button">
-                                <span class="marker-dot"></span>
-                                <span class="marker-tooltip">
-                                    <span class="tooltip-title">Tr?m S5</span>
-                                    <span class="tooltip-line">Lo?i khu v?c: Giao th?ng</span>
-                                    <span class="tooltip-line">PM2.5: 39.2 ?g/m?</span>
-                                    <span class="tooltip-line rating-warning">X?p lo?i: Trung b?nh</span>
-                                </span>
-                            </button>
-                            <button class="station-marker station-hot" style="--x: 78%; --y: 26%;" type="button">
-                                <span class="marker-dot"></span>
-                                <span class="marker-tooltip">
-                                    <span class="tooltip-title">Tr?m S6</span>
-                                    <span class="tooltip-line">Lo?i khu v?c: C?ng nghi?p</span>
-                                    <span class="tooltip-line">PM2.5: 49.8 ?g/m?</span>
-                                    <span class="tooltip-line rating-bad">X?p lo?i: K?m</span>
-                                </span>
-                            </button>
+                            <img src="../assets/img/map.png" alt="Bản đồ các trạm" class="map-image"/>
+                            <!-- Các marker trạm sẽ được vẽ động bằng JavaScript dựa trên dữ liệu backend -->
                         </div>
                     </div>
                 </div>
@@ -137,7 +87,7 @@
                                 <div class="dropdown-menu" role="menu"></div>
                             </div>
                         </div>
-                        <button class="btn-refresh" type="button" aria-label="Refresh">
+                        <button class="btn-refresh" type="button" aria-label="Refresh" id="refreshButton" title="Làm mới dữ liệu">
                             <svg class="refresh-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M1 4V10H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M23 20V14H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -151,30 +101,9 @@
                 </div>
             </div>
 
-
-            <div class="summary-cards summary-band" data-requires="management">
-                <div class="card summary-band-item">
-                    <p class="summary-band-title">Tr&#7841;m t&#7879; nh&#7845;t h&#244;m nay</p>
-                    <p class="summary-band-value">Tr&#7841;m S1</p>
-                    <p class="summary-band-subtitle">Giao th&#244;ng</p>
-                </div>
-                <div class="card summary-band-item">
-                    <p class="summary-band-title">Ch&#7881; s&#7889; PM2.5 trung b&#236;nh t&#7841;i tr&#7841;m t&#7879; nh&#7845;t</p>
-                    <p class="summary-band-value">Tr&#7841;m S1 (52.1 &micro;g/m&sup3;)</p>
-                    <p class="summary-band-subtitle">Giao th&#244;ng</p>
-                </div>
-                <div class="card summary-band-item">
-                    <p class="summary-band-title">Ch&#7881; s&#7889; PM 2.5 trung b&#236;nh c&#225;c tr&#7841;m</p>
-                    <div class="summary-band-inline">
-                        <span class="summary-band-value">35.1 &micro;g/m&sup3;</span>
-                        <span class="summary-band-pill">&#8593; 6% so v&#7899;i h&#244;m qua</span>
-                    </div>
-                    <p class="summary-band-subtitle">WHO guideline: PM2.5 24h = 15 &micro;g/m&sup3;</p>
-                </div>
-            </div>
-
             <!-- Bottom Row -->
             <div class="bottom-row">
+                <!-- Dữ liệu xếp hạng theo PM2.5 trung bình cho 6 trạm -->
                 <div class="card">
                     <h2 class="card-title">Xếp hạng mức độ ô nhiễm theo trạm</h2>
                     <div class="ranking-container">
@@ -186,14 +115,28 @@
                     <h2 class="card-title">Giải thích xu hướng</h2>
                     <div class="explanation-content">
                         <ul class="explanation-list">
-                            <li>Maecenas quis velit nec ipsum sollicitudin mattis at quis sapien.</li>
-                            <li>Nam in risus sit amet est pellentesque feugiat.</li>
-                            <li>Ut eu nulla a purus ultrices interdum.</li>
-                            <li>Nullam egestas nisi quis nunc dictum tristique.</li>
-                            <li>Morbi quis libero tempor, accumsan diam lacinia, dignissim nulla.</li>
+                            <!-- Nội dung này sẽ được điền động bằng JavaScript từ dữ liệu backend -->
                         </ul>
                     </div>
                 </div>
+            </div>
+
+            <br><br>
+            <!-- Bottom Row last row: chỉ cho chế độ quản lý -->
+            <div class="bottom-row">
+                <div data-requires="management" class="card">
+                    <h2 class="card-title">Số giờ trong ngày PM2.5 &gt; 15 µg/m³ tại top 3 trạm tệ nhất</h2>
+                    <div class="management-chart-container">
+                        <canvas id="hoursAboveThresholdChart"></canvas>
+                    </div>
+                </div>
+                <div data-requires="management" class="card">
+                    <h2 class="card-title">Nhận xét xu hướng</h2>
+                    <div class="explanation-content">
+                        <ul class="explanation-list" id="management-details">
+                            <!-- Nhận xét chi tiết sẽ được sinh tự động bằng JavaScript -->
+                        </ul>
+                    </div>
             </div>
         </main>
     </div>
