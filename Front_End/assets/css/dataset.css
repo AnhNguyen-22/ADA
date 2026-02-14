@@ -1,5 +1,3 @@
-
-
 :root {
     --base-font-size: clamp(12px, 1.2vw, 16px);
     --sidebar-width: clamp(60px, 5vw, 80px);
@@ -15,7 +13,6 @@
     --card-bg: rgba(255, 255, 255, 0.2);
 }
 
-
 /* Dashboard Container */
 .dashboard-container {
     position: relative;
@@ -25,8 +22,6 @@
     overflow-x: hidden;
 }
 
-
-
 /* Data Overview Cards */
 .data-overview {
     display: grid;
@@ -34,7 +29,6 @@
     gap: clamp(15px, 2vw, 20px);
     margin-bottom: clamp(20px, 2.5vw, 30px);
 }
-
 
 .card-value {
     font-family: '72', sans-serif;
@@ -52,89 +46,67 @@
     margin-top: clamp(4px, 0.5vw, 6px);
 }
 
-/* Heatmap Section */
+/* --- HEATMAP SECTION --- */
 .heatmap-section {
     margin-bottom: clamp(20px, 2.5vw, 30px);
 }
 
-
-.heatmap-container {
-    margin-top: clamp(15px, 2vw, 20px);
-    overflow-x: auto;
-}
-
-.heatmap-grid {
-    display: grid;
-    gap: clamp(6px, 0.8vw, 8px);
-    min-width: fit-content;
-    margin: 0 auto;
-}
-
-.heatmap-header {
-    display: grid;
-    gap: clamp(6px, 0.8vw, 8px);
-    margin-bottom: clamp(6px, 0.8vw, 8px);
+#heatmapContainer {
+    margin-top: 15px;
+    overflow-x: auto; /* Cho phép cuộn ngang nếu nhiều cột */
+    padding-bottom: 10px;
 }
 
 .heatmap-header-cell {
-    font-family: '72', sans-serif;
-    font-weight: 600;
-    font-size: clamp(11px, 1.2vw, 13px);
-    color: white;
-    text-align: center;
-    padding: clamp(8px, 1vw, 10px);
-    min-width: clamp(60px, 8vw, 80px);
-}
-
-.heatmap-row {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: clamp(6px, 0.8vw, 8px);
-    align-items: center;
-}
-
-.heatmap-row-label {
-    font-family: '72', sans-serif;
-    font-weight: 600;
-    font-size: clamp(11px, 1.2vw, 13px);
-    color: white;
-    padding: clamp(8px, 1vw, 10px);
-    min-width: clamp(60px, 8vw, 80px);
-    text-align: right;
-}
-
-.heatmap-row-cells {
-    display: grid;
-    grid-template-columns: repeat(var(--var-count, 8), 1fr);
-    gap: clamp(6px, 0.8vw, 8px);
-}
-
-.heatmap-cell {
-    width: clamp(50px, 7vw, 70px);
-    height: clamp(50px, 7vw, 70px);
-    border-radius: clamp(6px, 0.8vw, 8px);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: '72', sans-serif;
+    padding: 12px;
     font-weight: 600;
-    font-size: clamp(10px, 1.2vw, 12px);
-    color: white;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 13px;
+    color: #013a59;
+    background-color: #e1f5fe;
+    border-radius: 4px;
 }
 
+.heatmap-row-label {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Ép nhãn nằm sát vào ma trận */
+    padding: 12px 15px;
+    font-weight: 600;
+    font-size: 13px;
+    color: #013a59;
+    background-color: #e1f5fe;
+    border-radius: 4px;
+}
+
+.heatmap-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: default;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Hiệu ứng nổi bật (nổi 3D lên) khi rê chuột vào ô dữ liệu */
 .heatmap-cell:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: scale(1.15);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+    z-index: 10;
+    position: relative;
+    border: 1px solid #fff;
 }
 
-/* Variable Section */
+
+/* --- VARIABLE SECTION --- */
 .variable-section {
     margin-bottom: clamp(20px, 2.5vw, 30px);
 }
-
 
 .variable-controls {
     display: flex;
@@ -163,7 +135,7 @@
     color: white;
 }
 
-/* Variable Table */
+/* --- VARIABLE TABLE --- */
 .variable-table-container {
     margin-top: clamp(15px, 2vw, 20px);
     overflow-x: auto;
@@ -207,31 +179,57 @@
     border-bottom: none;
 }
 
-/* Custom Scrollbar */
+
+/* --- BẢNG DỮ LIỆU CSV (FREEZE HEADER) --- */
+.csv-table-container {
+    max-height: 400px;      /* Giới hạn chiều cao để xuất hiện thanh cuộn */
+    overflow-y: auto;       /* Tự động hiện thanh cuộn dọc khi dữ liệu dài */
+    border-radius: 10px;    /* Bo tròn 4 góc của khung chứa */
+    border: 1px solid #d1d5db; 
+    overflow-x: auto; 
+}
+
+/* Đóng băng tiêu đề */
+#dataTable thead th {
+    position: sticky !important;    /* Lệnh ghim (Freeze) */
+    top: 0 !important;              /* Ghim sát mép trên cùng của khung cuộn */
+    z-index: 10;                    /* Ép dòng này nổi lên trên cùng */
+    background-color: #e1f5fe !important; /* Màu nền xanh dương nhạt để không bị đè chữ */
+    color: #013a59;                 /* Màu chữ xanh đậm cho dễ đọc */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+/* --- CUSTOM SCROLLBAR --- */
 .variable-table-container::-webkit-scrollbar,
-.heatmap-container::-webkit-scrollbar {
+.heatmap-container::-webkit-scrollbar,
+.csv-table-container::-webkit-scrollbar {
     width: clamp(8px, 1vw, 10px);
     height: clamp(8px, 1vw, 10px);
 }
 
 .variable-table-container::-webkit-scrollbar-track,
-.heatmap-container::-webkit-scrollbar-track {
+.heatmap-container::-webkit-scrollbar-track,
+.csv-table-container::-webkit-scrollbar-track {
     background: rgba(176, 190, 197, 0.2);
     border-radius: clamp(4px, 0.5vw, 5px);
 }
 
 .variable-table-container::-webkit-scrollbar-thumb,
-.heatmap-container::-webkit-scrollbar-thumb {
+.heatmap-container::-webkit-scrollbar-thumb,
+.csv-table-container::-webkit-scrollbar-thumb {
     background: var(--primary-blue);
     border-radius: clamp(4px, 0.5vw, 5px);
 }
 
 .variable-table-container::-webkit-scrollbar-thumb:hover,
-.heatmap-container::-webkit-scrollbar-thumb:hover {
+.heatmap-container::-webkit-scrollbar-thumb:hover,
+.csv-table-container::-webkit-scrollbar-thumb:hover {
     background: var(--teal-dark);
 }
 
-/* Responsive Design */
+
+/* --- RESPONSIVE DESIGN --- */
 @media (max-width: 1200px) {
     .data-overview {
         grid-template-columns: 1fr;
@@ -263,9 +261,54 @@
     .variable-controls {
         flex-direction: column;
     }
-    
-    .heatmap-cell {
-        width: clamp(40px, 10vw, 60px);
-        height: clamp(40px, 10vw, 60px);
-    }
+}
+
+/* --- CSS CHO CHẾ ĐỘ LƯỚI (GRID VIEW) CỦA DANH SÁCH BIẾN --- */
+.variable-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 15px;
+    padding: 10px 0;
+}
+
+.variable-card {
+    background-color: #ffffff;
+    border: 1px solid #b0bec5;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.variable-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 105, 92, 0.15); /* Bóng đổ màu xanh ngọc */
+    border-color: #4db6ac;
+}
+
+.var-card-name {
+    font-family: '72', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #013a59;
+    margin-bottom: 5px;
+}
+
+.var-card-unit {
+    font-size: 0.85rem;
+    color: #26a69a; /* Màu xanh ngọc */
+    font-weight: 600;
+    margin-bottom: 12px;
+    background: #e0f2f1;
+    padding: 4px 10px;
+    border-radius: 12px;
+}
+
+.var-card-desc {
+    font-size: 0.95rem;
+    color: #546e7a;
+    line-height: 1.4;
 }
