@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = 'overview.html';
     }
     
+    // --- XỬ LÝ ĐĂNG NHẬP ---
     if (loginForm) {
         loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -58,20 +59,59 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // Here you would typically send the data to a server
+            // Log thử để kiểm tra
             console.log('Login attempt:', { email, password });
 
-            // Demo logic: đăng nhập thành công => chuyển sang chế độ quản lý
-            localStorage.setItem(STORAGE_KEYS.MODE, MODES.MANAGEMENT);
-            localStorage.removeItem(STORAGE_KEYS.PENDING_MODE);
-
-            const target = getRedirectTarget();
-            localStorage.removeItem(STORAGE_KEYS.POST_LOGIN_REDIRECT);
-            window.location.href = target;
-        });
+            // GỌI API BACK-END
+            fetch('http://127.0.0.1:5000/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: email, password: password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert(data.message);    // Hiển thị lời chào từ Back-End gửi về
+                    
+                    localStorage.setItem(STORAGE_KEYS.MODE, MODES.MANAGEMENT);
+                    localStorage.removeItem(STORAGE_KEYS.PENDING_MODE);
+                    
+                    const target = getRedirectTarget();
+                    localStorage.removeItem(STORAGE_KEYS.POST_LOGIN_REDIRECT);
+                    window.location.href = target;
+                } else {
+                    alert(data.message || 'Sai thông tin đăng nhập. Vui lòng thử lại!');
+                }
+            })
+            .catch(error => {
+                console.error('Lỗi kết nối Server:', error);
+                alert('Không thể kết nối đến máy chủ. Vui lòng thử lại sau.');
+            });
+        }); 
     }
     
-    // Add focus effects to inputs
+    // --- HIỆU ỨNG GIAO DIỆN (UI EFFECTS) ---
+
+    // 1. Ẩn/hiện mật khẩu
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener('click', function() {
+            // Kiểm tra trạng thái hiện tại
+            const isPassword = passwordInput.getAttribute('type') === 'password';
+            
+            // Thay đổi type của input
+            passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+            
+            // Cập nhật icon tương ứng
+            this.src = isPassword ? '../assets/img/login_password_unhide.png' : '../assets/img/login_password_hide.png';
+        });
+    }
+
+    // 2. Hiệu ứng focus vào ô input
     const inputs = document.querySelectorAll('.form-input');
     inputs.forEach(input => {
         input.addEventListener('focus', function() {
@@ -83,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Link "Quay về trang công khai"
+    // 3. Link "Quay về trang công khai"
     const publicLink = document.querySelector('.public-page-link');
     if (publicLink) {
         publicLink.addEventListener('click', function(e) {
