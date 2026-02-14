@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    alert('Đăng nhập thành công!');
+                    alert(data.message);    // Hiển thị lời chào từ Back-End gửi về
                     
                     localStorage.setItem(STORAGE_KEYS.MODE, MODES.MANAGEMENT);
                     localStorage.removeItem(STORAGE_KEYS.PENDING_MODE);
