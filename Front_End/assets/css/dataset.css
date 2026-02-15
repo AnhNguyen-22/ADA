@@ -46,7 +46,7 @@
     margin-top: clamp(4px, 0.5vw, 6px);
 }
 
-/* --- HEATMAP SECTION (FIX SCALE) --- */
+/* --- HEATMAP SECTION --- */
 .heatmap-section {
     margin-bottom: clamp(20px, 2.5vw, 30px);
 }
@@ -58,8 +58,10 @@
 }
 
 .heatmap-header-cell, .heatmap-row-label {
-    display: flex;
-    align-items: center;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important; 
+    text-align: center !important;
     font-weight: 600;
     font-size: 13px;
     color: #013a59;
@@ -67,9 +69,6 @@
     border-radius: 4px;
     padding: 12px;
 }
-
-.heatmap-row-label { justify-content: flex-end; }
-.heatmap-header-cell { justify-content: center; }
 
 .heatmap-cell {
     display: flex;
@@ -90,7 +89,7 @@
     border: 1px solid #fff;
 }
 
-/* --- VARIABLE SECTION (LIST & GRID) --- */
+/* --- VARIABLE SECTION CONTROLS --- */
 .variable-controls {
     display: flex;
     gap: 20px;
@@ -110,28 +109,78 @@
     font-size: 14px;
 }
 
-/* Chế độ Danh sách */
+/* =========================================================
+   1. BẢNG DANH SÁCH BIẾN (.variable-table)
+   ========================================================= */
+.variable-table-container {
+    width: 100%;
+    overflow-x: auto; 
+    background: transparent; 
+    border: none; 
+    box-shadow: none;
+}
+
 .variable-table {
     width: 100%;
-    border-collapse: collapse;
-    background: white;
-    border-radius: 8px;
+    min-width: 850px; 
+    table-layout: fixed; 
+    border-collapse: separate; 
+    border-spacing: 0;
+    
+    background: #ffffff !important; 
+    border-radius: 12px;
+    border: 1px solid #eee;
     overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-.variable-table th, .variable-table td {
-    padding: 15px;
-    text-align: left;
-    border-bottom: 1px solid #eee;
-}
-
-.variable-table th {
-    background: #f8f9fa;
-    color: var(--primary-blue);
+.variable-table thead th {
+    background-color: #e1f5fe !important;
+    color: var(--primary-blue) !important;
     font-weight: 700;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    text-align: center !important;
+    vertical-align: middle;
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
 }
 
-/* --- CHẾ ĐỘ LƯỚI & POPOVER GIẢI THÍCH --- */
+.variable-table tbody td {
+    color: #131e29 !important; 
+    background-color: #ffffff !important;
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0; 
+    vertical-align: middle;
+    word-wrap: break-word;
+}
+
+/* Căn chỉnh độ rộng các cột Danh sách biến */
+.variable-table th:nth-child(1), .variable-table td:nth-child(1) {
+    width: 100px; 
+    text-align: center !important;
+}
+
+.variable-table th:nth-child(2), .variable-table td:nth-child(2) {
+    width: 100px; 
+    text-align: center !important;
+    white-space: nowrap; 
+}
+
+.variable-table th:nth-child(3), .variable-table td:nth-child(3) {
+    width: 320px; 
+    text-align: center !important;
+    padding: 15px 10px;
+}
+
+.variable-table th:nth-child(4), .variable-table td:nth-child(4) {
+    text-align: left; 
+    padding-left: 20px;
+    line-height: 1.5;
+}
+
+/* --- CHẾ ĐỘ LƯỚI (CARD VIEW) & POPOVER --- */
 .variable-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -149,11 +198,10 @@
     align-items: center;
     text-align: center;
     position: relative;
-    z-index: 1; /* Mặc định thấp hơn popover */
-    transition: transform 0.2s ease, z-index 0s;
+    z-index: 1;
+    transition: transform 0.2s ease;
 }
 
-/* Fix lỗi bị che: Thẻ đang hover phải có z-index cao nhất */
 .variable-card:hover {
     transform: translateY(-5px);
     z-index: 999; 
@@ -166,12 +214,11 @@
     padding: 4px 12px; border-radius: 15px; margin: 10px 0;
 }
 
-/* --- POPOVER (FIX LỖI BỊ CHE LỀ) --- */
 .var-explanation-popover {
     display: none; 
     position: absolute;
     top: 50%;
-    left: 105%; /* Mặc định bên phải */
+    left: 105%; 
     transform: translateY(-50%);
     width: 450px;
     height: 240px;
@@ -184,14 +231,13 @@
     animation: fadeIn 0.3s ease;
 }
 
-/* Logic lật Popover sang trái khi card nằm sát lề phải (Dùng kết hợp với JS) */
 .var-explanation-popover.popover-flip {
     left: auto;
     right: 105%;
 }
 
 .variable-card:hover .var-explanation-popover {
-    display: flex; /* Kích hoạt hiển thị dạng Flex */
+    display: flex;
 }
 
 .popover-left {
@@ -211,25 +257,83 @@
 
 .popover-right {
     width: 45%;
+    background-repeat: no-repeat;
     background-size: cover;
+    background-color: #131e29;
     border-left: 1px solid #f0f0f0;
 }
 
-/* --- BẢNG DỮ LIỆU CSV (FREEZE PANES) --- */
+/* =========================================================
+   2. BẢNG DỮ LIỆU CHI TIẾT RAW DATA (#dataTable)
+   ========================================================= */
 .csv-table-container {
-    max-height: 450px;
-    overflow: auto;
-    border-radius: 12px;
-    border: 1px solid #e0e0e0;
+    height: 500px;
+    overflow: auto; /* Kích hoạt thanh cuộn */
+    position: relative; /* Đóng khung không gian để Sticky hoạt động */
+    border-radius: 12px; 
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05); 
+    backdrop-filter: blur(10px);
 }
 
-#dataTable thead th {
-    position: sticky !important;
-    top: 0 !important;
-    z-index: 20;
-    background-color: #e1f5fe !important;
+#dataTable {
+    width: 100%;
+    border-collapse: separate; /* Bắt buộc để Freeze Row hoạt động */
+    border-spacing: 0;
+}
+
+/* --- GIA CỐ TÍNH NĂNG FREEZE ROW (EXCEL) --- */
+#dataTable th {
+    position: sticky;
+    top: 0; 
+    z-index: 10; /* Luôn nổi trên dữ liệu */
+    background-color: #e1f5fe; 
     color: var(--primary-blue);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 15px 10px;
+    font-size: 13px;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-align: center;
+    /* Dùng box-shadow làm viền để không bị đứt gãy khi cuộn */
+    box-shadow: inset 0 -2px 0 rgba(1, 58, 89, 0.15), inset -1px 0 0 rgba(1, 58, 89, 0.1);
+}
+
+/* Fix bo góc cho Header */
+#dataTable th:first-child { 
+    border-top-left-radius: 12px; 
+}
+#dataTable th:last-child { 
+    border-top-right-radius: 12px; 
+    box-shadow: inset 0 -2px 0 rgba(1, 58, 89, 0.15); /* Bỏ vạch kẻ dọc ở cột cuối */
+}
+
+/* Body Dữ liệu chi tiết: Trong suốt, chữ trắng */
+#dataTable tbody td {
+    color: #ffffff; 
+    padding: 12px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.1); 
+    text-align: center;
+    font-size: 13px;
+}
+
+#dataTable td:last-child {
+    border-right: none; 
+}
+
+/* Đổi màu nhẹ khi hover dòng */
+#dataTable tbody tr:hover td {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Độ rộng cột Data Table */
+#dataTable th, #dataTable td { min-width: 100px; }
+#dataTable th:nth-child(3), #dataTable td:nth-child(3) {
+    width: 120px;
+    max-width: 120px;
+}
+#dataTable th:last-child, #dataTable td:last-child {
+    min-width: 160px;
 }
 
 /* --- THANH CUỘN CUSTOM --- */
@@ -246,7 +350,7 @@
 
 @media (max-width: 1024px) {
     .var-explanation-popover {
-        left: 50%;
+        left: 50% !important;
         top: -120%;
         transform: translateX(-50%);
         width: 90vw;

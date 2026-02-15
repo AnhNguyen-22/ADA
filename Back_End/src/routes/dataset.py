@@ -8,19 +8,18 @@ dataset_bp = Blueprint('dataset', __name__)
 # Tự động tìm đường dẫn tới file AirQualityHoChiMinhCity.csv
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.abspath(os.path.join(current_dir, "../../.."))
-# Cấu trúc: ADA/data/raw/AirQualityHoChiMinhCity.csv
 CSV_FILE_PATH = os.path.join(root_dir, 'data', 'raw', 'AirQualityHoChiMinhCity.csv')
 
 @dataset_bp.route('/api/dataset', methods=['GET'])
 def get_dataset():
     try:
         data = []
-        # Đọc file CSV
         with open(CSV_FILE_PATH, mode='r', encoding='utf-8-sig') as file:
             reader = csv.DictReader(file)
             for i, row in enumerate(reader):
-                if i >= 500:  # Giới hạn 500 dòng để tối ưu hiệu suất lúc test
+                if i >= 500:  
                     break
+                row = {k.replace('Temperature', 'Temp').replace('Humidity', 'Humid'): v for k, v in row.items()}
                 data.append(row)
         
         return jsonify({
@@ -38,28 +37,27 @@ def get_dataset():
 def get_correlation():
     try:
         data_cols = {}
-        # Các cột cần tính toán tương quan (tên phải khớp với file CSV)
-        target_keys = ['PM2.5', 'PM10', 'NO2', 'O3', 'SO2', 'CO', 'Temp', 'Humid']
+        # CẬP NHẬT: Đã thêm 'Temperature' và 'Humidity' vào danh sách tìm kiếm
+        target_keys = ['PM2.5', 'PM10', 'NO2', 'O3', 'SO2', 'CO', 'Temperature', 'Humidity']
         found_cols = []
 
         with open(CSV_FILE_PATH, mode='r', encoding='utf-8-sig') as file:
             reader = csv.DictReader(file)
             headers = reader.fieldnames
             
-            # Lọc ra những cột thực sự tồn tại trong file
+            # Lọc ra những cột thực sự tồn tại trong file CSV của bạn
             found_cols = [col for col in headers if col in target_keys]
             for col in found_cols:
                 data_cols[col] = []
                 
-            # Đọc toàn bộ dữ liệu (không giới hạn 500 dòng để tính cho chuẩn)
             for row in reader:
                 for col in found_cols:
                     try:
                         data_cols[col].append(float(row[col]))
                     except (ValueError, TypeError):
-                        pass # Bỏ qua ô trống hoặc lỗi định dạng
+                        pass 
         
-        # Hàm tính Tương quan Pearson (Pearson Correlation)
+        # Hàm tính Tương quan Pearson
         def calculate_pearson(x, y):
             n = min(len(x), len(y))
             if n <= 1: return 0

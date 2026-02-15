@@ -1,0 +1,9 @@
+# Bỏ qua thư mục cache của Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# (Tùy chọn) Bạn có thể thêm các file/thư mục môi trường ảo nếu có dùng
+venv/
+env/
+.env

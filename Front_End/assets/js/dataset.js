@@ -3,22 +3,22 @@ const variables = [
     { 
         name: 'PM2.5', 
         unit: 'µg/m³', 
-        fullName: 'Particulate Matter 2.5',
+        fullName: 'Particulate Matter 2.5 - Bụi mịn PM2.5',
         phonetic: '/pɑːrˈtɪkjələt ˈmætər tuː pɔɪnt faɪv/',
         description: 'Các hạt bụi siêu nhỏ có đường kính dưới 2.5 micromet, có thể xâm nhập sâu vào phổi và máu.', 
-        image: 'https://cdn.tgdd.vn/hoi-dap/1203991/bui-min-pm2-5-pm10-la-gi-cach-xem-chi-so-bui.004-800x408.jpg', 
+        image: '../assets/img/dataset_grid_PM.jpg', 
         imagePosition: '7% center',
         imageSize: '180%',
-        stations: ['s1', 's2', 's3'] 
     },
     { 
         name: 'PM10', 
         unit: 'µg/m³', 
-        fullName: 'Particulate Matter 10',
+        fullName: 'Particulate Matter 10 - Bụi mịn PM10',
         phonetic: '/pɑːrˈtɪkjələt ˈmætər ten/',
         description: 'Các hạt bụi có đường kính dưới 10 micromet, bao gồm bụi, phấn hoa và nấm mốc. Gây kích ứng niêm mạc mắt, mũi, họng; tích tụ trong các phế quản lớn.', 
-        image: 'https://images.unsplash.com/photo-1524143825310-867f707f1697?q=80&w=400',
-        stations: ['s1', 's2', 's3'] 
+        image: '../assets/img/dataset_grid_PM.jpg',
+        imagePosition: '80% center',
+        imageSize: '160%',
     },
     { 
         name: 'NO2', 
@@ -26,8 +26,9 @@ const variables = [
         fullName: 'Nitrogen dioxide',
         phonetic: '/ˈnaɪtrədʒən daɪˈɒksaɪd/',
         description: 'Chất khí màu nâu đỏ, có mùi gắt, phát sinh chủ yếu từ khí thải phương tiện giao thông.Làm giảm chức năng phổi, tăng nguy cơ hen suyễn và là tác nhân chính gây mưa axit.', 
-        image: 'https://images.unsplash.com/photo-1616432043562-3671ea2e5241?q=80&w=400',
-        stations: ['s1', 's2'] 
+        image: '../assets/img/dataset_grid_NO2.jpg',
+        imagePosition: 'left center',
+        imageSize: '300%',
     },
     { 
         name: 'O3', 
@@ -35,8 +36,9 @@ const variables = [
         fullName: 'Ozone',
         phonetic: '/ˈəʊzəʊn/',
         description: 'Chất ô nhiễm thứ cấp do ánh sáng mặt trời phản ứng với khí thải. Gây sưng viêm phổi, khó thở và đau ngực.', 
-        image: 'https://images.unsplash.com/photo-1599388144837-293699b68c9c?q=80&w=400',
-        stations: ['s1', 's2', 's3'] 
+        image: '../assets/img/dataset_grid_O3.webp',
+        imagePosition: 'leftcenter',
+        imageSize: 'cover',
     },
     { 
         name: 'SO2', 
@@ -44,8 +46,9 @@ const variables = [
         fullName: 'Sulfur (Lưu Huỳnh) dioxide',
         phonetic: '/ˈsʌlfər daɪˈɒksaɪd/',
         description: 'Sản phẩm của quá trình đốt cháy nhiên liệu hóa thạch, có mùi hắc đặc trưng. Gây kích ứng đường hô hấp cực mạnh, viêm phế quản cấp tính và phá hủy hệ sinh thái.', 
-        image: 'https://images.unsplash.com/photo-1580193769210-b8d1c049a7d9?q=80&w=400',
-        stations: ['s1', 's3'] 
+        image: '../assets/img/dataset_grid_SO2.jpg',
+        imagePosition: 'left center',
+        imageSize: 'cover'
     },
     { 
         name: 'CO', 
@@ -53,8 +56,9 @@ const variables = [
         fullName: 'Carbon monoxide',
         phonetic: '/ˈkɑːrbən mɒnˈɒksaɪd/',
         description: 'Khí không màu, không mùi, sinh ra do sự cháy không hoàn toàn của carbon. Ngăn cản máu vận chuyển oxy, gây đau đầu, chóng mặt và ngạt khí.', 
-        image: 'https://images.unsplash.com/photo-1532187643603-ba119ca4109e?q=80&w=400',
-        stations: ['s1', 's2', 's3'] 
+        image: '../assets/img/dataset_grid_CO.webp',
+        imagePosition: 'center',
+        imageSize: 'cover'
     },
     { 
         name: 'Temp', 
@@ -62,8 +66,9 @@ const variables = [
         fullName: 'Temperature - Nhiệt độ',
         phonetic: '/ˈtemprətʃər/',
         description: 'Yếu tố khí tượng quan trọng. Nhiệt độ cao thúc đẩy các phản ứng hóa học tạo Ozon và giữ các hạt bụi treo lơ lửng.', 
-        image: 'https://images.unsplash.com/photo-1504370805625-d32c54b16100?q=80&w=400',
-        stations: ['s1', 's2', 's3'] 
+        image: '../assets/img/dataset_grid_Temp.jfif',
+        imagePosition: 'center',
+        imageSize: 'cover'
     },
     { 
         name: 'Humid', 
@@ -71,14 +76,14 @@ const variables = [
         fullName: 'Humidity - Độ ẩm',
         phonetic: '/hjuːˈmɪdəti/',
         description: 'Độ ẩm không khí. Tác động: Ảnh hưởng đến khả năng phân tán bụi; độ ẩm cao thường đi kèm với việc tích tụ các sol khí gây mù quang hóa.', 
-        image: 'https://images.unsplash.com/photo-1485236715568-ddc5ee6ca227?q=80&w=400',
-        stations: ['s1', 's2', 's3'] 
+        image: '../assets/img/dataset_grid_Humid.jfif',
+        imagePosition: 'center',
+        imageSize: 'cover'
     }
 ];
 
 // Biến toàn cục cho giao diện Danh sách/Lưới
-let currentMode = 'list';
-let currentStation = 's1';
+let currentMode = 'grid'; // Mặc định hiển thị ở Lưới
 
 // --- HÀM TIỆN ÍCH: Tự động chuyển đổi số thành chỉ số dưới (Subscript) ---
 function formatSubscript(str) {
@@ -86,9 +91,7 @@ function formatSubscript(str) {
     return str
         .replace('O3', 'O₃')
         .replace('NO2', 'NO₂')
-        .replace('SO2', 'SO₂')
-        .replace('PM2.5', 'PM₂.₅')
-        .replace('PM10', 'PM₁₀');
+        .replace('SO2', 'SO₂');
 }
 
 // 2. Tạo Heatmap từ API
@@ -169,133 +172,156 @@ function createHeatmap() {
         });
 }
 
-// 3. Hàm render giao diện Danh sách Biến (Lưới / Bảng)
+// 3. Render danh sách biến (Chế độ Danh sách/Lưới)
 function renderVariableView() {
     const container = document.querySelector('.variable-table-container');
     if (!container) return;
 
-    const filteredVars = variables.filter(v => v.stations.includes(currentStation));
-
     if (currentMode === 'list') {
+        // Áp dụng cuộn ngang cho bảng Danh sách
+        container.style.overflowX = 'auto';
+        
         let html = `
             <table class="variable-table">
                 <thead>
-                    <tr><th>Biến</th><th>Đơn vị</th><th>Mô tả</th></tr>
+                    <tr>
+                        <th style="white-space: nowrap;">Biến</th>
+                        <th style="white-space: nowrap;">Đơn vị</th>
+                        <th style="white-space: nowrap;">Ý nghĩa</th>
+                        <th>Mô tả</th>
+                    </tr>
                 </thead>
                 <tbody>
         `;
-        filteredVars.forEach(variable => {
+        variables.forEach(v => {
             html += `
                 <tr>
-                    <td><strong>${formatSubscript(variable.name)}</strong></td>
-                    <td>${variable.unit}</td>
-                    <td>${variable.description}</td>
+                    <td><strong>${formatSubscript(v.name)}</strong></td>
+                    <td>${v.unit}</td>
+                    <td>${v.fullName}</td>
+                    <td>${v.description}</td>
                 </tr>
             `;
         });
         html += `</tbody></table>`;
         container.innerHTML = html;
-
-    } else if (currentMode === 'grid') {
+        
+    } else {
+        // TẮT cuộn ngang ở chế độ Lưới để Popover không bị cắt xén
+        container.style.overflow = 'visible';
+        
         let html = `<div class="variable-grid">`;
-        filteredVars.forEach(variable => {
+        variables.forEach(v => {
+            const pos = v.imagePosition || 'center';
+            const size = v.imageSize || 'cover';
             html += `
                 <div class="variable-card">
-                    <div class="var-card-name">${formatSubscript(variable.name)}</div>
-                    <div class="var-card-unit">${variable.unit}</div>
-                    <div class="var-card-desc">${variable.description.substring(0, 40)}...</div>
-
+                    <div class="var-card-name">${formatSubscript(v.name)}</div>
+                    <div class="var-card-unit">${v.unit}</div>
+                    <div class="var-card-desc">${v.description.substring(0, 45)}...</div>
                     <div class="var-explanation-popover">
                         <div class="popover-left">
-                            <h4 class="popover-title">${formatSubscript(variable.name)}</h4>
-                            <p class="popover-full">${variable.fullName} <span class="phonetic">${variable.phonetic}</span></p>
-                            <p class="popover-text">${variable.description}</p>
+                            <h4 class="popover-title">${formatSubscript(v.name)}</h4>
+                            <p class="popover-full">${v.fullName}</p>
+                            <p class="popover-text">${v.description}</p>
                         </div>
-                        <div class="popover-right" style="background-image: url('${variable.image}')"></div>
+                        <div class="popover-right" style="background-image: url('${v.image}'); background-position: ${pos}; background-size: ${size};"></div>
                     </div>
                 </div>`;
         });
         html += `</div>`;
         container.innerHTML = html;
 
-        // Xử lý lật Popover để không bị che khuất lề phải
+        // Xử lý Flip Popover
         const cards = container.querySelectorAll('.variable-card');
         cards.forEach(card => {
             card.addEventListener('mouseenter', () => {
                 const popover = card.querySelector('.var-explanation-popover');
                 const cardRect = card.getBoundingClientRect();
-                const windowWidth = window.innerWidth;
-
-                if (windowWidth - cardRect.right < 460) {
-                    popover.classList.add('popover-flip');
-                } else {
-                    popover.classList.remove('popover-flip');
-                }
+                if (window.innerWidth - cardRect.right < 470) popover.classList.add('popover-flip');
+                else popover.classList.remove('popover-flip');
             });
         });
     }
 }
 
-// 4. Khởi tạo Dropdown
+// 4. Khởi tạo Dropdown (Đã xóa Dropdown Trạm)
 function setupDropdowns() {
     new Dropdown('modeDropdown', {
-        items: [{ value: 'list', text: 'Danh sách' }, { value: 'grid', text: 'Lưới' }],
-        defaultItem: 'list',
+        items: [
+            { value: 'grid', text: 'Lưới' }, 
+            { value: 'list', text: 'Danh sách' }
+        ],
+        defaultItem: 'grid', // Đặt mặc định chọn Lưới
         onSelect: function(value) {
             currentMode = value; 
             renderVariableView();
         }
     });
+}
 
-    new Dropdown('stationDropdown', {
-        items: [{ value: 's1', text: 'S1' }, { value: 's2', text: 'S2' }, { value: 's3', text: 'S3' }],
-        defaultItem: 's1',
-        onSelect: function(value) {
-            currentStation = value;
-            renderVariableView();
+// Hàm bổ trợ để định dạng số (Max 3 chữ số thập phân + dấu ...)
+function formatTableData(val) {
+    if (val === null || val === undefined || val === "") return "-";
+    let strVal = val.toString();
+    if (!isNaN(val) && strVal.includes('.')) {
+        let parts = strVal.split('.');
+        if (parts[1].length > 3) {
+            return parseFloat(val).toFixed(3) + "...";
         }
-    });
+    }
+    return val;
 }
 
 // 5. Load dữ liệu CSV gốc vào bảng
+// Hàm tải dữ liệu chi tiết
 function loadDataset() {
-    const tableHead = document.getElementById('tableHead');
-    const tableBody = document.getElementById('tableBody');
-
     fetch('http://127.0.0.1:5000/api/dataset')
-        .then(response => response.json())
+        .then(res => res.json())
         .then(result => {
-            if (result.status === 'success') {
-                const data = result.data;
-                if (data.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="10" style="text-align:center;">Không có dữ liệu.</td></tr>';
-                    return;
-                }
+            if (result.status !== 'success') return;
+            const data = result.data;
+            const head = document.getElementById('tableHead');
+            const body = document.getElementById('tableBody');
+            
+            if (data.length === 0) return;
 
-                const columns = Object.keys(data[0]);
-                tableHead.innerHTML = '';
-                columns.forEach(col => {
-                    const th = document.createElement('th');
-                    th.textContent = formatSubscript(col);
-                    tableHead.appendChild(th);
-                });
+            const cols = Object.keys(data[0]);
+            
+            // --- VẼ HEADER ---
+            head.innerHTML = '';
+            cols.forEach(c => {
+                const th = document.createElement('th');
+                th.textContent = formatSubscript(c);
+                head.appendChild(th); 
+            });
 
-                tableBody.innerHTML = ''; 
-                data.forEach(row => {
-                    const tr = document.createElement('tr');
-                    columns.forEach(col => {
-                        const td = document.createElement('td');
-                        td.textContent = row[col];
-                        tr.appendChild(td);
-                    });
-                    tableBody.appendChild(tr);
+            // --- VẼ BODY ---
+            body.innerHTML = ''; 
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                cols.forEach(c => {
+                    const td = document.createElement('td');
+                    
+                    const rawValue = row[c]; 
+                    const formattedValue = formatTableData(rawValue); 
+
+                    td.textContent = formattedValue;
+                    
+                    if (formattedValue.toString().includes('...')) {
+                        td.title = rawValue; 
+                        td.style.cursor = 'help'; 
+                    }
+
+                    tr.appendChild(td);
                 });
-            } else {
-                tableBody.innerHTML = `<tr><td colspan="10" style="color:red; text-align:center;">Lỗi: ${result.message}</td></tr>`;
-            }
+                body.appendChild(tr);
+            });
         })
         .catch(err => {
-            tableBody.innerHTML = '<tr><td colspan="10" style="color:red; text-align:center;">Không thể kết nối đến máy chủ.</td></tr>';
+            console.error("Lỗi tải bảng chi tiết:", err);
+            // Đổi chữ cảnh báo thành màu trắng để dễ đọc trên nền trong suốt
+            document.getElementById('tableBody').innerHTML = '<tr><td colspan="10" style="color:#ffffff; text-align:center; padding: 20px;">Lỗi tải dữ liệu. Bạn hãy kiểm tra xem Server Python đã được bật chưa nhé!</td></tr>';
         });
 }
 

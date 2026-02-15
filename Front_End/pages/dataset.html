@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dữ liệu - AirSense HCMC</title>
+    <link rel="icon" type="image/png" href="../assets/img/logo_nho.png">
     <link rel="stylesheet" href="../assets/css/dataset.css">
     <link href="../components/sidebar.css" rel="stylesheet"/>
     <link href="../components/dropdown.css" rel="stylesheet"/>
@@ -64,20 +65,10 @@
                     
                     <div class="variable-controls">
                         <div class="control-group">
-                            <label for="modeDropdown" class="control-label">Chế độ</label>
+                            <label class="control-label">Chế độ xem</label>
                             <div class="dropdown-container" id="modeDropdown">
                                 <button class="dropdown-button" type="button" aria-haspopup="true" aria-expanded="false">
-                                    <span class="dropdown-button-text">Danh sách</span>
-                                    <span class="dropdown-arrow">&#9662;</span>
-                                </button>
-                                <div class="dropdown-menu" role="menu"></div>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label for="stationDropdown" class="control-label">Trạm</label>
-                            <div class="dropdown-container" id="stationDropdown">
-                                <button class="dropdown-button" type="button" aria-haspopup="true" aria-expanded="false">
-                                    <span class="dropdown-button-text">S1</span>
+                                    <span class="dropdown-button-text">Lưới</span>
                                     <span class="dropdown-arrow">&#9662;</span>
                                 </button>
                                 <div class="dropdown-menu" role="menu"></div>
@@ -103,18 +94,20 @@
 
             <section class="raw-data-section" style="margin-top: 20px;">
                 <div class="card">
-                    <h3 class="card-title">Dữ liệu chi tiết:</h3>
-                    <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-                        <table id="dataTable" class="variable-table" style="width: 100%;">
+                    <h3 class="card-title">Dữ liệu chi tiết</h3>
+                    
+                    <div class="csv-table-container">
+                        <table id="dataTable">
                             <thead>
                                 <tr id="tableHead">
-                                    </tr>
+                                </tr>
                             </thead>
                             <tbody id="tableBody">
-                                <tr><td colspan="10" style="text-align: center; padding: 20px;">Đang tải dữ liệu từ máy chủ...</td></tr>
+                                <tr><td colspan="10" style="text-align: center; padding: 20px; color: white;">Đang tải dữ liệu từ máy chủ...</td></tr>
                             </tbody>
                         </table>
                     </div>
+
                 </div>
             </section>
             
