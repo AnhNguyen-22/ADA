@@ -244,17 +244,19 @@
 }
 
 /* ===================== PUBLIC vs GOVERNMENT VISIBILITY ===================== */
+/* ✅ MẶC ĐỊNH: Public mode - ẨN TẤT CẢ STATION ROWS */
 .station-row {
-  display: none; /* public default */
+  display: none !important;
 }
 
+/* ✅ GOVERNMENT MODE: Hiện tất cả station rows */
 body.is-government .station-row {
-  display: grid; /* gov show station rows */
+  display: grid !important;
 }
 
-/* TP.HCM vẫn hiện ở gov (theo yêu cầu mới) -> KHÔNG ẩn summary */
-body.is-government #hcmc-summary-row {
-  display: grid;
+/* ✅ TP.HCM summary row LUÔN HIỂN THỊ ở cả 2 mode */
+#hcmc-summary-row {
+  display: grid !important;
 }
 
 /* ===================== GOVERNMENT COMPARE CHART (nằm dưới bảng) ===================== */
@@ -482,4 +484,112 @@ body.is-government .gov-compare-chart {
   .forecast-hint {
     display: none;
   }
+}
+
+/* Hover từng dòng (trạm) - không ảnh hưởng hover theo cột */
+.NB-c-khuyencao .table-row:hover {
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+  transition: 120ms ease;
+}
+/* ===================== PUBLIC SUMMARY CHART ===================== */
+.public-summary-chart{
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(0,0,0,0.06);
+  background: rgba(255,255,255,0.55);
+}
+
+.public-chart-header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+
+.public-chart-title{
+  font-weight: 800;
+  color:#131e29;
+  margin-bottom:2px;
+}
+
+.public-chart-sub{
+  font-size:12.5px;
+  color:#666;
+}
+
+.public-chart-canvas-wrap{
+  width:100%;
+}
+
+#public-line-chart{
+  width:100%;
+  display:block;
+}
+
+/* ✅ Gov mode thì ẩn chart public (vì gov có chart compare riêng) */
+body.is-government .public-summary-chart{
+  display:none;
+}
+/* ===== FIX: Reasons card (WHY PM2.5 INCREASES) ===== */
+
+/* Giảm cảm giác "bài văn", canh lại list */
+#public-top-reasons {
+  margin: 10px 0 0;
+  padding-left: 16px;              /* bullet gọn */
+}
+
+#public-top-reasons li.reason-item {
+  margin: 10px 0;                  /* giảm khoảng cách */
+}
+
+/* Title: bớt to + bớt đậm */
+#public-top-reasons .reason-title {
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.25;
+  margin: 0 0 4px 0;
+  color: rgba(10, 20, 30, 0.95);
+}
+
+/* Detail: nhỏ + nhẹ hơn */
+#public-top-reasons .reason-detail {
+  font-weight: 400;
+  font-size: 13.5px;
+  line-height: 1.35;
+  opacity: 0.9;
+  margin: 0 0 2px 0;
+  color: rgba(10, 20, 30, 0.85);
+}
+
+/* Nếu có action box thì làm gọn + nhìn như hint */
+#public-top-reasons .reason-action {
+  margin-top: 6px;
+  font-size: 13.5px;
+  line-height: 1.35;
+  font-weight: 500;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Label “Vì sao/Ý nghĩa/Bạn nên”: nhẹ hơn, đừng quá nổi */
+#public-top-reasons .reason-label {
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+/* Bullet nhỏ lại để đỡ thô */
+#public-top-reasons li::marker {
+  font-size: 0.85em;
+  color: rgba(10, 20, 30, 0.7);
+}
+
+/* (Option) Làm card này “đỡ nặng” một chút nếu text đang quá đen */
+.card .info-title {
+  letter-spacing: 0.4px;
 }
