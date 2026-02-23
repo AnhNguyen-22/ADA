@@ -1,15 +1,24 @@
+
+# Project root (ProjectADA_AirSense)
 from pathlib import Path
 import os
 
-# Project root (ProjectADA_AirSense)
+# Start from this file
 BASE_DIR = Path(__file__).resolve()
 
-# Tìm thư mục gốc có chứa folder "data"
-while BASE_DIR.name != "ProjectADA_AirSense":
-    BASE_DIR = BASE_DIR.parent
-    
-DATA_DIR = BASE_DIR / 'data' / 'raw'
-CSV_FILE = DATA_DIR / 'AirQualityHoChiMinhCity.csv'
+# Tìm thư mục gốc có chứa folder data/raw (tránh while vô hạn)
+root = BASE_DIR
+for _ in range(12):  # đi lên tối đa 12 cấp
+    if (root / "data" / "raw").exists():
+        BASE_DIR = root
+        break
+    root = root.parent
+else:
+    # fallback: lấy thư mục Back_End (settings.py nằm ở Back_End/src/config/)
+    BASE_DIR = Path(__file__).resolve().parents[2]
+
+DATA_DIR = BASE_DIR / "data" / "raw"
+CSV_FILE = DATA_DIR / "AirQualityHoChiMinhCity.csv"
 
 DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 HOST = os.getenv('HOST', '0.0.0.0')
