@@ -1,254 +1,281 @@
 /**
- * Station Tracking API Integration - SIMPLIFIED VERSION
- * This version is simpler and will work if backend is running
+ * Station Tracking API Integration
+ * Kết nối backend API với chart functions trong HTML.
+ *
+ * Logic:
+ *   1. Thử kết nối backend → lấy danh sách trạm thật
+ *   2. Xây dựng bảng map: mock ID (s1..s6) ↔ API ID thật
+ *   3. Mỗi khi chọn trạm → dùng API ID thật để fetch data
+ *   4. Không có backend → giữ mock data, trang vẫn chạy bình thường
  */
 
 console.log('🚀 Loading Station API...');
 
-// API Configuration
 const API_BASE = 'http://127.0.0.1:5000';
 
-/**
- * Simple fetch wrapper with error handling
- */
+// Map từ mock ID (s1, s2...) → API ID thật (được build sau khi fetch stations)
+// VD: { s1: '1', s2: '2' } hoặc { s1: 'station_1' } tuỳ backend
+let apiIdMap = {};          // mockId → apiId
+let apiStationsCache = [];  // danh sách stations từ API
+
+// ─── Helpers ────────────────────────────────────────────────────────────────
+
 async function apiRequest(endpoint) {
-    try {
-        console.log(`📡 Fetching: ${API_BASE}${endpoint}`);
-        
-        const response = await fetch(`${API_BASE}${endpoint}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-        
-        const data = await response.json();
-        console.log(`✅ Success:`, data);
-        return data;
-        
-    } catch (error) {
-        console.error(`❌ Error fetching ${endpoint}:`, error);
-        throw error;
-    }
+    const response = await fetch(`${API_BASE}${endpoint}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    return response.json();
 }
 
-/**
- * Show notification
- */
 function showNotification(message, type = 'error') {
-    // Remove old notifications
     document.querySelectorAll('.api-notification').forEach(el => el.remove());
-    
-    const colors = {
+
+    const styles = {
         success: { bg: '#4caf50', icon: '✓' },
-        error: { bg: '#ff5252', icon: '⚠️' }
+        error:   { bg: '#ff5252', icon: '⚠️' },
+        info:    { bg: '#2196F3', icon: 'ℹ️' }
     };
-    
-    const { bg, icon } = colors[type] || colors.error;
-    
+    const { bg, icon } = styles[type] || styles.error;
+
     const notif = document.createElement('div');
     notif.className = 'api-notification';
     notif.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${bg};
-        color: white;
-        padding: 16px 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        z-index: 100000;
-        font-size: 14px;
-        max-width: 400px;
+        position:fixed;top:20px;right:20px;background:${bg};color:#fff;
+        padding:14px 18px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.3);
+        z-index:100000;font-size:14px;max-width:400px;
     `;
     notif.innerHTML = `${icon} ${message}`;
-    
     document.body.appendChild(notif);
-    
     setTimeout(() => notif.remove(), type === 'success' ? 3000 : 8000);
 }
 
-/**
- * Test backend connection
- */
+// ─── API calls ───────────────────────────────────────────────────────────────
+
 async function testConnection() {
     try {
-        const health = await apiRequest('/health');
-        console.log('✅ Backend connected:', health);
-        showNotification('Backend connected successfully!', 'success');
+        await apiRequest('/health');
         return true;
-    } catch (error) {
-        console.error('❌ Cannot connect to backend:', error);
-        showNotification(`Cannot connect to backend at ${API_BASE}`, 'error');
+    } catch {
         return false;
     }
 }
 
-/**
- * Get all stations
- */
 async function getAllStations() {
-    try {
-        const result = await apiRequest('/api/stations');
-        return result.data || result.stations || [];
-    } catch (error) {
-        showNotification('Failed to load stations', 'error');
-        return [];
-    }
+    const result = await apiRequest('/api/stations');
+    return result.data || result.stations || [];
 }
 
-/**
- * Get station detail
- */
-async function getStationDetail(stationId) {
-    try {
-        const result = await apiRequest(`/api/stations/${stationId}`);
-        return result.data || result;
-    } catch (error) {
-        showNotification(`Failed to load station ${stationId}`, 'error');
-        return null;
-    }
+async function getStationPM25(apiId, limit = 12) {
+    const result = await apiRequest(`/api/stations/${apiId}/pm25?limit=${limit}`);
+    return result.data || result;
 }
 
-/**
- * Get PM2.5 data
- */
-async function getStationPM25(stationId, limit = 24) {
-    try {
-        const result = await apiRequest(`/api/stations/${stationId}/pm25?limit=${limit}`);
-        return result.data || result;
-    } catch (error) {
-        showNotification(`Failed to load PM2.5 data`, 'error');
-        return null;
-    }
+async function getStationDetail(apiId) {
+    const result = await apiRequest(`/api/stations/${apiId}`);
+    return result.data || result;
 }
 
-/**
- * Get comparison data
- */
-async function getStationComparison(stationId) {
-    try {
-        const result = await apiRequest(`/api/stations/${stationId}/comparison`);
-        return result.data || result;
-    } catch (error) {
-        console.error('Comparison error:', error);
-        return null;
-    }
+async function getStationComparison(apiId) {
+    const result = await apiRequest(`/api/stations/${apiId}/comparison`);
+    return result.data || result;
 }
 
+// ─── Build mapping mock ↔ API ID ─────────────────────────────────────────────
 /**
- * Initialize page
+ * Cố gắng match station từ API với mock ID (s1..s6).
+ * Thử các heuristic theo thứ tự:
+ *   1. station.id === mockId (vd 's1' === 's1')
+ *   2. station.id === mockId.slice(1) (vd '1' từ 's1')
+ *   3. station.name chứa số cuối của mockId (vd name='Station 1' ↔ s1)
+ *   4. Không match được → dùng index (trạm thứ N ↔ sN)
  */
-async function initPage() {
-    console.log('🔄 Initializing page...');
-    
-    // Test connection first
-    const connected = await testConnection();
-    
-    if (!connected) {
-        console.error('❌ Backend not connected');
-        return;
-    }
-    
-    // Load stations
-    console.log('📊 Loading stations...');
-    const stations = await getAllStations();
-    
-    if (stations.length === 0) {
-        showNotification('No stations found', 'error');
-        return;
-    }
-    
-    console.log(`✅ Loaded ${stations.length} stations:`, stations);
-    
-    // Update UI with station data
-    updateStationsDropdown(stations);
-    
-    // Load first station
-    if (stations[0]) {
-        const firstId = stations[0].id;
-        console.log(`📍 Loading first station: ${firstId}`);
-        await loadStationData(firstId);
-    }
-}
+function buildIdMap(stations) {
+    const mockIds = ['s1', 's2', 's3', 's4', 's5', 's6'];
+    const map = {};
 
-/**
- * Update dropdown with real stations
- */
-function updateStationsDropdown(stations) {
-    console.log('🔄 Updating dropdown with stations:', stations);
-    
-    // If you have a dropdown instance
-    if (window.stationDropdown && typeof window.stationDropdown.updateItems === 'function') {
-        const items = stations.map(s => ({
-            value: s.id,
-            text: `${s.name || s.id}`
-        }));
-        window.stationDropdown.updateItems(items);
-    }
-}
+    mockIds.forEach((mockId, i) => {
+        const num = mockId.slice(1); // '1', '2', ...
 
-/**
- * Load station data
- */
-async function loadStationData(stationId) {
-    console.log(`📊 Loading station ${stationId}...`);
-    
-    try {
-        const [detail, pm25, comparison] = await Promise.all([
-            getStationDetail(stationId),
-            getStationPM25(stationId, 24),
-            getStationComparison(stationId)
-        ]);
-        
-        console.log('Station data loaded:', { detail, pm25, comparison });
-        
-        // Update UI
-        if (pm25 && pm25.average) {
-            const avgElement = document.querySelector('.section-subtitle');
-            if (avgElement) {
-                avgElement.textContent = `Trung bình ~ ${pm25.average.toFixed(1)} µg/m³`;
-            }
-            
-            const gaugeElement = document.getElementById('gauge-value');
-            if (gaugeElement) {
-                gaugeElement.textContent = Math.round(pm25.average);
-            }
+        // Tìm station phù hợp
+        let matched = stations.find(s =>
+            String(s.id).toLowerCase() === mockId ||          // s1 === s1
+            String(s.id) === num ||                            // 1 === 1
+            String(s.id).toLowerCase() === `station_${num}` || // station_1
+            (s.name && String(s.name).includes(` ${num}`))    // "Station 1"
+        );
+
+        // Fallback: dùng theo index
+        if (!matched && stations[i]) matched = stations[i];
+
+        if (matched) {
+            map[mockId] = String(matched.id);
         }
-        
-        // Update station name displays
-        const stationNameElements = document.querySelectorAll('#station-name-display');
-        stationNameElements.forEach(el => {
-            el.textContent = stationId.toUpperCase();
-        });
-        
-        showNotification(`Station ${stationId} loaded`, 'success');
-        
+    });
+
+    console.log('📋 ID map built:', map);
+    return map;
+}
+
+// ─── Cập nhật toàn bộ UI từ data API ─────────────────────────────────────────
+
+async function loadStationData(mockId) {
+    // Dùng API ID thật nếu có, fallback về mockId
+    const apiId = apiIdMap[mockId] || mockId;
+    console.log(`📊 Loading station mockId=${mockId} → apiId=${apiId}`);
+
+    try {
+        const [pm25, detail] = await Promise.all([
+            getStationPM25(apiId, 12).catch(() => null),
+            getStationDetail(apiId).catch(() => null)
+        ]);
+
+        console.log('✅ API data received:', { pm25, detail });
+
+        if (typeof window.updateStationFromAPI === 'function') {
+            window.updateStationFromAPI(mockId, pm25, detail);
+            showNotification(`✅ Trạm ${mockId.toUpperCase()} đã tải từ API`, 'success');
+        } else {
+            // Fallback thủ công
+            if (pm25?.average != null) {
+                const el = document.querySelector('.section-subtitle');
+                if (el) el.textContent = `Trung bình ~ ${pm25.average.toFixed(1)} µg/m³`;
+                const g = document.getElementById('gauge-value');
+                if (g) g.textContent = Math.round(pm25.average);
+            }
+            document.querySelectorAll('#station-name-display')
+                .forEach(el => { el.textContent = mockId.toUpperCase(); });
+        }
+
     } catch (error) {
-        console.error('Failed to load station data:', error);
+        console.error(`❌ loadStationData(${mockId}) failed:`, error);
+        showNotification(`Không tải được trạm ${mockId.toUpperCase()} từ API. Dùng mock data.`, 'info');
     }
 }
 
-// Auto-initialize when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initPage);
-} else {
-    initPage();
+// ─── Cập nhật dropdown với tên trạm thật từ API ──────────────────────────────
+
+function syncDropdownWithAPI(stations) {
+    if (!window.stationDropdown?.updateItems) return;
+
+    // Map ngược: apiId → mockId (để giữ value = mockId cho chart functions)
+    const reverseMap = {};
+    Object.entries(apiIdMap).forEach(([mock, api]) => { reverseMap[api] = mock; });
+
+    const items = stations.map(s => {
+        const apiId = String(s.id);
+        const mockId = reverseMap[apiId] || apiId;
+        return {
+            value: mockId,           // vẫn dùng mockId (s1..s6) làm value để chart hoạt động
+            text: s.name || s.id    // tên thật từ API làm label hiển thị
+        };
+    });
+
+    window.stationDropdown.updateItems(items);
+    console.log('✅ Dropdown synced with API station names');
 }
 
-// Export for console debugging
+// ─── Lắng nghe dropdown đổi trạm ─────────────────────────────────────────────
+/**
+ * Dropdown HTML gọi onSelect(value) với value = mockId (s1..s6)
+ * rồi cập nhật station-name-display.
+ * Ta dùng MutationObserver để bắt thay đổi đó và fetch API data.
+ */
+function observeStationChange() {
+    const nameEl = document.getElementById('station-name-display');
+    if (!nameEl) return;
+
+    let lastStation = '';
+
+    const obs = new MutationObserver(() => {
+        const newText = nameEl.textContent.trim().toLowerCase();
+        if (!newText || newText === lastStation) return;
+        lastStation = newText;
+
+        // newText có thể là 's1' hoặc 'S1' → chuẩn hoá về 's1'
+        const mockId = newText.startsWith('s') ? newText : `s${newText}`;
+
+        // Chỉ fetch nếu đã có apiIdMap (tức là backend đang kết nối)
+        if (Object.keys(apiIdMap).length === 0) return;
+
+        console.log(`🔄 Station changed → ${mockId}, syncing API...`);
+        loadStationData(mockId);
+    });
+
+    obs.observe(nameEl, { childList: true, characterData: true, subtree: true });
+    console.log('👁️ MutationObserver active on station-name-display');
+}
+
+// ─── Init ────────────────────────────────────────────────────────────────────
+
+async function initPage() {
+    console.log('🔄 Initializing Station API...');
+
+    const connected = await testConnection();
+    if (!connected) {
+        console.warn('⚠️ Backend không kết nối — dùng mock data.');
+        showNotification('Backend chưa kết nối — đang hiển thị mock data.', 'info');
+        return;
+    }
+
+    showNotification('Đã kết nối backend!', 'success');
+
+    // Lấy danh sách trạm
+    let stations = [];
+    try {
+        stations = await getAllStations();
+        apiStationsCache = stations;
+        console.log(`✅ ${stations.length} stations from API:`, stations);
+    } catch (err) {
+        console.error('❌ Không lấy được danh sách trạm:', err);
+        showNotification('Không lấy được danh sách trạm từ API.', 'error');
+        return;
+    }
+
+    if (stations.length === 0) {
+        showNotification('API không trả về trạm nào — dùng mock data.', 'info');
+        return;
+    }
+
+    // Build mapping mock ID ↔ API ID
+    apiIdMap = buildIdMap(stations);
+
+    // Cập nhật tên trạm trong dropdown từ API
+    syncDropdownWithAPI(stations);
+
+    // Load trạm đang chọn (mặc định s1)
+    const nameEl = document.getElementById('station-name-display');
+    const currentText = (nameEl?.textContent?.trim() || 'S1').toLowerCase();
+    const currentMockId = currentText.startsWith('s') ? currentText : `s${currentText}`;
+    const targetMockId = apiIdMap[currentMockId] ? currentMockId : Object.keys(apiIdMap)[0];
+
+    await loadStationData(targetMockId || 's1');
+}
+
+// ─── Bootstrap ───────────────────────────────────────────────────────────────
+
+function bootstrap() {
+    observeStationChange(); // Setup observer trước
+    initPage();             // Sau đó init (populate apiIdMap)
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootstrap);
+} else {
+    bootstrap();
+}
+
+// Debug helpers
 window.API = {
     test: testConnection,
     getStations: getAllStations,
     getStation: getStationDetail,
     getPM25: getStationPM25,
-    getComparison: getStationComparison,
-    load: loadStationData
+    load: loadStationData,
+    idMap: () => apiIdMap,
+    stations: () => apiStationsCache
 };
 
-console.log('✅ Station API loaded');
-console.log('💡 Debug in console: API.test() or API.getStations()');
+console.log('✅ Station API ready');
+console.log('💡 Debug: API.idMap() để xem mapping, API.stations() để xem API stations');

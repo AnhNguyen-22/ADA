@@ -9,7 +9,6 @@
 <link href="../components/dropdown.css" rel="stylesheet"/>
 <link href="../assets/css/main.css" rel="stylesheet"/>
 </head>
-<script src="../assets/js/station-tracking.js"></script>
 <body>
 <div class="station-tracking-page">
     <!-- Background -->
@@ -481,13 +480,17 @@
             if (!canvas) return;
 
             const ctx = canvas.getContext('2d');
-            const size = 500;  // Tăng từ 400 lên 500
+            const containerW = canvas.parentElement ? canvas.parentElement.clientWidth : 400;
+            const size = Math.min(containerW, 420);
+            const scale = size / 500;
             canvas.width = size;
-            canvas.height = 400; // Tăng lên 400 để chữ không bị cắt
+            const centerY = Math.round(200 * scale);   // đẩy xuống thêm để label trên không bị clip
+            const radius = Math.round(130 * scale);
+            const lineW = Math.round(26 * scale);
+            // canvas height = centerY + khoảng cho µg/m³ + khoảng thở trước subtitle
+            canvas.height = centerY + Math.round(55 * scale);
 
             const centerX = size / 2;
-            const centerY = 200; // Điều chỉnh lại vị trí tâm
-            const radius = 140; // Tăng từ 110 lên 140
 
             ctx.clearRect(0, 0, size, canvas.height);
 
@@ -529,13 +532,25 @@
 
                 ctx.beginPath();
                 ctx.arc(centerX, centerY, radius, angle1, angle2);
-                ctx.lineWidth = 30;  // Tăng từ 24 lên 30
+                ctx.lineWidth = lineW;
                 ctx.lineCap = 'round';
                 ctx.strokeStyle = color;
                 ctx.stroke();
             }
 
-            // KHÔNG VẼ KIM NỮA
+            // Vẽ số value và đơn vị trực tiếp lên canvas (thay vì CSS overlay)
+            const valueFontSize = Math.round(58 * scale);
+            const unitFontSize = Math.round(14 * scale);
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            ctx.font = `bold ${valueFontSize}px "72-Semibold", Helvetica, Arial`;
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillText(Math.round(value), centerX, centerY - Math.round(14 * scale));
+
+            ctx.font = `${unitFontSize}px Arial`;
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillText('µg/m³', centerX, centerY + Math.round(22 * scale));
             
             // Vẽ labels xung quanh - CĂN ĐỀU KHOẢNG CÁCH
             function drawCurvedLabel(text, percent, radius) {
@@ -558,10 +573,9 @@
                 ctx.restore();
             }
 
-            ctx.font = "15px Arial";  // Tăng từ 13px lên 15px
-            ctx.fillStyle = "#000000";  // Đổi từ #2C3E50 sang đen #000000
-
-            const r = 195; // Tăng từ 155 để phù hợp với gauge lớn hơn
+            ctx.font = `${Math.round(15 * scale)}px Arial`;
+            ctx.fillStyle = "#000000";
+            const r = Math.round(185 * scale);  
 
             // Gauge: TRÁI (percent 0.0) = Math.PI = Xanh/Tốt
             //        PHẢI (percent 1.0) = 0 = Tím/Nguy hại
@@ -747,6 +761,68 @@
             }
         }
 
+        // ===== EXPOSE RA WINDOW ĐỂ station-tracking.js CÓ THỂ GỌI =====
+        window.stationPM25Data = stationPM25Data;
+
+        // Hàm để JS bên ngoài cập nhật data và refresh UI cho 1 trạm
+        window.updateStationFromAPI = function(stationId, pm25Data, detail) {
+            // Cập nhật data
+            if (pm25Data && pm25Data.readings && pm25Data.readings.length > 0) {
+                // Lấy tối đa 12 điểm từ API
+                const readings = pm25Data.readings.slice(0, 12).map(r => r.value || r.pm25 || r);
+                while (readings.length < 12) readings.push(readings[readings.length - 1] || 0);
+                window.stationPM25Data[stationId] = readings;
+            }
+
+            // Tính trung bình
+            const data = window.stationPM25Data[stationId];
+            const avgValue = calculateAverage(data);
+
+            // Cập nhật subtitle
+            const subtitleEl = document.querySelector('.section-subtitle');
+            if (subtitleEl) subtitleEl.textContent = `Trung bình ~ ${avgValue} µg/m³`;
+
+            // Cập nhật status badge
+            const statusBadges = document.querySelectorAll('.status-badge');
+            statusBadges.forEach(badge => {
+                badge.className = 'status-badge';
+                if (avgValue > 50) {
+                    badge.classList.add('status-bad');
+                    badge.textContent = 'Xấu';
+                } else if (avgValue > 35) {
+                    badge.classList.add('status-moderate');
+                    badge.textContent = 'Trung bình';
+                } else {
+                    badge.classList.add('status-good');
+                    badge.textContent = 'Tốt';
+                }
+            });
+
+            // Cập nhật station name display
+            const nameEl = document.getElementById('station-name-display');
+            if (nameEl) nameEl.textContent = stationId.toUpperCase();
+
+            // Cập nhật gauge value text (legacy, gauge canvas tự xử lý)
+            const gaugeEl = document.getElementById('gauge-value');
+            if (gaugeEl) gaugeEl.textContent = Math.round(avgValue);
+
+            // Vẽ lại các chart
+            drawChart(stationId);
+            drawGaugeChart(avgValue);
+            drawComparisonChart(stationId);
+            updateStationInfo(stationId);
+
+            // Cập nhật dropdown hiển thị đúng trạm
+            currentStation = stationId;
+        };
+
+        // Expose hàm drawComparisonChart để JS bên ngoài dùng cho government section
+        window._drawChart = drawChart;
+        window._drawGaugeChart = drawGaugeChart;
+        window._drawComparisonChart = drawComparisonChart;
+        window._calculateAverage = calculateAverage;
+        // ===== END EXPOSE =====
+
         // Khởi tạo dropdown cho trạm
         let currentStation = 's1';
         const stationDropdown = new Dropdown('station-dropdown', {
@@ -828,20 +904,18 @@ document.addEventListener('DOMContentLoaded', function () {
     function setGovVisible(isVisible) {
         if (!govSection) return;
         govSection.style.display = isVisible ? 'block' : 'none';
-        localStorage.setItem('airsense_role', isVisible ? 'government' : 'public');
-
-        // FIX: đợi layout render xong -> canvas mới có width
+        sessionStorage.setItem('airsense_role', isVisible ? 'government' : 'public');
         if (isVisible) {
-            requestAnimationFrame(() => {
-                updateGovernmentUI(getCurrentStationId());
-            });
+            requestAnimationFrame(() => { updateGovernmentUI(getCurrentStationId()); });
         }
     }
 
     if (btnPublic) btnPublic.addEventListener('click', function () { setGovVisible(false); });
-    if (btnMgmt) btnMgmt.addEventListener('click', function () { setGovVisible(true); });
+    if (btnMgmt)   btnMgmt.addEventListener('click',   function () { setGovVisible(true);  });
 
-    const savedRole = localStorage.getItem('airsense_role') || 'public';
+    // Đọc lại trạng thái từ sessionStorage (chỉ trong tab hiện tại).
+    // Mặc định 'public' — sessionStorage tự xoá khi đóng tab nên không bị stale.
+    const savedRole = sessionStorage.getItem('airsense_role') || 'public';
     setGovVisible(savedRole === 'government');
 
     const WHO_GUIDELINE = 15;
@@ -1169,7 +1243,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const stationNameEl = document.getElementById('station-name-display');
     if (stationNameEl) {
         const obs = new MutationObserver(function () {
-            const isGov = (localStorage.getItem('airsense_role') === 'government');
+            const isGov = (sessionStorage.getItem('airsense_role') === 'government');
             if (!isGov) return;
             requestAnimationFrame(() => updateGovernmentUI(getCurrentStationId()));
         });
@@ -1180,7 +1254,7 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('resize', function () {
         clearTimeout(resizeTimer2);
         resizeTimer2 = setTimeout(function () {
-            const isGov = (localStorage.getItem('airsense_role') === 'government');
+            const isGov = (sessionStorage.getItem('airsense_role') === 'government');
             if (!isGov) return;
             updateGovernmentCharts(getCurrentStationId());
         }, 250);
