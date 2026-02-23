@@ -50,7 +50,6 @@
           <section class="card forecast-card">
             <div class="card-title-row">
               <h2 class="card-title">Dự báo PM2.5 theo khu vực x thời gian</h2>
-              <div class="forecast-hint">Di chuột vào cột 3h/6h/12h/24h để highlight</div>
             </div>
 
             <!-- Legend + WHO -->
@@ -70,10 +69,6 @@
 
                   <span class="value-pill pill-red legend-pill">Xấu</span>
                   <span class="legend-range">&gt;55</span>
-                </div>
-
-                <div class="public-note">
-                  * Chỉ là minh hoạ UI: bạn có thể chỉnh lại ngưỡng theo tiêu chuẩn bạn dùng.
                 </div>
               </div>
 
@@ -152,10 +147,6 @@
               <div class="gov-chart-canvas-wrap">
                 <canvas id="compare-line-chart"></canvas>
               </div>
-
-              <div class="public-note">
-                * Line chart chỉ hiển thị trong chế độ Quản lý để so sánh mức chênh giữa tổng thể và từng trạm.
-              </div>
             </div>
           </section>
 
@@ -166,9 +157,6 @@
               <ul class="info-list" id="public-top-reasons">
                 <li>--</li>
               </ul>
-              <div class="public-note">
-                * Đây là mô tả dễ hiểu cho người dân. Khi có dữ liệu thật, hệ thống sẽ tự đổ nội dung.
-              </div>
             </div>
 
             <div class="card">
@@ -238,17 +226,13 @@
                 </div>
                 <button id="btn-download-csv" class="btn-primary">Tải CSV</button>
               </div>
-              <div class="public-note">* Export phía client (demo). Khi nối backend, bạn đổi sang API download.</div>
             </div>
 
             <div class="gov-box">
               <div class="gov-title">Đánh giá độ tin cậy dự báo</div>
-              <div class="gov-desc">Minh hoạ: "Confidence score" theo các mốc dự báo (3h/6h/12h/24h).</div>
               <canvas id="reliability-chart"></canvas>
             </div>
           </div>
-
-          <div class="public-note">* Government "thấy thêm": tải dữ liệu + đánh giá độ tin cậy (UI demo)</div>
         </section>
       </main>
     </div>
