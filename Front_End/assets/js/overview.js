@@ -50,6 +50,11 @@ document.addEventListener('DOMContentLoaded', function() {
     let trendMulti = null;   // dữ liệu xu hướng cho nhiều chỉ số (từ backend)
     let trendChart = null;   // instance Chart.js cho trendChart
 
+    // Cấu hình base URL cho API (chạy được cả khi mở file trực tiếp hoặc qua Flask server)
+    const API_BASE = (window.location.origin && window.location.origin.startsWith('http'))
+        ? window.location.origin
+        : 'http://127.0.0.1:5000';
+
     // Vị trí tương đối (theo %) của từng trạm trên bản đồ (matching với hình nền)
     const STATION_POSITIONS = {
         1: { x: '22%', y: '28%' },
@@ -61,10 +66,10 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     // ------------------------------------------------------------------------------
-    // Lấy dữ liệu KPI từ backend (file JSON) và gán lên giao diện
+    // Lấy dữ liệu KPI từ backend qua API Flask (chạy bằng python server.py)
+    // Nếu mở trực tiếp file HTML (file://) thì vẫn fallback về http://127.0.0.1:5000
     // ------------------------------------------------------------------------------
-    // Đường dẫn tương đối: từ `Front_End/pages/overview.html` -> `data/overview/overview_kpi.json`
-    fetch('../../data/overview/overview_kpi.json')
+    fetch(`${API_BASE}/api/overview`)
         .then(function(response) {
             if (!response.ok) {
                 throw new Error('HTTP status ' + response.status);

@@ -1,0 +1,675 @@
+(function () {
+  const API_URL = "/api/recommendations";
+  const COLS = ["3h", "6h", "12h", "24h"];
+
+  const elSummaryRow = () => document.getElementById("hcmc-summary-row");
+  const elStationsContainer = () => document.getElementById("stations-container");
+
+  const elTopReasons = () => document.getElementById("public-top-reasons");
+  const elRecoPublic = () => document.getElementById("reco-public-list");
+  const elRecoSensitive = () => document.getElementById("reco-sensitive-list");
+
+  const elGovSection = () => document.getElementById("government-section");
+  const elGovCompare = () => document.getElementById("gov-compare-chart");
+  const elGovToggles = () => document.getElementById("gov-chart-toggles");
+
+  function safeText(v) {
+    if (v === null || v === undefined) return "--";
+    const n = Number(v);
+    return Number.isFinite(n) ? n.toFixed(1).replace(/\.0$/, "") : String(v);
+  }
+
+  function setPill(el, value, cls) {
+    if (!el) return;
+    el.textContent = safeText(value);
+
+    [...el.classList].forEach((c) => {
+      if (c.startsWith("pill-")) el.classList.remove(c);
+    });
+    el.classList.add(cls || "pill-gray");
+  }
+
+  function fillSummary(payload) {
+    const row = elSummaryRow();
+    if (!row) return;
+
+    COLS.forEach((c) => {
+      const cell = row.querySelector(`[data-col="${c}"]`);
+      setPill(cell, payload.summary?.[c], payload.summary_level?.[c] || "pill-gray");
+    });
+  }
+
+  // ✅ Để CSS QUYẾT ĐỊNH (CSS dùng body.is-government)
+  function applyRoleToStations() {
+    document.querySelectorAll(".station-row").forEach((row) => {
+      row.style.removeProperty("display");
+    });
+  }
+
+  // ✅ expose để HTML gọi
+  window.__setGovMode = function (isGov) {
+    window.__IS_GOV__ = !!isGov;
+
+    document.body.classList.toggle("is-government", !!isGov);
+
+    if (elGovSection()) elGovSection().style.display = isGov ? "block" : "none";
+
+    const hasStations = !!window.__HAS_STATIONS__;
+    if (elGovCompare()) elGovCompare().style.display = isGov && hasStations ? "block" : "none";
+
+    applyRoleToStations();
+
+    // ✅ VẼ LẠI CHART KHI CHUYỂN MODE
+    if (isGov) {
+      if (typeof window.drawReliabilityChart === "function") window.drawReliabilityChart();
+      if (typeof window.drawCompareChartFromTable === "function") window.drawCompareChartFromTable();
+    } else {
+      // ✅ QUAN TRỌNG: vẽ lại public chart khi chuyển về public mode
+      if (typeof window.drawPublicSummaryChartFromRow === "function") {
+        window.drawPublicSummaryChartFromRow();
+      }
+    }
+  };
+
+  function renderStations(payload) {
+    const wrap = elStationsContainer();
+    if (!wrap) return;
+
+    wrap.innerHTML = "";
+
+    // ✅ FIX: sort + unique station codes (tránh “mất trạm” do id null/trùng)
+    const stationsRaw = Array.isArray(payload.stations) ? payload.stations : [];
+    const stations = stationsRaw.slice().sort((a, b) => {
+      const ka = String(a?.id ?? a?.station_id ?? a?.station_no ?? "");
+      const kb = String(b?.id ?? b?.station_id ?? b?.station_no ?? "");
+      return ka.localeCompare(kb, undefined, { numeric: true, sensitivity: "base" });
+    });
+    const usedCodes = new Set();
+
+    stations.forEach((st, idx) => {
+      let code = String(st?.id ?? st?.station_id ?? st?.station_no ?? st?.code ?? `S${idx + 1}`);
+      if (usedCodes.has(code)) code = `${code}_${idx + 1}`;
+      usedCodes.add(code);
+
+      const type = st.type || "";
+
+      const row = document.createElement("div");
+      row.className = "table-row station-row";
+      row.setAttribute("data-series", code);
+
+      const col1 = document.createElement("div");
+      col1.className = "station";
+      col1.textContent = code;
+
+      const col2 = document.createElement("div");
+      col2.textContent = type || "–";
+
+      row.appendChild(col1);
+      row.appendChild(col2);
+
+      COLS.forEach((c) => {
+        const cell = document.createElement("div");
+        cell.className = "value-pill pill-gray";
+        cell.setAttribute("data-col", c);
+        cell.textContent = "--";
+        row.appendChild(cell);
+
+        setPill(cell, st.values?.[c], st.level?.[c] || "pill-gray");
+      });
+
+      wrap.appendChild(row);
+    });
+
+    window.__HAS_STATIONS__ = stations.length > 0;
+
+    // ✅ Apply mode HIỆN TẠI (không đọc localStorage để ép mode)
+    const currentGov =
+      typeof window.__IS_GOV__ !== "undefined"
+        ? !!window.__IS_GOV__
+        : document.body.classList.contains("is-government");
+
+    if (typeof window.__setGovMode === "function") window.__setGovMode(currentGov);
+  }
+
+  function fillNarrative(payload) {
+    const reasons = Array.isArray(payload.top_reasons) ? payload.top_reasons : [];
+    if (elTopReasons()) {
+      // ✅ FIX: top_reasons là object {title, detail} -> render đúng thay vì [object Object]
+      elTopReasons().innerHTML = reasons.length
+  ? reasons
+      .map((x) => {
+        if (typeof x === "object" && x !== null) {
+          const t = x.title ?? "";
+          const d = x.detail ?? "";
+          return `
+            <li class="reason-item">
+              <div class="reason-title">${t}</div>
+              ${d ? `<div class="reason-detail">${d}</div>` : ""}
+            </li>
+          `;
+        }
+        return `
+          <li class="reason-item">
+            <div class="reason-title">${x}</div>
+          </li>
+        `;
+      })
+      .join("")
+  : "<li>--</li>";
+    }
+
+    const pub = payload.recommendations?.public || [];
+    const sens = payload.recommendations?.sensitive || payload.recommendations?.sensitive_group || [];
+
+    if (elRecoPublic()) {
+      elRecoPublic().innerHTML = pub.length ? pub.map((x) => `<li>${x}</li>`).join("") : "<li>--</li>";
+    }
+    if (elRecoSensitive()) {
+      elRecoSensitive().innerHTML = sens.length ? sens.map((x) => `<li>${x}</li>`).join("") : "<li>--</li>";
+    }
+  }
+
+  function buildToggles(payload) {
+    const box = elGovToggles();
+    if (!box) return;
+    box.innerHTML = "";
+
+    box.insertAdjacentHTML(
+      "beforeend",
+      `<button class="toggle-btn is-on" data-series="HCMC" type="button">TP.HCM</button>`
+    );
+
+    const stationsRaw = Array.isArray(payload.stations) ? payload.stations : [];
+    const stations = stationsRaw.slice();
+    stations.forEach((st, idx) => {
+      const code = String(st?.id ?? st?.station_id ?? st?.station_no ?? st?.code ?? `S${idx + 1}`);
+      box.insertAdjacentHTML(
+        "beforeend",
+        `<button class="toggle-btn is-on" data-series="${code}" type="button">${code}</button>`
+      );
+    });
+
+    box.querySelectorAll(".toggle-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        btn.classList.toggle("is-on");
+        if (typeof window.drawCompareChartFromTable === "function") window.drawCompareChartFromTable();
+      });
+    });
+  }
+
+  // ✅ PUBLIC chart: giữ y chang cách bạn vẽ canvas
+  window.drawPublicSummaryChartFromRow = function drawPublicSummaryChartFromRow() {
+    const canvas = document.getElementById("public-line-chart");
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    const container = canvas.parentElement;
+
+    canvas.width = container.offsetWidth;
+    canvas.height = 260;
+
+    const w = canvas.width;
+    const h = canvas.height;
+    ctx.clearRect(0, 0, w, h);
+
+    const row = document.querySelector('[data-series="HCMC"]') || document.getElementById("hcmc-summary-row");
+    if (!row) return;
+
+    const vals = COLS.map((col) => {
+      const cell = row.querySelector(`[data-col="${col}"]`);
+      const num = parseFloat((cell?.textContent || "--").trim());
+      return isNaN(num) ? null : num;
+    });
+
+    const valid = vals.filter((v) => v !== null);
+    if (!valid.length) {
+      ctx.fillStyle = "#666";
+      ctx.font = "14px sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("Chưa có dữ liệu để hiển thị", w / 2, h / 2);
+      return;
+    }
+
+    const minVal = Math.min(...valid);
+    const maxVal = Math.max(...valid);
+    const range = maxVal - minVal || 1;
+
+    const padding = { top: 34, right: 20, bottom: 44, left: 56 };
+    const chartW = w - padding.left - padding.right;
+    const chartH = h - padding.top - padding.bottom;
+
+    const xStep = chartW / (COLS.length - 1);
+    const yScale = chartH / range;
+
+    const mapX = (i) => padding.left + i * xStep;
+    const mapY = (v) => padding.top + chartH - (v - minVal) * yScale;
+
+    ctx.strokeStyle = "rgba(0,0,0,0.10)";
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 4; i++) {
+      const y = padding.top + (chartH / 4) * i;
+      ctx.beginPath();
+      ctx.moveTo(padding.left, y);
+      ctx.lineTo(w - padding.right, y);
+      ctx.stroke();
+
+      const val = maxVal - (range / 4) * i;
+      ctx.fillStyle = "#666";
+      ctx.font = "11px sans-serif";
+      ctx.textAlign = "right";
+      ctx.fillText(val.toFixed(1), padding.left - 10, y + 4);
+    }
+
+    ctx.fillStyle = "#666";
+    ctx.font = "12px sans-serif";
+    ctx.textAlign = "center";
+    COLS.forEach((c, i) => ctx.fillText(c, mapX(i), h - padding.bottom + 22));
+
+    ctx.strokeStyle = "#131e29";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+
+    let started = false;
+    vals.forEach((v, i) => {
+      if (v === null) return;
+      const x = mapX(i);
+      const y = mapY(v);
+      if (!started) {
+        ctx.moveTo(x, y);
+        started = true;
+      } else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+
+    vals.forEach((v, i) => {
+      if (v === null) return;
+      const x = mapX(i);
+      const y = mapY(v);
+
+      ctx.fillStyle = "#fff";
+      ctx.beginPath();
+      ctx.arc(x, y, 6, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = "#131e29";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.fillStyle = "#131e29";
+      ctx.font = "12px sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText(String(v.toFixed(1)).replace(/\.0$/, ""), x, y - 12);
+    });
+  };
+
+  async function load() {
+    try {
+      const res = await fetch(API_URL, { cache: "no-store" });
+      const data = await res.json();
+
+      if (!data || !data.ok) {
+        console.warn("[recommendations] API not ok:", data);
+        return;
+      }
+
+      // ✅ Lưu confidence values
+      window.__CONF_VALUES__ = [
+        data.confidence?.["3h"],
+        data.confidence?.["6h"],
+        data.confidence?.["12h"],
+        data.confidence?.["24h"],
+      ]
+        .map((v) => (Number.isFinite(Number(v)) ? Number(v) : null))
+        .map((v, i) => (v === null ? [86, 78, 66, 58][i] : v));
+
+      // ✅ Fill summary data
+      fillSummary(data);
+
+      // ✅ Render stations
+      renderStations(data);
+
+      // ✅ Fill narrative
+      fillNarrative(data);
+
+      // ✅ Build toggles
+      buildToggles(data);
+
+      // ✅ QUAN TRỌNG: sync theo mode HIỆN TẠI (ưu tiên window.__IS_GOV__ do HTML set)
+      const currentGov =
+        typeof window.__IS_GOV__ !== "undefined"
+          ? !!window.__IS_GOV__
+          : document.body.classList.contains("is-government");
+
+      // ✅ Gọi setGovMode để vẽ chart phù hợp
+      if (typeof window.__setGovMode === "function") {
+        window.__setGovMode(currentGov);
+      }
+    } catch (e) {
+      console.error("[recommendations] load failed:", e);
+    }
+  }
+
+  // ✅ QUAN TRỌNG: Lắng nghe sự kiện custom để reload khi cần
+  window.addEventListener("recommendations:reload", function () {
+    console.log("[recommendations] Reloading data...");
+    load();
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    load();
+  });
+  /* =========================
+   ADD-ON: Charts + CSV Export
+   (Only ADD, do not modify existing code)
+========================= */
+
+  (function () {
+    const COLS = ["3h", "6h", "12h", "24h"];
+
+    function safeNumFromCell(cell) {
+      if (!cell) return null;
+      const t = String(cell.textContent || "").trim();
+      const n = parseFloat(t);
+      return Number.isFinite(n) ? n : null;
+    }
+
+    function getSeriesFromTable(seriesKey) {
+      // seriesKey = "HCMC" or "S1"..."S6" (as your table rows set data-series)
+      const row = document.querySelector(`[data-series="${seriesKey}"]`);
+      if (!row) return null;
+
+      const values = COLS.map((c) => safeNumFromCell(row.querySelector(`[data-col="${c}"]`)));
+      const labelLeft = row.querySelector(".station")?.textContent?.trim() || seriesKey;
+      const typeText = row.children?.[1]?.textContent?.trim() || "";
+      return { key: seriesKey, label: labelLeft, type: typeText, values };
+    }
+
+    function getActiveToggleSeries() {
+      // Toggle buttons only exist in GOV compare chart header
+      const btns = Array.from(document.querySelectorAll("#gov-chart-toggles .toggle-btn.is-on"));
+      const keys = btns.map((b) => b.getAttribute("data-series")).filter(Boolean);
+      // Ensure HCMC exists if toggles missing
+      if (!keys.length) return ["HCMC"];
+      return keys;
+    }
+
+    /* =========================
+     1) GOV Compare Chart
+  ========================= */
+    window.drawCompareChartFromTable = function drawCompareChartFromTable() {
+      const canvas = document.getElementById("compare-line-chart");
+      if (!canvas) return;
+
+      const wrap = canvas.parentElement;
+      const ctx = canvas.getContext("2d");
+
+      canvas.width = wrap.offsetWidth || 900;
+      canvas.height = 280;
+
+      const w = canvas.width;
+      const h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      const keys = getActiveToggleSeries();
+      const series = keys.map(getSeriesFromTable).filter(Boolean);
+
+      // Collect all numeric values
+      const all = [];
+      series.forEach((s) => s.values.forEach((v) => (v !== null ? all.push(v) : null)));
+
+      if (!all.length) {
+        ctx.fillStyle = "#666";
+        ctx.font = "14px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("Chưa có dữ liệu để so sánh", w / 2, h / 2);
+        return;
+      }
+
+      const minVal = Math.min(...all);
+      const maxVal = Math.max(...all);
+      const range = maxVal - minVal || 1;
+
+      const padding = { top: 34, right: 24, bottom: 44, left: 56 };
+      const chartW = w - padding.left - padding.right;
+      const chartH = h - padding.top - padding.bottom;
+
+      const xStep = chartW / (COLS.length - 1);
+      const yScale = chartH / range;
+
+      const mapX = (i) => padding.left + i * xStep;
+      const mapY = (v) => padding.top + chartH - (v - minVal) * yScale;
+
+      // grid
+      ctx.strokeStyle = "rgba(0,0,0,0.10)";
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        const y = padding.top + (chartH / 4) * i;
+        ctx.beginPath();
+        ctx.moveTo(padding.left, y);
+        ctx.lineTo(w - padding.right, y);
+        ctx.stroke();
+
+        const val = maxVal - (range / 4) * i;
+        ctx.fillStyle = "#666";
+        ctx.font = "11px sans-serif";
+        ctx.textAlign = "right";
+        ctx.fillText(val.toFixed(1), padding.left - 10, y + 4);
+      }
+
+      // x labels
+      ctx.fillStyle = "#666";
+      ctx.font = "12px sans-serif";
+      ctx.textAlign = "center";
+      COLS.forEach((c, i) => ctx.fillText(c, mapX(i), h - padding.bottom + 22));
+
+      // palette (simple, readable)
+      const palette = ["#131e29", "#2f6fda", "#d14b4b", "#1e8e5a", "#8b5cf6", "#f59e0b", "#0ea5e9", "#ef4444"];
+
+      // draw each series
+      series.forEach((s, si) => {
+        const stroke = palette[si % palette.length];
+
+        ctx.strokeStyle = stroke;
+        ctx.lineWidth = s.key === "HCMC" ? 3.5 : 2.5;
+
+        ctx.beginPath();
+        let started = false;
+        s.values.forEach((v, i) => {
+          if (v === null) return;
+          const x = mapX(i);
+          const y = mapY(v);
+          if (!started) {
+            ctx.moveTo(x, y);
+            started = true;
+          } else {
+            ctx.lineTo(x, y);
+          }
+        });
+        ctx.stroke();
+
+        // points
+        s.values.forEach((v, i) => {
+          if (v === null) return;
+          const x = mapX(i);
+          const y = mapY(v);
+
+          ctx.fillStyle = "#fff";
+          ctx.beginPath();
+          ctx.arc(x, y, s.key === "HCMC" ? 6 : 5, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.strokeStyle = stroke;
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        });
+      });
+    };
+
+    /* =========================
+     2) Reliability (Confidence) Chart
+  ========================= */
+    window.drawReliabilityChart = function drawReliabilityChart() {
+      const canvas = document.getElementById("reliability-chart");
+      if (!canvas) return;
+
+      const wrap = canvas.parentElement;
+      const ctx = canvas.getContext("2d");
+
+      canvas.width = wrap.offsetWidth || 520;
+      canvas.height = 220;
+
+      const w = canvas.width;
+      const h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      const vals = Array.isArray(window.__CONF_VALUES__) ? window.__CONF_VALUES__ : [];
+      const data = COLS.map((_, i) => {
+        const v = vals[i];
+        const n = Number(v);
+        return Number.isFinite(n) ? Math.max(0, Math.min(100, n)) : null;
+      });
+
+      const valid = data.filter((v) => v !== null);
+      if (!valid.length) {
+        ctx.fillStyle = "#666";
+        ctx.font = "14px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("Chưa có dữ liệu confidence", w / 2, h / 2);
+        return;
+      }
+
+      const padding = { top: 24, right: 18, bottom: 44, left: 46 };
+      const chartW = w - padding.left - padding.right;
+      const chartH = h - padding.top - padding.bottom;
+
+      // y grid 0..100
+      ctx.strokeStyle = "rgba(0,0,0,0.10)";
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        const y = padding.top + (chartH / 4) * i;
+        ctx.beginPath();
+        ctx.moveTo(padding.left, y);
+        ctx.lineTo(w - padding.right, y);
+        ctx.stroke();
+
+        const val = 100 - 25 * i;
+        ctx.fillStyle = "#666";
+        ctx.font = "11px sans-serif";
+        ctx.textAlign = "right";
+        ctx.fillText(String(val), padding.left - 10, y + 4);
+      }
+
+      const barW = Math.max(24, chartW / (COLS.length * 1.6));
+      const gap = (chartW - barW * COLS.length) / (COLS.length + 1);
+
+      // bars
+      data.forEach((v, i) => {
+        const x = padding.left + gap + i * (barW + gap);
+        const labelX = x + barW / 2;
+
+        // x labels
+        ctx.fillStyle = "#666";
+        ctx.font = "12px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(COLS[i], labelX, h - padding.bottom + 22);
+
+        if (v === null) return;
+
+        const bh = (v / 100) * chartH;
+        const y = padding.top + chartH - bh;
+
+        // bar
+        ctx.fillStyle = "rgba(19, 30, 41, 0.75)";
+        ctx.fillRect(x, y, barW, bh);
+
+        // value text
+        ctx.fillStyle = "#131e29";
+        ctx.font = "12px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(`${Math.round(v)}%`, labelX, y - 8);
+      });
+    };
+
+    /* =========================
+     3) CSV Export (Client)
+  ========================= */
+    function buildCsvFromTable() {
+      const rows = Array.from(document.querySelectorAll("#forecast-table .table-row"));
+      if (!rows.length) return null;
+
+      const header = ["series", "type", ...COLS];
+      const lines = [header.join(",")];
+
+      rows.forEach((row) => {
+        const series = row.getAttribute("data-series") || "";
+        const station = row.querySelector(".station")?.textContent?.trim() || "";
+        const type = row.children?.[1]?.textContent?.trim() || "";
+        const vals = COLS.map((c) => {
+          const cell = row.querySelector(`[data-col="${c}"]`);
+          const t = String(cell?.textContent || "--").trim();
+          return t;
+        });
+
+        // Use "station" if available, else series
+        const seriesOut = station || series;
+        const safe = (s) => `"${String(s).replace(/"/g, '""')}"`;
+        lines.push([safe(seriesOut), safe(type), ...vals.map(safe)].join(","));
+      });
+
+      return lines.join("\n");
+    }
+
+    function downloadText(filename, text) {
+      const blob = new Blob([text], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function wireCsvButton() {
+      const btn = document.getElementById("btn-download-csv");
+      if (!btn) return;
+
+      // avoid double binding
+      if (btn.__csv_bound__) return;
+      btn.__csv_bound__ = true;
+
+      btn.addEventListener("click", () => {
+        const csv = buildCsvFromTable();
+        if (!csv) return;
+        const ts = new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
+        downloadText(`tp-hcm-forecast-${ts}.csv`, csv);
+      });
+    }
+
+    // Redraw on resize (only when canvas exists)
+    function onResize() {
+      if (document.body.classList.contains("is-government")) {
+        if (typeof window.drawCompareChartFromTable === "function") window.drawCompareChartFromTable();
+        if (typeof window.drawReliabilityChart === "function") window.drawReliabilityChart();
+      } else {
+        if (typeof window.drawPublicSummaryChartFromRow === "function") window.drawPublicSummaryChartFromRow();
+      }
+    }
+
+    window.addEventListener("resize", () => {
+      clearTimeout(window.__reco_resize_t__);
+      window.__reco_resize_t__ = setTimeout(onResize, 150);
+    });
+
+    // When page ready: bind CSV
+    document.addEventListener("DOMContentLoaded", function () {
+      wireCsvButton();
+    });
+
+    // When your code triggers reload, button still exists: bind again safely
+    window.addEventListener("recommendations:reload", function () {
+      wireCsvButton();
+    });
+  })();
+})(); // ✅ FIX: chỉ giữ 1 lần đóng IIFE, bỏ cái dư

@@ -1,3 +1,58 @@
+/* ===================== */
+/* ✅ RESPONSIVE FONT SCALE (base tuned to match "VÌ SAO PM2.5 TĂNG?" card vibe) */
+/* ===================== */
+
+/* Base mặc định cho màn nhỏ hơn 1440 (14 inch ~1024) */
+html {
+  font-size: 13px;
+}
+
+/* Đúng design gốc 1440x1024 */
+@media (min-width: 1440px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+/* Lap 16" lớn hơn */
+@media (min-width: 1536px) {
+  html {
+    font-size: 17px;
+  }
+}
+
+@media (min-width: 1600px) {
+  html {
+    font-size: 18px;
+  }
+}
+
+body {
+  font-size: 1rem;
+}
+
+/* -----------------------
+   Typography tokens
+   Lấy "card reasons" làm gốc rồi map ra các chỗ khác
+------------------------ */
+:root {
+  /* Titles */
+  --fs-page-title: clamp(1.6rem, 1.1vw + 1.2rem, 2.15rem);
+  --fs-card-title: clamp(1.02rem, 0.55vw + 0.82rem, 1.18rem);
+  --fs-section-title: clamp(0.98rem, 0.5vw + 0.78rem, 1.08rem);
+
+  /* Body text */
+  --fs-body: clamp(0.9rem, 0.25vw + 0.82rem, 0.98rem);
+  --fs-small: clamp(0.82rem, 0.18vw + 0.78rem, 0.9rem);
+  --fs-table: clamp(0.82rem, 0.18vw + 0.78rem, 0.9rem);
+
+  /* Pills / tiny */
+  --fs-pill: clamp(0.78rem, 0.16vw + 0.74rem, 0.86rem);
+
+  /* Strong line (like reason-title) */
+  --fs-strong: clamp(0.98rem, 0.35vw + 0.88rem, 1.08rem);
+}
+
 @supports selector(:has(*)) {
   .NB-c-khuyencao:has(.side-ql-unchoose.collapsed) .frame {
     left: 118px;
@@ -14,10 +69,11 @@
 
 .page-title {
   font-family: "72-Black", "Segoe UI", Arial, sans-serif;
-  font-size: 32px;
-  letter-spacing: 0.5px;
+  font-size: var(--fs-page-title);
+  letter-spacing: 0.6px;
   color: #ffffff;
   margin: 0;
+  line-height: 1.05;
 }
 
 .page-meta {
@@ -26,7 +82,7 @@
   gap: 6px;
   align-items: flex-end;
   color: #f7fbff;
-  font-size: 11px;
+  font-size: var(--fs-small);
 }
 
 .meta-item {
@@ -67,8 +123,10 @@
 .NB-c-khuyencao .card-title {
   font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
   color: #f3fbff;
-  font-size: 14px;
+  font-size: var(--fs-card-title);
   margin: 0;
+  letter-spacing: 0.2px;
+  line-height: 1.2;
 }
 
 /* ===================== PUBLIC COMPACT + META BOXES ===================== */
@@ -77,7 +135,7 @@
 }
 
 .forecast-hint {
-  font-size: 12.5px;
+  font-size: var(--fs-small);
   color: #666;
   opacity: 0.9;
   white-space: nowrap;
@@ -98,9 +156,11 @@
 }
 
 .public-box-title {
-  font-weight: 700;
+  font-weight: 800;
   color: #131e29;
   margin-bottom: 6px;
+  font-size: var(--fs-section-title);
+  line-height: 1.2;
 }
 
 .legend-row {
@@ -116,20 +176,22 @@
 
 .legend-range {
   color: #666;
-  font-size: 13px;
+  font-size: var(--fs-small);
 }
 
 .public-note {
   margin-top: 8px;
   color: #666;
-  font-size: 12.5px;
+  font-size: var(--fs-small);
+  line-height: 1.35;
+  opacity: 0.9;
 }
 
 .who-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
-  font-size: 13px;
+  font-size: var(--fs-body);
   color: #444;
 }
 
@@ -141,12 +203,15 @@
 }
 
 .who-label {
-  font-weight: 700;
+  font-weight: 800;
   color: #131e29;
+  font-size: var(--fs-small);
 }
 
 .who-value {
   color: #444;
+  font-size: var(--fs-body);
+  font-weight: 600;
 }
 
 /* ===================== TABLE ===================== */
@@ -166,30 +231,35 @@
   border-radius: 12px;
 }
 
+/* Header rõ hơn chút (theo vibe card) */
 .NB-c-khuyencao .table-header {
   background: var(--color-table-head-bg);
-  font-size: 11px;
+  font-size: var(--fs-table);
   font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
   color: var(--color-text-dark);
+  letter-spacing: 0.2px;
 }
 
+/* Body table: giống body text */
 .NB-c-khuyencao .table-row {
   background: var(--color-surface);
-  font-size: 11px;
+  font-size: var(--fs-table);
   color: var(--color-text-dark);
 }
 
 .NB-c-khuyencao .station {
   font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
+  letter-spacing: 0.2px;
 }
 
+/* Pills: to hơn chút so với trước để match “card reasons” */
 .NB-c-khuyencao .value-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 2px 0;
+  padding: 4px 0;
   border-radius: 10px;
-  font-size: 11px;
+  font-size: var(--fs-pill);
   font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
   color: var(--color-text-dark);
 }
@@ -244,17 +314,19 @@
 }
 
 /* ===================== PUBLIC vs GOVERNMENT VISIBILITY ===================== */
+/* ✅ MẶC ĐỊNH: Public mode - ẨN TẤT CẢ STATION ROWS */
 .station-row {
-  display: none; /* public default */
+  display: none !important;
 }
 
+/* ✅ GOVERNMENT MODE: Hiện tất cả station rows */
 body.is-government .station-row {
-  display: grid; /* gov show station rows */
+  display: grid !important;
 }
 
-/* TP.HCM vẫn hiện ở gov (theo yêu cầu mới) -> KHÔNG ẩn summary */
-body.is-government #hcmc-summary-row {
-  display: grid;
+/* ✅ TP.HCM summary row LUÔN HIỂN THỊ ở cả 2 mode */
+#hcmc-summary-row {
+  display: grid !important;
 }
 
 /* ===================== GOVERNMENT COMPARE CHART (nằm dưới bảng) ===================== */
@@ -281,14 +353,17 @@ body.is-government .gov-compare-chart {
 }
 
 .gov-chart-title {
-  font-weight: 800;
+  font-weight: 900;
   color: #131e29;
   margin-bottom: 2px;
+  font-size: var(--fs-section-title);
+  line-height: 1.2;
 }
 
 .gov-chart-sub {
-  font-size: 12.5px;
+  font-size: var(--fs-small);
   color: #666;
+  line-height: 1.35;
 }
 
 .gov-chart-toggles {
@@ -304,8 +379,8 @@ body.is-government .gov-compare-chart {
   border-radius: 999px;
   padding: 8px 10px;
   cursor: pointer;
-  font-weight: 700;
-  font-size: 12px;
+  font-weight: 800;
+  font-size: var(--fs-small);
   transition: 120ms ease;
 }
 
@@ -342,15 +417,17 @@ body.is-government .gov-compare-chart {
   font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
   color: #f2f8ff;
   margin: 0 0 8px 0;
-  font-size: 14px;
+  font-size: var(--fs-card-title);
+  letter-spacing: 0.6px;
+  line-height: 1.15;
 }
 
 .NB-c-khuyencao .info-list {
   margin: 0;
   padding-left: 16px;
   color: var(--color-text-dark);
-  font-size: 11px;
-  line-height: 1.5;
+  font-size: var(--fs-body);
+  line-height: 1.45;
 }
 
 /* ===================== BOTTOM ===================== */
@@ -361,8 +438,9 @@ body.is-government .gov-compare-chart {
 .NB-c-khuyencao .bottom-title {
   font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
   color: #f2f8ff;
-  font-size: 13px;
+  font-size: var(--fs-card-title);
   margin: 0 0 12px 0;
+  letter-spacing: 0.3px;
 }
 
 .NB-c-khuyencao .bottom-columns {
@@ -374,17 +452,18 @@ body.is-government .gov-compare-chart {
 .NB-c-khuyencao .bottom-block h3 {
   font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
   color: #f2f8ff;
-  font-size: 16px;
+  font-size: var(--fs-section-title);
   margin: 0 0 8px 0;
   text-align: center;
+  letter-spacing: 0.2px;
 }
 
 .NB-c-khuyencao .bottom-list {
   margin: 0;
   padding-left: 16px;
   color: var(--color-text-dark);
-  font-size: 11px;
-  line-height: 1.5;
+  font-size: var(--fs-body);
+  line-height: 1.45;
 }
 
 /* ===================== GOVERNMENT UI ===================== */
@@ -413,15 +492,17 @@ body.is-government .gov-compare-chart {
 }
 
 .gov-title {
-  font-weight: 800;
+  font-weight: 900;
   color: #131e29;
   margin-bottom: 4px;
+  font-size: var(--fs-section-title);
 }
 
 .gov-desc {
   color: #666;
-  font-size: 13px;
+  font-size: var(--fs-body);
   margin-bottom: 10px;
+  line-height: 1.4;
 }
 
 .btn-primary {
@@ -431,7 +512,8 @@ body.is-government .gov-compare-chart {
   border-radius: 12px;
   background: #131e29;
   color: #fff;
-  font-weight: 700;
+  font-weight: 800;
+  font-size: var(--fs-small);
 }
 
 /* ===================== RESPONSIVE ===================== */
@@ -459,7 +541,7 @@ body.is-government .gov-compare-chart {
   .NB-c-khuyencao .table-header,
   .NB-c-khuyencao .table-row {
     grid-template-columns: 70px 1fr repeat(4, 1fr);
-    font-size: 11px;
+    font-size: var(--fs-table);
   }
 
   .NB-c-khuyencao .bottom-columns {
@@ -482,4 +564,286 @@ body.is-government .gov-compare-chart {
   .forecast-hint {
     display: none;
   }
+}
+
+/* Hover từng dòng (trạm) - không ảnh hưởng hover theo cột */
+.NB-c-khuyencao .table-row:hover {
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+  transition: 120ms ease;
+}
+
+/* ===================== PUBLIC SUMMARY CHART ===================== */
+.public-summary-chart{
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(0,0,0,0.06);
+  background: rgba(255,255,255,0.55);
+}
+
+.public-chart-header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+
+.public-chart-title{
+  font-weight: 900;
+  color:#131e29;
+  margin-bottom:2px;
+  font-size: var(--fs-section-title);
+  line-height: 1.2;
+}
+
+.public-chart-sub{
+  font-size: var(--fs-small);
+  color:#666;
+  line-height: 1.35;
+}
+
+.public-chart-canvas-wrap{
+  width:100%;
+}
+
+#public-line-chart{
+  width:100%;
+  display:block;
+}
+
+/* ✅ Gov mode thì ẩn chart public (vì gov có chart compare riêng) */
+body.is-government .public-summary-chart{
+  display:none;
+}
+
+/* ==================================================
+   FIX CARD "VÌ SAO PM2.5 TĂNG?" TO MATCH CARD BELOW
+   (override riêng card đầu tiên ở right-stack)
+================================================== */
+
+.NB-c-khuyencao .right-stack .card:first-child .info-title{
+  font-size: var(--fs-card-title);
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  line-height: 1.15;
+  text-transform: none;
+  margin-bottom: 12px;
+}
+
+.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons{
+  margin: 0;
+  padding-left: 18px;
+}
+
+.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons li.reason-item{
+  margin: 12px 0;
+}
+
+.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons .reason-title{
+  font-size: var(--fs-body);
+  font-weight: 800;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons .reason-detail{
+  font-size: var(--fs-body);
+  font-weight: 500;
+  line-height: 1.45;
+  opacity: 0.95;
+  margin: 4px 0 0 0;
+}
+
+.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons li::marker{
+  font-size: 0.9em;
+  color: rgba(10,20,30,0.6);
+}
+
+.NB-c-khuyencao .right-stack .card:first-child .public-note{
+  font-size: var(--fs-small);
+  line-height: 1.35;
+  opacity: 0.75;
+  margin-top: 12px;
+}
+/* ==================================================
+   FIX 1: TÁCH CÁC Ô TRẮNG (TABLE ROWS) RÕ RÀNG
+   Fix chắc ăn: dùng margin thay vì chỉ rely vào gap
+================================================== */
+
+/* đảm bảo table có khoảng thở */
+.NB-c-khuyencao .table{
+  gap: 12px; /* tăng nhẹ */
+}
+
+/* mỗi row tự có khoảng cách -> không còn cảm giác dính */
+.NB-c-khuyencao .table-row{
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+/* row cuối không cần margin */
+.NB-c-khuyencao .table-row:last-child{
+  margin-bottom: 0;
+}
+
+/* header cách row đầu ra rõ hơn */
+.NB-c-khuyencao .table-header{
+  margin-bottom: 12px;
+}
+
+/* ==================================================
+   FIX 2: CARD "VÌ SAO PM2.5 TĂNG?" = ĐÚNG FONT/VIBE NHƯ CARD DƯỚI
+================================================== */
+
+/* ép font hệ của card trên giống card dưới */
+.NB-c-khuyencao .right-stack .card:first-child,
+.NB-c-khuyencao .right-stack .card:first-child *{
+  font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
+}
+
+/* title giống card dưới */
+.NB-c-khuyencao .right-stack .card:first-child .info-title{
+  font-size: var(--fs-card-title);
+  font-weight: 800;
+  letter-spacing: 0.6px; /* giống hệt .info-title card dưới */
+  line-height: 1.15;
+  margin-bottom: 10px;
+}
+
+/* list trong card trên giống .info-list card dưới */
+.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons{
+  margin: 0;
+  padding-left: 16px;         /* giống .info-list */
+  font-size: var(--fs-body);  /* cùng size */
+  line-height: 1.45;
+  letter-spacing: 0;          /* bỏ kiểu “reason” */
+}
+
+/* mỗi bullet spacing giống card dưới */
+.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons li.reason-item{
+  margin: 10px 0;
+}
+
+/* reason-title = phần in đậm trong bullet của card dưới */
+.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons .reason-title{
+  font-size: inherit;
+  font-weight: 800;
+  line-height: inherit;
+  margin: 0;
+  letter-spacing: 0; /* bỏ lệch vibe */
+}
+
+/* reason-detail = text thường ngay dưới */
+.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons .reason-detail{
+  font-size: inherit;
+  font-weight: 500;
+  line-height: inherit;
+  margin: 4px 0 0 0;
+  opacity: 0.92;
+}
+
+/* marker giống card dưới */
+.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons li::marker{
+  font-size: 0.95em;
+  color: rgba(10,20,30,0.55);
+}
+
+/* note (*) giống style phụ của card dưới */
+.NB-c-khuyencao .right-stack .card:first-child .public-note{
+  font-family: "72-Regular", "Segoe UI", Arial, sans-serif;
+  font-size: var(--fs-small);
+  line-height: 1.35;
+  opacity: 0.75;
+  margin-top: 12px;
+}
+/* ================================
+   FIX: PM2.5 card dùng đúng font như card dưới
+================================ */
+
+/* Bỏ mọi override riêng cho #public-top-reasons */
+#public-top-reasons,
+#public-top-reasons li,
+#public-top-reasons .reason-title,
+#public-top-reasons .reason-detail {
+  font-size: var(--fs-body) !important;
+  font-weight: inherit !important;
+  line-height: 1.45 !important;
+  letter-spacing: normal !important;
+}
+
+/* Title đậm giống các strong bên dưới */
+#public-top-reasons strong,
+#public-top-reasons .reason-title {
+  font-weight: 800 !important;
+}
+/* ==================================================
+   HARD FIX: PM2.5 card giống 100% card dưới (GIÓ)
+   (override cuối file)
+================================================== */
+
+/* Card PM2.5 = card đầu tiên trong right-stack */
+.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons,
+.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons li,
+.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons * {
+  font-family: inherit !important;
+  font-size: var(--fs-body) !important;
+  line-height: 1.45 !important;
+  letter-spacing: 0 !important;
+}
+
+/* title trong mỗi bullet: ép giống <strong> ở card dưới */
+.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons .reason-title {
+  display: inline !important;      /* giống strong inline */
+  font-weight: 800 !important;     /* giống strong */
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* phần mô tả: ép giống text thường ngay sau strong */
+.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons .reason-detail {
+  display: inline !important;      /* để nó đọc như 1 bullet, giống card dưới */
+  font-weight: 500 !important;
+  opacity: 1 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Nếu JS bọc detail bằng <p> thì p mặc định hay có margin -> bỏ đi */
+.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons p {
+  display: inline !important;
+  margin: 0 !important;
+}
+
+/* marker giống card dưới */
+.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons li::marker {
+  font-size: 1em !important;
+  color: rgba(10,20,30,0.55) !important;
+}
+/* ================================
+   FIX: PM2.5 bớt đậm, match card dưới
+   (paste cuối file)
+================================ */
+
+/* Card PM2.5 */
+.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons{
+  font-size: var(--fs-body);
+  line-height: 1.45;
+}
+
+/* Title trong bullet: giảm đậm xuống giống strong của card dưới */
+.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons .reason-title{
+  font-weight: 700 !important; /* trước đang 800 nên nhìn nặng */
+}
+
+/* Detail luôn là thường */
+.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons .reason-detail{
+  font-weight: 500 !important;
+}
+
+/* Nếu cả <li> bị inherit đậm từ đâu đó -> ép lại */
+.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons li{
+  font-weight: 500 !important;
 }
