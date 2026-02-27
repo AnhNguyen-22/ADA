@@ -7,8 +7,12 @@ from dotenv import load_dotenv
 # - If your project uses Back_End/src/...
 # - Or just src/...
 # ==========================================
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Back_End folder
 SRC_DIR = os.path.join(BASE_DIR, "src")
+
+# Add Back_End folder to path so "from src.app import" works
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
 if SRC_DIR not in sys.path:
     sys.path.insert(0, SRC_DIR)
 
@@ -18,20 +22,14 @@ if SRC_DIR not in sys.path:
 load_dotenv()
 
 # ==========================================
-# 3) Import create_app (support both import styles)
+# 3) Import create_app
 # ==========================================
-create_app = None
 try:
-    # most common in your codebase
-    from src.app import create_app as _create_app
-    create_app = _create_app
-except Exception:
-    try:
-        # if packaged as Back_End.src
-        from Back_End.src.app import create_app as _create_app
-        create_app = _create_app
-    except Exception as e:
-        raise ImportError("Cannot import create_app from src.app or Back_End.src.app") from e
+    from src.app import create_app
+except ImportError as e:
+    print(f"❌ Failed to import: {e}")
+    print(f"   Python path: {sys.path[:3]}")
+    raise
 
 # ==========================================
 # 4) Read HOST/PORT/DEBUG (support settings + env)
@@ -46,7 +44,7 @@ try:
     HOST = _HOST
     PORT = _PORT
     DEBUG = _DEBUG
-except Exception:
+except ImportError:
     # no settings file or different structure -> keep env defaults
     pass
 

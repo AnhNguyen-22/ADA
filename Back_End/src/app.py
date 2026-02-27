@@ -80,6 +80,25 @@ def create_app():
     if recommendations_bp is not None:
         app.register_blueprint(recommendations_bp)  # blueprint already defines /api/recommendations in your code
 
+    # ---- model_evaluation blueprint ----
+    model_eval_bp = None
+    try:
+        from Back_End.src.routes.model_evaluation import bp as _model_eval_bp
+        model_eval_bp = _model_eval_bp
+    except Exception:
+        try:
+            from src.routes.model_evaluation import bp as _model_eval_bp
+            model_eval_bp = _model_eval_bp
+        except Exception:
+            try:
+                from routes.model_evaluation import bp as _model_eval_bp
+                model_eval_bp = _model_eval_bp
+            except Exception:
+                model_eval_bp = None
+
+    if model_eval_bp is not None:
+        app.register_blueprint(model_eval_bp)  # blueprint defines /api/model-evaluation routes
+
     # =========================
     # API endpoints
     # =========================
