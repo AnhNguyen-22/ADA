@@ -148,7 +148,12 @@ def create_app():
     @app.get("/recommendations")
     def go_recommendations():
         return send_from_directory(os.path.join(frontend_root, "pages"), "recommendations.html")
-
+    
+    @app.route('/api/login', methods=['POST', 'OPTIONS'])
+    def login():
+        # Trả về thành công giả định để test UI
+        return jsonify({"status": "success", "message": "Đăng nhập thành công", "token": "mock_token_123"}), 200
+    
     @app.get("/__paths")
     def debug_paths():
         return jsonify({
