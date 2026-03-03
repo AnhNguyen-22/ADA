@@ -30,25 +30,27 @@ def _processed_dir():
 
 
 def _pill_class(pm25):
-    if pm25 is None:
-        return "pill-gray"
     try:
         v = float(pm25)
-    except:
+    except Exception:
         return "pill-gray"
 
-    if v <= 15:
+    if v <= 12.0:
         return "pill-green"
-    if v <= 35:
+    if v <= 35.4:
         return "pill-yellow"
-    if v <= 55:
+    if v <= 55.4:
         return "pill-orange"
-    return "pill-red"
+    if v <= 150.4:
+        return "pill-red"
+    if v <= 250.4:
+        return "pill-purple"
+    return "pill-plum"   # dùng plum như “nâu/nguy hại”
 
 
 def _pack_values(d: dict):
     d = d or {}
-    return {"3h": d.get("3h"), "6h": d.get("6h"), "12h": d.get("12h"), "24h": d.get("24h")}
+    return {"1h": d.get("1h"), "3h": d.get("3h"), "6h": d.get("6h"), "12h": d.get("12h"), "24h": d.get("24h")}
 
 
 # =========================
@@ -74,6 +76,73 @@ def get_recommendations():
     print(f"[DEBUG] Looking for files in: {pdir}")
     print(f"[DEBUG] Project root: {_project_root()}")
 
+    # =========================
+    # ƯU TIÊN: recommendations_payload.json (file tổng hợp mới)
+    # Nếu tồn tại → dùng luôn, không cần đọc 3 file cũ
+    # =========================
+    payload_path = os.path.join(pdir, "recommendations_payload.json")
+    unified = _read_json(payload_path)
+
+    if unified and unified.get("ok"):
+        # File tổng hợp đã có đủ mọi thứ — trả thẳng, chỉ đảm bảo stations có id chuẩn
+        stations_raw = unified.get("stations", []) or []
+        stations_out = []
+        for i, st in enumerate(stations_raw):
+            sid = str(st.get("id", i + 1))
+            if sid.isdigit():
+                sid = str(sid)  # giữ nguyên số, JS sẽ thêm "S"
+            values = _pack_values(st.get("values") or {})
+            stations_out.append({
+                "id": sid,
+                "type": st.get("type", ""),
+                "values": values,
+                "level": {k: st.get("level", {}).get(k) or _pill_class(values.get(k))
+                          for k in ["1h", "3h", "6h", "12h", "24h"]},
+            })
+
+        recs = unified.get("recommendations", {}) or {}
+
+        # Đảm bảo confidence giảm dần theo horizon (1h > 3h > 6h > 12h > 24h)
+        # Nếu notebook export sai chiều → clamp lại ở đây
+        raw_conf = unified.get("confidence", {}) or {}
+        CONF_FALLBACK = {"1h": 88, "3h": 80, "6h": 72, "12h": 63, "24h": 55}
+        HORIZONS_ORDER = ["1h", "3h", "6h", "12h", "24h"]
+
+        conf_values = {}
+        for k in HORIZONS_ORDER:
+            v = raw_conf.get(k)
+            try:
+                conf_values[k] = float(v) if v is not None else CONF_FALLBACK[k]
+            except Exception:
+                conf_values[k] = CONF_FALLBACK[k]
+
+        # Clamp: mỗi horizon không được cao hơn horizon trước đó
+        prev = None
+        for k in HORIZONS_ORDER:
+            if prev is not None and conf_values[k] > prev:
+                conf_values[k] = round(prev - 2.0, 1)  # ép giảm ít nhất 2%
+            prev = conf_values[k]
+
+        return jsonify({
+            "ok": True,
+            "generated_at": unified.get("generated_at"),
+            "city": "TP.HCM",
+            "summary": unified.get("summary", {}),
+            "summary_level": unified.get("summary_level", {}),
+            "stations": stations_out,
+            "confidence": conf_values,
+            "top_reasons": unified.get("top_reasons", []),
+            "recommendations": {
+                "public":     recs.get("public", []),
+                "sensitive":  recs.get("sensitive", []) or recs.get("sensitive_group", []),
+                "government": recs.get("government", []),
+            },
+            "processed_dir_used": pdir,
+        })
+
+    # =========================
+    # FALLBACK: đọc 3 file cũ nếu chưa có file tổng hợp
+    # =========================
     forecast_path = os.path.join(pdir, "tp_hcm_forecast_payload.json")
     conf_path = os.path.join(pdir, "tp_hcm_confidence.json")
     narr_path = os.path.join(pdir, "tp_hcm_narrative.json")
@@ -95,57 +164,38 @@ def get_recommendations():
             "missing": missing
         }), 404
 
-    # =========================
     # Parse forecast payload
-    # =========================
     tp = forecast.get("tp_hcm", {}) or {}
     summary = tp.get("summary", {}) or {}
     stations = tp.get("stations", []) or []
 
     summary_values = _pack_values(summary)
-    summary_level = {k: _pill_class(summary_values.get(k)) for k in ["3h", "6h", "12h", "24h"]}
+    summary_level = {k: _pill_class(summary_values.get(k)) for k in ["1h", "3h", "6h", "12h", "24h"]}
 
-    # ✅ Labels cố định cho 6 trạm
     station_labels = [
-        "Giao thông",
-        "Dân cư",
-        "Công nghiệp",
-        "Nông nghiệp",
-        "Thương mại",
-        "Hỗn hợp",
+        "Giao thông", "Dân cư", "Công nghiệp",
+        "Nông nghiệp", "Thương mại", "Hỗn hợp",
     ]
 
-    # ✅ LUÔN HIỂN THỊ ĐỦ 6 TRẠM (dù data null)
     stations_out = []
     for i in range(6):
-        # Nếu có trạm thứ i trong data
         if i < len(stations):
             st = stations[i]
             values = _pack_values(st.get("forecast") or {})
         else:
-            # Không có data → tạo trạm rỗng
-            values = {"3h": None, "6h": None, "12h": None, "24h": None}
+            values = {"1h": None, "3h": None, "6h": None, "12h": None, "24h": None}
             st = {"station_id": f"{i + 1}.0"}
 
-        sid = f"S{i + 1}"
-        sname = station_labels[i]
-
         stations_out.append({
-            "id": sid,  # "S1", "S2", ..., "S6"
+            "id": str(i + 1),
             "station_id": st.get("station_id"),
-            "type": sname,  # "Giao thông", "Dân cư", ...
+            "type": station_labels[i],
             "values": values,
-            "level": {k: _pill_class(values.get(k)) for k in ["3h", "6h", "12h", "24h"]},
+            "level": {k: _pill_class(values.get(k)) for k in ["1h", "3h", "6h", "12h", "24h"]},
         })
 
-    # =========================
-    # Parse confidence
-    # =========================
     tp_conf = (conf.get("tp_hcm", {}) or {}).get("confidence", {}) or {}
 
-    # =========================
-    # Parse narrative
-    # =========================
     tp_narr = narr.get("tp_hcm", {}) or {}
     top_reasons = tp_narr.get("top_reasons", []) or []
     recs = tp_narr.get("recommendations", {}) or {}
@@ -154,28 +204,21 @@ def get_recommendations():
         "ok": True,
         "generated_at": forecast.get("generated_at"),
         "city": "TP.HCM",
-
         "summary": summary_values,
         "summary_level": summary_level,
-
-        # ✅ Luôn có đủ 6 trạm (trạm null hiện "--")
         "stations": stations_out,
-
         "confidence": {
+            "1h": tp_conf.get("1h"),
             "3h": tp_conf.get("3h"),
             "6h": tp_conf.get("6h"),
             "12h": tp_conf.get("12h"),
             "24h": tp_conf.get("24h"),
         },
-
         "top_reasons": top_reasons,
-
         "recommendations": {
-            "public": recs.get("public", []),
-            "sensitive": recs.get("sensitive", []) or recs.get("sensitive_group", []),
+            "public":     recs.get("public", []),
+            "sensitive":  recs.get("sensitive", []) or recs.get("sensitive_group", []),
             "government": recs.get("government", []),
         },
-
-        # debug
-        "processed_dir_used": pdir
+        "processed_dir_used": pdir,
     })

@@ -1,6 +1,6 @@
 (function () {
   const API_URL = "/api/recommendations";
-  const COLS = ["3h", "6h", "12h", "24h"];
+  const COLS = ["1h", "3h", "6h", "12h", "24h"];
 
   const elSummaryRow = () => document.getElementById("hcmc-summary-row");
   const elStationsContainer = () => document.getElementById("stations-container");
@@ -87,7 +87,9 @@
     const usedCodes = new Set();
 
     stations.forEach((st, idx) => {
-      let code = String(st?.id ?? st?.station_id ?? st?.station_no ?? st?.code ?? `S${idx + 1}`);
+      let code = String(st?.id ?? st?.station_id ?? st?.station_no ?? st?.code ?? `${idx + 1}`);
+      // Normalize: số thuần "1","2"... → "S1","S2"... để khớp với toggle buttons
+      if (/^\d+$/.test(code)) code = "S" + code;
       if (usedCodes.has(code)) code = `${code}_${idx + 1}`;
       usedCodes.add(code);
 
@@ -134,39 +136,64 @@
   function fillNarrative(payload) {
     const reasons = Array.isArray(payload.top_reasons) ? payload.top_reasons : [];
     if (elTopReasons()) {
-      // ✅ FIX: top_reasons là object {title, detail} -> render đúng thay vì [object Object]
+      // Render top_reasons as mini-cards
       elTopReasons().innerHTML = reasons.length
-  ? reasons
-      .map((x) => {
-        if (typeof x === "object" && x !== null) {
-          const t = x.title ?? "";
-          const d = x.detail ?? "";
-          return `
-            <li class="reason-item">
-              <div class="reason-title">${t}</div>
-              ${d ? `<div class="reason-detail">${d}</div>` : ""}
-            </li>
-          `;
-        }
-        return `
-          <li class="reason-item">
-            <div class="reason-title">${x}</div>
-          </li>
-        `;
-      })
-      .join("")
-  : "<li>--</li>";
+        ? reasons
+            .map((x, i) => {
+              if (typeof x === "object" && x !== null) {
+                const t = x.title ?? "";
+                const d = x.detail ?? "";
+                return `
+                  <div class="reason-mini-card">
+                    <div class="reason-mini-num">0${i + 1}</div>
+                    <div class="reason-mini-title">${t}</div>
+                    ${d ? `<div class="reason-mini-detail">${d}</div>` : ""}
+                  </div>
+                `;
+              }
+              return `
+                <div class="reason-mini-card">
+                  <div class="reason-mini-num">0${i + 1}</div>
+                  <div class="reason-mini-title">${x}</div>
+                </div>
+              `;
+            })
+            .join("")
+        : `<div class="reason-mini-card"><div class="reason-mini-title">Chưa có dữ liệu</div></div>`;
     }
 
     const pub = payload.recommendations?.public || [];
     const sens = payload.recommendations?.sensitive || payload.recommendations?.sensitive_group || [];
 
+    // Parse **bold** markdown thành <strong>
+    function mdBold(s) {
+      return String(s).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+    }
+
     if (elRecoPublic()) {
-      elRecoPublic().innerHTML = pub.length ? pub.map((x) => `<li>${x}</li>`).join("") : "<li>--</li>";
+      elRecoPublic().innerHTML = pub.length
+        ? pub.map((x) => `<li>${mdBold(x)}</li>`).join("")
+        : "<li>--</li>";
     }
     if (elRecoSensitive()) {
-      elRecoSensitive().innerHTML = sens.length ? sens.map((x) => `<li>${x}</li>`).join("") : "<li>--</li>";
+      elRecoSensitive().innerHTML = sens.length
+        ? sens.map((x) => `<li>${mdBold(x)}</li>`).join("")
+        : "<li>--</li>";
     }
+  }
+
+  const FIXED_PALETTE = {
+    "HCMC": "#131e29",
+    "1": "#2f6fda", "S1": "#2f6fda",
+    "2": "#d14b4b", "S2": "#d14b4b",
+    "3": "#1e8e5a", "S3": "#1e8e5a",
+    "4": "#8b5cf6", "S4": "#8b5cf6",
+    "5": "#f59e0b", "S5": "#f59e0b",
+    "6": "#0ea5e9", "S6": "#0ea5e9",
+  };
+
+  function getFixedColor(key) {
+    return FIXED_PALETTE[key] || "#aaaaaa";
   }
 
   function buildToggles(payload) {
@@ -180,16 +207,25 @@
     );
 
     const stationsRaw = Array.isArray(payload.stations) ? payload.stations : [];
-    const stations = stationsRaw.slice();
-    stations.forEach((st, idx) => {
-      const code = String(st?.id ?? st?.station_id ?? st?.station_no ?? st?.code ?? `S${idx + 1}`);
-      box.insertAdjacentHTML(
-        "beforeend",
-        `<button class="toggle-btn is-on" data-series="${code}" type="button">${code}</button>`
-      );
+    stationsRaw.forEach((st, idx) => {
+      let code = String(st?.id ?? st?.station_id ?? st?.station_no ?? st?.code ?? `${idx + 1}`);
+      if (/^\d+$/.test(code)) code = "S" + code;
+
+      const vals = st?.values || {};
+      const hasData = Object.values(vals).some((v) => v !== null && v !== undefined);
+
+      if (hasData) {
+        box.insertAdjacentHTML("beforeend",
+          `<button class="toggle-btn is-on" data-series="${code}" type="button">${code}</button>`
+        );
+      } else {
+        box.insertAdjacentHTML("beforeend",
+          `<button class="toggle-btn toggle-no-data" data-series="${code}" type="button" disabled title="Không có dữ liệu">${code}</button>`
+        );
+      }
     });
 
-    box.querySelectorAll(".toggle-btn").forEach((btn) => {
+    box.querySelectorAll(".toggle-btn:not([disabled])").forEach((btn) => {
       btn.addEventListener("click", () => {
         btn.classList.toggle("is-on");
         if (typeof window.drawCompareChartFromTable === "function") window.drawCompareChartFromTable();
@@ -314,13 +350,14 @@
 
       // ✅ Lưu confidence values
       window.__CONF_VALUES__ = [
+        data.confidence?.["1h"],
         data.confidence?.["3h"],
         data.confidence?.["6h"],
         data.confidence?.["12h"],
         data.confidence?.["24h"],
       ]
         .map((v) => (Number.isFinite(Number(v)) ? Number(v) : null))
-        .map((v, i) => (v === null ? [86, 78, 66, 58][i] : v));
+        .map((v, i) => (v === null ? [92, 86, 78, 66, 58][i] : v));
 
       // ✅ Fill summary data
       fillSummary(data);
@@ -333,6 +370,7 @@
 
       // ✅ Build toggles
       buildToggles(data);
+      fillGovPreviewTable();
 
       // ✅ QUAN TRỌNG: sync theo mode HIỆN TẠI (ưu tiên window.__IS_GOV__ do HTML set)
       const currentGov =
@@ -364,7 +402,7 @@
 ========================= */
 
   (function () {
-    const COLS = ["3h", "6h", "12h", "24h"];
+    const COLS = ["1h", "3h", "6h", "12h", "24h"];
 
     function safeNumFromCell(cell) {
       if (!cell) return null;
@@ -463,11 +501,9 @@
       COLS.forEach((c, i) => ctx.fillText(c, mapX(i), h - padding.bottom + 22));
 
       // palette (simple, readable)
-      const palette = ["#131e29", "#2f6fda", "#d14b4b", "#1e8e5a", "#8b5cf6", "#f59e0b", "#0ea5e9", "#ef4444"];
-
-      // draw each series
+      // draw each series — màu cố định theo key, không đổi khi ẩn/hiện
       series.forEach((s, si) => {
-        const stroke = palette[si % palette.length];
+        const stroke = getFixedColor(s.key);
 
         ctx.strokeStyle = stroke;
         ctx.lineWidth = s.key === "HCMC" ? 3.5 : 2.5;
@@ -516,7 +552,7 @@
       const ctx = canvas.getContext("2d");
 
       canvas.width = wrap.offsetWidth || 520;
-      canvas.height = 220;
+      canvas.height = Math.max(320, Math.round((wrap?.offsetHeight || 360) * 0.65));
 
       const w = canvas.width;
       const h = canvas.height;
@@ -662,7 +698,7 @@
       window.__reco_resize_t__ = setTimeout(onResize, 150);
     });
 
-    // When page ready: bind CSV
+    // When page Fready: bind CSV
     document.addEventListener("DOMContentLoaded", function () {
       wireCsvButton();
     });
@@ -673,3 +709,38 @@
     });
   })();
 })(); // ✅ FIX: chỉ giữ 1 lần đóng IIFE, bỏ cái dư
+/* =========================
+   4) GOV PREVIEW TABLE
+========================= */
+
+function fillGovPreviewTable() {
+  const body = document.getElementById("gov-preview-body");
+  if (!body) return;
+
+  const rows = Array.from(document.querySelectorAll("#forecast-table .table-row"));
+  if (!rows.length) return;
+
+  body.innerHTML = "";
+
+  rows.forEach((row) => {
+    const series = row.querySelector(".station")?.textContent?.trim() || "";
+    const type = row.children?.[1]?.textContent?.trim() || "";
+
+    const vals = ["1h","3h","6h","12h","24h"].map((c) => {
+      const cell = row.querySelector(`[data-col="${c}"]`);
+      return (cell?.textContent || "--").trim();
+    });
+
+    body.insertAdjacentHTML("beforeend", `
+      <tr>
+        <td>${series}</td>
+        <td>${type}</td>
+        <td>${vals[0]}</td>
+        <td>${vals[1]}</td>
+        <td>${vals[2]}</td>
+        <td>${vals[3]}</td>
+        <td>${vals[4]}</td>
+      </tr>
+    `);
+  });
+}
