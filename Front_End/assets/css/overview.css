@@ -31,7 +31,7 @@
 .summary-band .summary-band-item {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px; /* giãn cách các dòng trong card hơn một chút */
   justify-content: center;
 }
 
@@ -39,17 +39,20 @@
   font-size: 14px;
   font-weight: 600;
   color: #f8fafc;
+  line-height: 1.5;
 }
 
 .summary-band-value {
   font-size: 20px;
   font-weight: 700;
   color: #ffffff;
+  line-height: 1.4;
 }
 
 .summary-band-subtitle {
   font-size: 12px;
   color: rgba(248, 250, 252, 0.8);
+  line-height: 1.5;
 }
 
 .summary-band-inline {
