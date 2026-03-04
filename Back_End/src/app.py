@@ -6,10 +6,6 @@ from flask_cors import CORS, cross_origin
 def create_app():
     # ======================================================
     # PATH CONFIG
-    # Back_End/src/app.py
-    # -> Back_End
-    # -> project root (ADA/ADA)
-    # -> Front_End
     # ======================================================
     backend_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     project_root = os.path.abspath(os.path.join(backend_root, ".."))
@@ -43,25 +39,12 @@ def create_app():
         except Exception as e:
             print(f"⚠️ Could not register {import_path}: {e}")
 
-    # stations
     try_register("Back_End.src.routes.stations", "stations_bp", "/api")
-
-    # recommendations
     try_register("Back_End.src.routes.recommendations", "bp")
-
-    # policy suggestions
     try_register("Back_End.src.routes.policy_suggestions", "bp")
-
-    # dataset
     try_register("Back_End.src.routes.dataset", "bp")
-
-    # overview
     try_register("Back_End.src.routes.overview", "bp")
-
-    # model evaluation
     try_register("Back_End.src.routes.model_evaluation", "bp")
-
-    # auth
     try_register("Back_End.src.routes.auth", "bp")
 
     # ======================================================
@@ -109,7 +92,7 @@ def create_app():
         return send_from_directory(os.path.join(frontend_root, "components"), filename)
 
     # ======================================================
-    # SERVE DATA/PROCESSED (SHAP IMAGE, CSV, JSON...)
+    # SERVE DATA
     # ======================================================
 
     @app.get("/data/processed/<path:filename>")
@@ -137,3 +120,13 @@ def create_app():
         }), 500
 
     return app
+
+
+# ======================================================
+# RUN DIRECTLY (DEV MODE)
+# ======================================================
+
+if __name__ == "__main__":
+    app = create_app()
+    print("Server Back-End đang chạy tại: http://127.0.0.1:5000")
+    app.run(debug=True, port=5000)
