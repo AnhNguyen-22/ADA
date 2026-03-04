@@ -1,22 +1,38 @@
 import os
-import sys
 from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS, cross_origin
+
+# ======================================================
+# SAFE DIRECT IMPORT (Version 1 style)
+# - Nếu bạn đang có routes/auth.py và routes/dataset.py
+#   thì 2 blueprint này sẽ được đăng ký chắc chắn.
+# ======================================================
+try:
+    from routes.auth import auth_bp
+except Exception as e:
+    auth_bp = None
+    print(f"⚠️ Cannot import routes.auth: {e}")
+
+try:
+    from routes.dataset import dataset_bp
+except Exception as e:
+    dataset_bp = None
+    print(f"⚠️ Cannot import routes.dataset: {e}")
 
 
 def create_app():
     """
-    FINAL MERGED VERSION
+    MERGED VERSION
     - Full frontend serving
-    - Full API blueprints
+    - Register auth_bp + dataset_bp directly (version 1)
+    - Auto register other blueprints (version 2)
     - Strong global CORS
     - Processed data serving
-    - Clean structure
     """
 
     # ======================================================
     # PATH CONFIG
-    # Back_End/src -> Back_End -> Project Root
+    # (giữ giống bản 2)
     # ======================================================
     backend_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     project_root = os.path.abspath(os.path.join(backend_root, ".."))
@@ -39,11 +55,25 @@ def create_app():
         return response
 
     # ======================================================
-    # BLUEPRINT AUTO REGISTER
+    # REGISTER BLUEPRINTS (Version 1 - direct)
+    # ======================================================
+    if auth_bp is not None:
+        app.register_blueprint(auth_bp)
+        print("✅ Registered: routes.auth.auth_bp")
+
+    if dataset_bp is not None:
+        app.register_blueprint(dataset_bp)
+        print("✅ Registered: routes.dataset.dataset_bp")
+
+    # ======================================================
+    # BLUEPRINT AUTO REGISTER (Version 2 - optional/safe)
     # ======================================================
 
     def try_register(import_path, bp_name, url_prefix=None):
-        # Try original path first, then fallback without "Back_End." prefix
+        """
+        Try import blueprint by path + name.
+        Also fallback removing 'Back_End.' prefix if present.
+        """
         paths_to_try = [import_path]
         if import_path.startswith("Back_End."):
             paths_to_try.append(import_path.replace("Back_End.", "", 1))
@@ -54,23 +84,20 @@ def create_app():
                 module = __import__(path, fromlist=[bp_name])
                 bp_obj = getattr(module, bp_name)
                 app.register_blueprint(bp_obj, url_prefix=url_prefix)
-                print(f"✅ Registered: {path}")
-                return
+                print(f"✅ Registered: {path}.{bp_name}" + (f" (prefix={url_prefix})" if url_prefix else ""))
+                return True
             except Exception as e:
                 last_err = e
 
-        print(f"⚠️ Skip {import_path}: {last_err}")
+        print(f"⚠️ Skip {import_path}.{bp_name}: {last_err}")
+        return False
 
-    # Stations
+    # Bạn có thể giữ list này như bản 2, nó sẽ tự skip nếu không tồn tại
     try_register("Back_End.src.routes.stations", "stations_bp", "/api")
 
-    # Recommendations
     try_register("Back_End.src.routes.recommendations", "bp")
-
-    # Overview KPI
     try_register("Back_End.src.routes.overview_api", "bp", "/api")
 
-    # Other optional routes (safe)
     try_register("Back_End.src.routes.policy_suggestions", "bp")
     try_register("Back_End.src.routes.dataset", "bp")
     try_register("Back_End.src.routes.model_evaluation", "bp")
@@ -83,10 +110,6 @@ def create_app():
     @app.get("/api/health")
     def api_health():
         return {"ok": True, "message": "Backend is running"}
-
-    # ======================================================
-    # OVERVIEW KPI - Direct route (bypass blueprint import issues)
-    # ======================================================
 
     @app.route("/health", methods=["GET", "OPTIONS"])
     @cross_origin()
@@ -177,8 +200,7 @@ def create_app():
 # ======================================================
 # RUN DIRECTLY (DEV MODE)
 # ======================================================
-
 if __name__ == "__main__":
     app = create_app()
-    print(" Server running at http://127.0.0.1:5000")
+    print("Server Back-End đang chạy tại: http://127.0.0.1:5000")
     app.run(debug=True, port=5000)

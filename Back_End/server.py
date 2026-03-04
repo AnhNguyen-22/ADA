@@ -11,7 +11,7 @@ PROJECT_ROOT = os.path.abspath(os.path.join(BASE_DIR, ".."))   # ADA
 SRC_DIR = os.path.join(BASE_DIR, "src")
 
 # ======================================================
-# 1) Auto use project .venv (if exists)
+# 1) Auto use project .venv (Windows) if exists
 #    Allow running: python server.py
 # ======================================================
 VENV_PY = os.path.join(PROJECT_ROOT, ".venv", "Scripts", "python.exe")
@@ -30,14 +30,21 @@ except Exception:
     pass
 
 # ======================================================
-# 2) Ensure imports work (both layouts supported)
+# 2) Ensure imports work (support both layouts)
+#    - Back_End/src/...
+#    - or src/...
 # ======================================================
+# Add both project root and src folder
 for path in (PROJECT_ROOT, SRC_DIR):
-    if path not in sys.path:
+    if path and path not in sys.path:
         sys.path.insert(0, path)
 
+# Also: if someone runs from Back_End directly, ensure BASE_DIR is present
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+
 # ======================================================
-# 3) Load environment variables
+# 3) Load .env
 # ======================================================
 load_dotenv()
 
@@ -47,25 +54,25 @@ load_dotenv()
 create_app = None
 
 try:
+    # most common in your codebase
     from src.app import create_app as _create_app
     create_app = _create_app
 except Exception:
     try:
+        # if packaged as Back_End.src
         from Back_End.src.app import create_app as _create_app
         create_app = _create_app
     except Exception as e:
-        raise ImportError(
-            "❌ Cannot import create_app from src.app or Back_End.src.app"
-        ) from e
+        raise ImportError("❌ Cannot import create_app from src.app or Back_End.src.app") from e
 
 # ======================================================
-# 5) Read HOST / PORT / DEBUG
+# 5) Read HOST / PORT / DEBUG (env first)
 # ======================================================
 HOST = os.getenv("HOST") or os.getenv("FLASK_HOST") or "127.0.0.1"
 PORT = int(os.getenv("PORT") or os.getenv("FLASK_PORT") or "5000")
 DEBUG = (os.getenv("FLASK_DEBUG", "1") == "1")
 
-# Override from settings.py if exists
+# Override from src.config.settings if exists
 try:
     from src.config.settings import HOST as _HOST, PORT as _PORT, DEBUG as _DEBUG
     HOST = _HOST
@@ -73,7 +80,6 @@ try:
     DEBUG = _DEBUG
 except Exception:
     pass
-
 
 # ======================================================
 # 6) RUN SERVER
@@ -87,7 +93,7 @@ if __name__ == "__main__":
     print(f"📡 API base URL: http://{HOST}:{PORT}/api")
     print("-" * 60)
 
-    # Show route map (debugging purpose)
+    # Show routes map (debugging)
     try:
         print(app.url_map)
     except Exception:
@@ -97,5 +103,5 @@ if __name__ == "__main__":
         host=HOST,
         port=PORT,
         debug=DEBUG,
-        use_reloader=False  # avoid Windows double execution
+        use_reloader=False  # avoid double-run issues on Windows
     )
