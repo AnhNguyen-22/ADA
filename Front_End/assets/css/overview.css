@@ -89,7 +89,7 @@
 /* Map Card */
 .map-container {
   width: 100%;
-  height: 400px;
+  height: 460px;
   border-radius: 12px;
   overflow: hidden;
   background: #F8FAFC;
@@ -232,22 +232,25 @@
 .chart-controls {
   display: flex;
   gap: 16px;
-  align-items: flex-end;
+  align-items: center;
   margin-bottom: 24px;
   flex-wrap: wrap;
 }
 
 .control-group {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
   min-width: 140px;
 }
 
 .control-group label {
-  font-size: 20px;
+  font-size: 18px;
   color: #64748B;
   font-weight: 500;
+  margin: 0;
+  white-space: nowrap; /* Giữ "Chỉ số" trên một dòng */
 }
 
 .time-button {
