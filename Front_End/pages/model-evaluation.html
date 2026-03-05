@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -16,108 +15,105 @@
     <div class="background-overlay"></div>
     <img src="../assets/img/background.png" alt="" class="background-image">
 </div>
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Header -->
-        <header class="content-header">
-            <h1 class="main-title">ĐÁNH GIÁ MÔ HÌNH</h1>
-            <div class="header-info">
-                <div class="header-meta-item">
-                    <img class="header-meta-icon" src="https://c.animaapp.com/aROkQ2yh/img/place-marker@2x.png" alt="" aria-hidden="true"/>
-                    <span class="location-text">Thành phố Hồ Chí Minh</span>
-                </div>
-                <div class="header-meta-item">
-                    <img class="header-meta-icon" src="https://c.animaapp.com/aROkQ2yh/img/world-health-organization@2x.png" alt="" aria-hidden="true"/>
-                    <span class="guideline-text">WHO guideline: PM2.5 24h = 15 µg/m³</span>
-                </div>
+
+<!-- Main Content -->
+<main class="main-content">
+    <!-- Header -->
+    <header class="content-header">
+        <h1 class="main-title">ĐÁNH GIÁ MÔ HÌNH</h1>
+        <div class="header-info">
+            <div class="header-meta-item">
+                <img class="header-meta-icon" src="https://c.animaapp.com/aROkQ2yh/img/place-marker@2x.png" alt="" aria-hidden="true"/>
+                <span class="location-text">Thành phố Hồ Chí Minh</span>
             </div>
-        </header>
-
-        <!-- Content Grid -->
-        <div class="content-grid">
-            <!-- Comparison Table Section -->
-            <section class="card comparison-section">
-                <h3 class="card-title">Bảng so sánh các mô hình</h3>
-                <div class="controls">
-                    <div class="dropdown-wrapper">
-                        <label>Chọn trạm:</label>
-                        <div class="dropdown-container" id="station-dropdown">
-                            <button class="dropdown-button" type="button" aria-haspopup="true" aria-expanded="false">
-                                <span class="dropdown-button-text">S1 - Giao thong</span>
-                                <span class="dropdown-arrow">&#9662;</span>
-                            </button>
-                            <div class="dropdown-menu" role="menu"></div>
-                        </div>
-                    </div>
-                    <button class="btn-create">Tạo</button>
-                </div>
-                <table class="comparison-table">
-                    <thead>
-                        <tr>
-                            <th>Mô hình</th>
-                            <th>RMSE</th>
-                            <th>MAE</th>
-                            <th>MAPE</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Linear Regression</td>
-                            <td>9.3</td>
-                            <td>10</td>
-                            <td>11.1</td>
-                        </tr>
-                        <tr>
-                            <td>Random Forest</td>
-                            <td>9.3</td>
-                            <td>10</td>
-                            <td>11.1</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                XGBoost
-                                <span class="badge-best">Tốt nhất</span>
-                            </td>
-                            <td>9.3</td>
-                            <td>10</td>
-                            <td>11.1</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
-
-            <!-- Best Model Section -->
-            <section class="card best-model-section">
-                <h3 class="card-title">Mô hình tốt nhất</h3>
-                <div class="best-model-box">
-                    <h3 class="best-model-name">XGBOOST</h3>
-                </div>
-                <p class="best-model-description">Là mô hình Machine Learning...</p>
-            </section>
-
-            <!-- Chart Section -->
-            <section class="card chart-section">
-                <h3 class="card-title">Biểu đồ so sánh mô hình</h3>
-                <p class="chart-description">Biểu đồ thể hiện RMSE/MAE của các mô hình</p>
-                <div class="chart-container">
-                    <canvas id="comparison-chart"></canvas>
-                </div>
-
-            </section>
-
-            <!-- Area Difference Section -->
-            <section class="card area-difference-section">
-                <h3 class="card-title">Sự khác biệt theo khu vực:</h3>
-                <p class="area-difference-text">Traffic thường biến động theo giờ → khó hơn Residential.</p>
-            </section>
-
-            <!-- Reason Section -->
-            <section class="card reason-section">
-                <h3 class="card-title">Lý do chọn mô hình:</h3>
-                <p class="reason-text">ưu tiên R² cao và RMSE/MAE thấp, đồng thời ổn định khi áp dụng đa trạm</p>
-            </section>
+            <div class="header-meta-item">
+                <img class="header-meta-icon" src="https://c.animaapp.com/aROkQ2yh/img/world-health-organization@2x.png" alt="" aria-hidden="true"/>
+                <span class="guideline-text">WHO guideline: PM2.5 24h = 15 µg/m³</span>
+            </div>
         </div>
-    </main>
+    </header>
+
+    <!-- Content Grid -->
+    <div class="content-grid">
+        <!-- Comparison Table Section -->
+        <section class="card comparison-section">
+            <h3 class="card-title">Bảng so sánh các mô hình</h3>
+
+            <div class="controls">
+                <!-- Dropdown: Station -->
+                <div class="dropdown-wrapper">
+                    <label>Chọn trạm:</label>
+                    <div class="dropdown-container" id="station-dropdown">
+                        <button class="dropdown-button" type="button" aria-haspopup="true" aria-expanded="false">
+                            <span class="dropdown-button-text">TP.HCM</span>
+                            <span class="dropdown-arrow">&#9662;</span>
+                        </button>
+                        <div class="dropdown-menu" role="menu"></div>
+                    </div>
+                </div>
+
+                <!-- ✅ Dropdown: Horizon -->
+                <div class="dropdown-wrapper">
+                    <label>Chọn thời gian:</label>
+                    <div class="dropdown-container" id="horizon-dropdown">
+                        <button class="dropdown-button" type="button" aria-haspopup="true" aria-expanded="false">
+                            <span class="dropdown-button-text">1h</span>
+                            <span class="dropdown-arrow">&#9662;</span>
+                        </button>
+                        <div class="dropdown-menu" role="menu"></div>
+                    </div>
+                </div>
+
+                <button class="btn-create" id="btn-create" type="button">Tạo</button>
+            </div>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Mô hình</th>
+                        <th>RMSE</th>
+                        <th>MAE</th>
+                        <th>MAPE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- JS sẽ render từ JSON -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Best Model Section -->
+        <section class="card best-model-section">
+            <h3 class="card-title">Mô hình tốt nhất</h3>
+            <div class="best-model-box">
+                <h3 class="best-model-name">-</h3>
+            </div>
+            <p class="best-model-description">Là mô hình Machine Learning...</p>
+        </section>
+
+        <!-- Chart Section -->
+        <section class="card chart-section">
+            <h3 class="card-title">Biểu đồ so sánh mô hình</h3>
+            <p class="chart-description">Biểu đồ thể hiện RMSE/MAE của các mô hình</p>
+            <div class="chart-container">
+                <canvas id="comparison-chart"></canvas>
+            </div>
+        </section>
+
+        <!-- Area Difference Section -->
+        <section class="card area-difference-section">
+            <h3 class="card-title">Sự khác biệt theo khu vực:</h3>
+            <p class="area-difference-text">Traffic thường biến động theo giờ → khó hơn Residential.</p>
+        </section>
+
+        <!-- Reason Section -->
+        <section class="card reason-section">
+            <h3 class="card-title">Lý do chọn mô hình:</h3>
+            <p class="reason-text">ưu tiên R² cao và RMSE/MAE thấp, đồng thời ổn định khi áp dụng đa trạm</p>
+        </section>
+    </div>
+</main>
+
 <!-- Sidebar Component -->
 <aside class="side-ql-unchoose" id="sidebar">
     <!-- Logo ở trên cùng -->
@@ -178,10 +174,15 @@
         <img class="logout-rounded" src="https://c.animaapp.com/aROkQ2yh/img/logout-rounded@2x.png" alt="Logout" style="cursor: pointer;"/>
     </div>
 </aside>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="../components/dropdown.js"></script>
-    <script src="../assets/js/model-evaluation.js"></script>
-    <script src="../components/sidebar.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Bạn có thể giữ dropdown.js, nhưng file JS dưới không phụ thuộc -->
+<script src="../components/dropdown.js"></script>
+
+<!-- ✅ File đã sửa để đọc JSON đúng schema -->
+<script src="../assets/js/model-evaluation.js"></script>
+
+<script src="../components/sidebar.js"></script>
 </body>
 </html>
-

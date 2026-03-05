@@ -116,12 +116,12 @@ def create_app():
                     return True
 
                 app.register_blueprint(bp_obj, url_prefix=url_prefix)
-                print(f"✅ Registered: {path}.{bp_name}" + (f" (prefix={url_prefix})" if url_prefix else ""))
+                print(f" Registered: {path}.{bp_name}" + (f" (prefix={url_prefix})" if url_prefix else ""))
                 return True
             except Exception as e:
                 last_err = e
 
-        print(f"⚠️ Skip {import_path}.{bp_name}: {last_err}")
+        print(f"Skip {import_path}.{bp_name}: {last_err}")
         return False
 
     # Bạn có thể giữ list này như bản 2, nó sẽ tự skip nếu không tồn tại

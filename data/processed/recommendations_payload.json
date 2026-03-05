@@ -1,12 +1,12 @@
 {
   "ok": true,
-  "generated_at": "2026-03-01T10:44:03.343345",
+  "generated_at": "2026-03-05T04:21:08.535478",
   "summary": {
-    "1h": 20.05,
-    "3h": 18.93,
-    "6h": 16.57,
-    "12h": 19.29,
-    "24h": 18.11
+    "1h": 22.13,
+    "3h": 21.35,
+    "6h": 19.04,
+    "12h": 20.42,
+    "24h": 19.47
   },
   "summary_level": {
     "1h": "pill-yellow",
@@ -16,22 +16,22 @@
     "24h": "pill-yellow"
   },
   "confidence": {
-    "1h": 51.8,
-    "3h": 40.0,
-    "6h": 40.0,
-    "12h": 40.0,
-    "24h": 40.0
+    "1h": 43.8,
+    "3h": 43.3,
+    "6h": 42.8,
+    "12h": 42.3,
+    "24h": 29.1
   },
   "stations": [
     {
       "id": "1",
       "type": "Dân cư",
       "values": {
-        "1h": 18.32,
-        "3h": 18.42,
-        "6h": 18.42,
-        "12h": 22.5,
-        "24h": 17.51
+        "1h": 16.61,
+        "3h": 23.76,
+        "6h": 23.87,
+        "12h": 24.48,
+        "24h": 18.82
       },
       "level": {
         "1h": "pill-yellow",
@@ -63,15 +63,15 @@
       "id": "3",
       "type": "Công nghiệp",
       "values": {
-        "1h": 20.17,
-        "3h": 20.0,
-        "6h": 16.36,
-        "12h": 20.6,
-        "24h": 18.32
+        "1h": 12.59,
+        "3h": 11.93,
+        "6h": 15.21,
+        "12h": 20.53,
+        "24h": 19.1
       },
       "level": {
         "1h": "pill-yellow",
-        "3h": "pill-yellow",
+        "3h": "pill-green",
         "6h": "pill-yellow",
         "12h": "pill-yellow",
         "24h": "pill-yellow"
@@ -81,11 +81,11 @@
       "id": "4",
       "type": "Dân cư",
       "values": {
-        "1h": 23.56,
-        "3h": 22.83,
-        "6h": 13.89,
-        "12h": 18.77,
-        "24h": 22.12
+        "1h": 33.01,
+        "3h": 24.58,
+        "6h": 16.29,
+        "12h": 18.76,
+        "24h": 23.04
       },
       "level": {
         "1h": "pill-yellow",
@@ -99,11 +99,11 @@
       "id": "5",
       "type": "Công nghiệp",
       "values": {
-        "1h": 17.57,
-        "3h": 15.13,
-        "6h": 15.13,
-        "12h": 16.1,
-        "24h": 17.26
+        "1h": 14.44,
+        "3h": 15.82,
+        "6h": 17.37,
+        "12h": 18.57,
+        "24h": 18.33
       },
       "level": {
         "1h": "pill-yellow",
@@ -117,11 +117,11 @@
       "id": "6",
       "type": "Giao thông",
       "values": {
-        "1h": 20.64,
-        "3h": 18.28,
-        "6h": 19.05,
-        "12h": 18.49,
-        "24h": 15.32
+        "1h": 33.99,
+        "3h": 30.68,
+        "6h": 22.5,
+        "12h": 19.78,
+        "24h": 18.05
       },
       "level": {
         "1h": "pill-yellow",
@@ -138,25 +138,25 @@
       "detail": "Nồng độ bụi mịn duy trì cao từ giờ trước, cho thấy ô nhiễm chưa kịp khuếch tán."
     },
     {
-      "title": "Trung bình 24h PM2.5 cao",
-      "detail": "Mức nền bụi mịn duy trì suốt 24 giờ qua, làm tăng rủi ro phơi nhiễm kéo dài."
+      "title": "Nền PM2.5 hôm qua cao",
+      "detail": "Mức bụi mịn của cùng giờ hôm qua vẫn cao, gợi ý xu hướng lặp theo chu kỳ ngày."
     },
     {
-      "title": "Nồng độ CO cao",
-      "detail": "CO tăng thường gắn với giao thông/đốt nhiên liệu, đồng thời có thể kéo theo PM2.5 tăng."
+      "title": "Trung bình 24h PM2.5 cao",
+      "detail": "Mức nền bụi mịn duy trì suốt 24 giờ qua, làm tăng rủi ro phơi nhiễm kéo dài."
     }
   ],
   "recommendations": {
     "public": [
-      "Không khí ở mức **chấp nhận được**, nhưng có thể gây khó chịu nhẹ nếu bạn vận động mạnh ngoài trời.",
-      "Hạn chế tập thể dục cường độ cao kéo dài (chạy bền/đạp xe lâu) vào **giờ cao điểm** (7–9h, 17–20h).",
-      "Khi di chuyển đường dài hoặc qua trục đường đông xe, nên đeo khẩu trang lọc bụi (KN95/N95 càng tốt).",
-      "Trong nhà: đóng cửa khi thấy mùi khói/bụi rõ; nếu có máy lọc không khí thì bật chế độ tự động."
+      "Không khí ở mức **chấp nhận được**, nhưng có thể gây khó chịu nhẹ nếu vận động mạnh ngoài trời.",
+      "Hạn chế tập thể dục cường độ cao vào **giờ cao điểm** (7–9h, 17–20h).",
+      "Khi di chuyển qua trục đường đông xe, nên đeo khẩu trang lọc bụi (KN95/N95).",
+      "Trong nhà: đóng cửa khi thấy mùi khói/bụi rõ; bật máy lọc không khí nếu có."
     ],
     "sensitive": [
       "Nhóm nhạy cảm nên giảm thời gian ở ngoài trời, đặc biệt khi có triệu chứng ho/khò khè.",
-      "Chuẩn bị sẵn thuốc hít (nếu có bệnh nền), tránh đứng lâu ở điểm kẹt xe hoặc gần công trình.",
-      "Ưu tiên di chuyển bằng tuyến đường ít xe, hoặc chọn thời điểm ít bụi hơn (sau 9h và trước 16h)."
+      "Chuẩn bị sẵn thuốc hít (nếu có bệnh nền), tránh đứng lâu ở điểm kẹt xe.",
+      "Ưu tiên di chuyển bằng tuyến đường ít xe, hoặc chọn thời điểm sau 9h và trước 16h."
     ]
   }
 }
