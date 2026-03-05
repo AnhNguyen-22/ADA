@@ -1,157 +1,288 @@
 (function () {
   "use strict";
 
-  const API_PATH = "/api/model-evaluation";
   const API_FALLBACK = "http://127.0.0.1:5000/api/model-evaluation";
+
+// Nếu đang chạy UI từ Flask (port 5000) -> dùng relative path
+// Nếu đang mở bằng Live Server (5500, ...) -> gọi thẳng backend 5000
+const API_PATH =
+  (location.port === "5000" || location.origin.includes(":5000"))
+    ? "/api/model-evaluation"
+    : API_FALLBACK;
+
+async function fetchModelEvaluation() {
+  const res = await fetch(API_PATH, { cache: "no-store" });
+  if (!res.ok) {
+    let detail = "";
+    try {
+      const errBody = await res.json();
+      detail = errBody?.message ? ` - ${errBody.message}` : "";
+    } catch (_) {}
+    throw new Error(`HTTP ${res.status} at ${API_PATH}${detail}`);
+  }
+  return await res.json();
+}
 
   let _data = null;
   let _stationById = {};
-  let _activeStationId = null;
+  let _activeStationId = null;   // "global" | "1".."6"
+  let _activeHorizon = "1";      // "1" | "3" | "6" | "12" | "24"
   let _chart = null;
-  let _stationDropdown = null;
 
-  function q(sel) {
-    return document.querySelector(sel);
-  }
+  let _stationDropdown = null;
+  let _horizonDropdown = null;
+
+  function q(sel) { return document.querySelector(sel); }
 
   function fmt(v) {
     const n = Number(v);
     return Number.isFinite(n) ? n.toFixed(3).replace(/\.000$/, "") : "--";
   }
-
   function asNum(v) {
     const n = Number(v);
     return Number.isFinite(n) ? n : null;
   }
 
-  function rowBestModel(rows, rmseKey, maeKey, mapeKey) {
-    const valid = rows.filter((r) => {
-      const rmse = asNum(r[rmseKey]);
-      const mae = asNum(r[maeKey]);
-      const mape = asNum(r[mapeKey]);
-      return rmse !== null && rmse > 0 && mae !== null && mae > 0 && mape !== null && mape > 0;
-    });
+  // ----------------------------
+  // Normalize input API schemas
+  // ----------------------------
+  // Expected internal format:
+  // data = {
+  //   ok: true,
+  //   horizons: [1,3,6,12,24],
+  //   stations: [
+  //     { id, name, horizons:[{horizon, rows:[{model,rmse,mae,mape,is_best}...], best_model}], best_model_overall }
+  //   ]
+  // }
+  function normalizeApi(raw) {
+    // If server wraps: {ok:true, data:{...}} or {payload:{...}}
+    const root = raw?.data || raw?.payload || raw;
 
-    if (!valid.length) return null;
+    const horizons = (root?.horizons || [1, 3, 6, 12, 24]).map(Number);
 
-    valid.sort((a, b) => {
-      const rmseDiff = Number(a[rmseKey]) - Number(b[rmseKey]);
-      if (rmseDiff !== 0) return rmseDiff;
+    // If already in station list format:
+    if (Array.isArray(root?.stations) && root.stations.length && root.stations[0]?.horizons) {
+      return {
+        ok: raw?.ok ?? true,
+        message: raw?.message,
+        horizons,
+        stations: root.stations,
+        default_station_id: root.default_station_id || root.default_station || "global",
+        default_horizon: String(root.default_horizon || "1"),
+        location: root.location,
+        who_guideline: root.who_guideline,
+      };
+    }
 
-      const maeDiff = Number(a[maeKey]) - Number(b[maeKey]);
-      if (maeDiff !== 0) return maeDiff;
+    // If coming from model_evaluation_payload.json style:
+    // payload: {stations:[...], station_labels:{}, results:{station:{h:[{model,rmse,mae,mape,is_best}]}} , global:{by_horizon:{h:[...]}} }
+    const payload = root;
 
-      return Number(a[mapeKey]) - Number(b[mapeKey]);
-    });
+    const stationsRaw = (payload?.stations || []).map(String);
+    const stationLabels = payload?.station_labels || {};
 
-    return valid[0].model;
+    const stations = [];
+
+    // Build per-station blocks
+    for (const st of stationsRaw) {
+      const name = stationLabels[st] ? `Trạm ${stationLabels[st].replace(/^S/, "")}` : `Trạm ${st}`;
+      const stResults = payload?.results?.[st] || {};
+
+      const hBlocks = horizons.map((h) => {
+        const rows = (stResults[String(h)] || []).map((r) => ({
+          model: r.model,
+          rmse: r.rmse,
+          mae: r.mae,
+          mape: r.mape,
+          is_best: Number(r.is_best) || 0,
+        }));
+
+        const bestRow = rows.find(x => Number(x.is_best) === 1);
+        return {
+          horizon: h,
+          rows,
+          best_model: bestRow ? bestRow.model : null,
+        };
+      });
+
+      // best overall from payload.best_model if exists
+      let bestOverall = null;
+      const bm = payload?.best_model?.[st];
+      if (bm) {
+        // try pick horizon 1 or first horizon
+        bestOverall = bm[String(horizons[0])] || null;
+      }
+
+      stations.push({
+        id: String(st),
+        name,
+        horizons: hBlocks,
+        best_model_overall: bestOverall,
+        used_rows: null,
+        dropped_rows: null,
+      });
+    }
+
+    // Build GLOBAL station "global" from payload.global.by_horizon if exists
+    if (payload?.global?.by_horizon) {
+      const gBlocks = horizons.map((h) => {
+        const rows = (payload.global.by_horizon[String(h)] || []).map((r) => ({
+          model: r.model,
+          rmse: r.rmse,
+          mae: r.mae,
+          mape: r.mape,
+          is_best: Number(r.is_best) || 0,
+        }));
+        const bestRow = rows.find(x => Number(x.is_best) === 1);
+        return {
+          horizon: h,
+          rows,
+          best_model: bestRow ? bestRow.model : (payload?.global?.best_by_horizon?.[String(h)] || null),
+        };
+      });
+
+      stations.unshift({
+        id: "global",
+        name: "TP.HCM",
+        horizons: gBlocks,
+        best_model_overall: payload?.global?.best_overall || null,
+        used_rows: null,
+        dropped_rows: null,
+      });
+    } else {
+      // If no global provided, still add TP.HCM (will show empty)
+      stations.unshift({
+        id: "global",
+        name: "TP.HCM",
+        horizons: horizons.map(h => ({ horizon: h, rows: [], best_model: null })),
+        best_model_overall: null,
+        used_rows: null,
+        dropped_rows: null,
+      });
+    }
+
+    return {
+      ok: raw?.ok ?? true,
+      message: raw?.message,
+      horizons,
+      stations,
+      default_station_id: payload?.default_station || "global",
+      default_horizon: String(payload?.default_horizon || "1"),
+      location: payload?.location,
+      who_guideline: payload?.who_guideline,
+    };
   }
 
-  function getStationRows(station) {
-    return ((station && station.model_avg_rmse) || []).slice();
+  // ----------------------------
+  // Data getters
+  // ----------------------------
+  function getStation(stationId) {
+    return _stationById[String(stationId)] || null;
   }
 
+  function getHorizonBlock(station, horizon) {
+    if (!station) return null;
+    return (station.horizons || []).find(h => String(h.horizon) === String(horizon)) || null;
+  }
+
+  function getRows(station, horizon) {
+    const hb = getHorizonBlock(station, horizon);
+    return (hb && Array.isArray(hb.rows)) ? hb.rows.slice() : [];
+  }
+
+  function getBestModel(station, horizon) {
+    if (!station) return null;
+
+    const hb = getHorizonBlock(station, horizon);
+    if (!hb) return station.best_model_overall || null;
+
+    // 1) ưu tiên best_model do server/json set (đã tie-break)
+    if (hb.best_model) return hb.best_model;
+
+    // 2) fallback: row có is_best=1
+    const rows = getRows(station, horizon);
+    const bestRow = rows.find(r => Number(r.is_best) === 1);
+    if (bestRow) return bestRow.model;
+
+    // 3) fallback: min RMSE
+    rows.sort((a, b) => (asNum(a.rmse) ?? 999) - (asNum(b.rmse) ?? 999));
+    return rows[0]?.model || null;
+  }
+
+  // ----------------------------
+  // Render table
+  // ----------------------------
   function renderTable(station) {
     const tbody = q(".comparison-table tbody");
     if (!tbody || !station) return;
 
-    const rows = getStationRows(station);
-    const best = rowBestModel(rows, "avg_rmse", "avg_mae", "avg_mape");
+    const rows = getRows(station, _activeHorizon);
+    const best = getBestModel(station, _activeHorizon);
 
     if (!rows.length) {
-      tbody.innerHTML = '<tr><td colspan="4">Không có dữ liệu hợp lệ để xếp hạng mô hình tại trạm này.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="4">Không có dữ liệu tại trạm / mốc này.</td></tr>';
       return;
     }
 
-    tbody.innerHTML = rows
-      .map((r) => {
-        const isBest = best && r.model === best;
-        return `
-          <tr>
-            <td>${r.model || "--"} ${isBest ? '<span class="badge-best">Tốt nhất</span>' : ""}</td>
-            <td>${fmt(r.avg_rmse)}</td>
-            <td>${fmt(r.avg_mae)}</td>
-            <td>${fmt(r.avg_mape)}</td>
-          </tr>
-        `;
-      })
-      .join("");
+    // sort by RMSE asc (null last)
+    rows.sort((a, b) => (asNum(a.rmse) ?? 999) - (asNum(b.rmse) ?? 999));
+
+    tbody.innerHTML = rows.map((r) => {
+      const isBest = best && r.model === best;
+      return `
+        <tr${isBest ? ' class="row-best"' : ""}>
+          <td>${r.model || "--"}${isBest ? ' <span class="badge-best">Tốt nhất</span>' : ""}</td>
+          <td>${fmt(r.rmse)}</td>
+          <td>${fmt(r.mae)}</td>
+          <td>${fmt(r.mape)}</td>
+        </tr>
+      `;
+    }).join("");
   }
 
+  // ----------------------------
+  // Render best model box
+  // ----------------------------
   function renderBestModel(station) {
     const bestName = q(".best-model-name");
     const bestDesc = q(".best-model-description");
     if (!bestName || !bestDesc || !station) return;
 
-    const rows = getStationRows(station);
-    const best = rowBestModel(rows, "avg_rmse", "avg_mae", "avg_mape") || "--";
-    const used = Number(station.used_rows || 0);
-    const dropped = Number(station.dropped_rows || 0);
-
+    const best = getBestModel(station, _activeHorizon) || "--";
     bestName.textContent = String(best).toUpperCase();
+
+    const used = station.used_rows != null ? Number(station.used_rows) : null;
+    const dropped = station.dropped_rows != null ? Number(station.dropped_rows) : null;
+
+    let extra = "";
+    if (used != null && dropped != null) {
+      extra = ` Dùng ${used} bản ghi hợp lệ, loại ${dropped} bản ghi rỗng hoặc bằng 0.`;
+    }
+
     bestDesc.textContent =
-      `Mô hình ${best} được chọn theo dữ liệu trung bình của riêng ${station.name} ` +
-      `(ưu tiên RMSE, sau đó MAE và MAPE). Dùng ${used} bản ghi hợp lệ, loại ${dropped} bản ghi rỗng hoặc bằng 0.`;
+      `Mô hình ${best} được chọn tại ${station.name} ở mốc ${_activeHorizon}h ` +
+      `(ưu tiên RMSE, sau đó MAE và MAPE; tie-break do server/json quyết định).` +
+      extra;
   }
 
-  function renderDiffText(station) {
-    const el = q(".area-difference-text");
-    if (!el || !station || !_data) return;
-
-    const stationRows = getStationRows(station);
-    const stationBest = stationRows[0];
-    if (!stationBest) {
-      el.textContent = "Chưa đủ dữ liệu để nhận xét sự khác biệt khu vực.";
-      return;
-    }
-
-    const allStations = Object.values(_stationById || {});
-    const globalBestRows = allStations
-      .map((st) => (st.model_avg_rmse || [])[0])
-      .filter(Boolean)
-      .filter((x) => asNum(x.avg_rmse) !== null);
-
-    if (!globalBestRows.length) {
-      el.textContent = "Chưa đủ dữ liệu để nhận xét sự khác biệt khu vực.";
-      return;
-    }
-
-    const globalMean = globalBestRows.reduce((s, x) => s + Number(x.avg_rmse), 0) / globalBestRows.length;
-    const stationRmse = Number(stationBest.avg_rmse);
-    const diff = Math.abs(stationRmse - globalMean).toFixed(3);
-    const trend = stationRmse > globalMean
-      ? "khó dự báo hơn mức trung bình giữa các trạm"
-      : "ổn định hơn mức trung bình giữa các trạm";
-
-    el.textContent =
-      `${station.name}: mô hình tốt nhất là ${stationBest.model} (RMSE=${fmt(stationRmse)}), ` +
-      `${trend} khoảng ${diff} RMSE so với mức trung bình tốt nhất của các trạm (${fmt(globalMean)}).`;
-  }
-
-  function renderReasonText(station) {
-    const el = q(".reason-text");
-    if (!el || !station) return;
-
-    const rows = getStationRows(station);
-    const best = rowBestModel(rows, "avg_rmse", "avg_mae", "avg_mape") || "--";
-
-    const rankText = rows.length
-      ? rows.map((x) => `${x.model}: RMSE ${fmt(x.avg_rmse)}, MAE ${fmt(x.avg_mae)}, MAPE ${fmt(x.avg_mape)}`).join(" | ")
-      : "Không có xếp hạng";
-
-    el.textContent =
-      `Lý do chọn mô hình tại ${station.name}: ưu tiên sai số nhỏ và ổn định trên các mốc dự báo của trạm. ` +
-      `Mô hình ${best} có RMSE trung bình thấp nhất tại trạm này. Xếp hạng: ${rankText}.`;
-  }
-
+  // ----------------------------
+  // Render chart
+  // ----------------------------
   function renderChart(station) {
     const canvas = document.getElementById("comparison-chart");
     if (!canvas || typeof Chart === "undefined" || !station) return;
 
-    const rows = getStationRows(station);
-    const labels = rows.map((r) => r.model || "--");
-    const rmseVals = rows.map((r) => (Number.isFinite(Number(r.avg_rmse)) ? Number(r.avg_rmse) : null));
-    const maeVals = rows.map((r) => (Number.isFinite(Number(r.avg_mae)) ? Number(r.avg_mae) : null));
+    const rows = getRows(station, _activeHorizon);
+    if (!rows.length) {
+      if (_chart) _chart.destroy();
+      return;
+    }
+
+    rows.sort((a, b) => (asNum(a.rmse) ?? 999) - (asNum(b.rmse) ?? 999));
+
+    const labels = rows.map(r => r.model || "--");
+    const rmseVals = rows.map(r => (Number.isFinite(Number(r.rmse)) ? Number(r.rmse) : null));
+    const maeVals  = rows.map(r => (Number.isFinite(Number(r.mae))  ? Number(r.mae)  : null));
 
     if (_chart) _chart.destroy();
 
@@ -166,7 +297,7 @@
             backgroundColor: "#1565C0",
             borderColor: "#0D47A1",
             borderWidth: 2,
-            borderRadius: 8
+            borderRadius: 8,
           },
           {
             label: "MAE",
@@ -174,27 +305,95 @@
             backgroundColor: "#64B5F6",
             borderColor: "#42A5F5",
             borderWidth: 2,
-            borderRadius: 8
-          }
-        ]
+            borderRadius: 8,
+          },
+        ],
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { display: true, position: "top" }
+          legend: { display: true, position: "top" },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y !== null ? ctx.parsed.y.toFixed(3) : "--"}`,
+            },
+          },
         },
         scales: {
           y: { beginAtZero: true },
-          x: { grid: { display: false } }
-        }
-      }
+          x: { grid: { display: false } },
+        },
+      },
     });
   }
 
+  // ----------------------------
+  // Render difference text
+  // ----------------------------
+  function renderDiffText(station) {
+    const el = q(".area-difference-text");
+    if (!el || !station) return;
+
+    const best = getBestModel(station, _activeHorizon);
+    const rows = getRows(station, _activeHorizon);
+    const stRow = rows.find(r => r.model === best);
+
+    if (!stRow || asNum(stRow.rmse) == null) {
+      el.textContent = "Chưa đủ dữ liệu để nhận xét sự khác biệt khu vực.";
+      return;
+    }
+
+    // global mean RMSE of BEST model per station at this horizon (including baselines if they win)
+    const allStations = Object.values(_stationById || {}).filter(s => s && s.id !== "global");
+    const rmseList = allStations.map(st => {
+      const b = getBestModel(st, _activeHorizon);
+      const rr = getRows(st, _activeHorizon).find(x => x.model === b);
+      return rr ? asNum(rr.rmse) : null;
+    }).filter(v => v != null);
+
+    if (!rmseList.length) {
+      el.textContent = "Chưa đủ dữ liệu để nhận xét sự khác biệt khu vực.";
+      return;
+    }
+
+    const globalMean = rmseList.reduce((s, v) => s + v, 0) / rmseList.length;
+    const stationRmse = asNum(stRow.rmse);
+    const diff = Math.abs(stationRmse - globalMean);
+    const trend = stationRmse > globalMean ? "khó dự báo hơn mức trung bình" : "ổn định hơn mức trung bình";
+
+    el.textContent =
+      `${station.name}: mô hình tốt nhất là ${best || "--"} (RMSE=${fmt(stationRmse)}), ` +
+      `${trend} khoảng ${fmt(diff)} RMSE so với mức trung bình các trạm (${fmt(globalMean)}).`;
+  }
+
+  // ----------------------------
+  // Render reason text
+  // ----------------------------
+  function renderReasonText(station) {
+    const el = q(".reason-text");
+    if (!el || !station) return;
+
+    const rows = getRows(station, _activeHorizon).slice()
+      .sort((a, b) => (asNum(a.rmse) ?? 999) - (asNum(b.rmse) ?? 999));
+
+    const best = getBestModel(station, _activeHorizon) || "--";
+    const rankText = rows.length
+      ? rows.map((x) => `${x.model}: RMSE ${fmt(x.rmse)}, MAE ${fmt(x.mae)}, MAPE ${fmt(x.mape)}`).join(" | ")
+      : "Không có xếp hạng";
+
+    el.textContent =
+      `Lý do chọn mô hình tại ${station.name} (mốc ${_activeHorizon}h): ` +
+      `ưu tiên sai số nhỏ (RMSE), sau đó MAE và MAPE; tie-break do server/json quyết định. ` +
+      `Mô hình chọn: ${best}. Xếp hạng: ${rankText}.`;
+  }
+
+  // ----------------------------
+  // Render station + horizon
+  // ----------------------------
   function renderStation(stationId) {
-    _activeStationId = stationId;
-    const station = _stationById[stationId];
+    _activeStationId = String(stationId);
+    const station = getStation(_activeStationId);
     if (!station) return;
 
     renderTable(station);
@@ -204,30 +403,72 @@
     renderReasonText(station);
   }
 
-  function initDropdown() {
-    const options = ((_data && _data.station_options) || []).map((x) => ({
-      value: x.id,
-      text: x.label
-    }));
+  // ----------------------------
+  // Dropdown init
+  // ----------------------------
+  function initStationDropdown() {
+    // Build options: TP.HCM + Trạm 1..6
+    const stations = _data?.stations || [];
+
+    // Ensure global exists
+    const hasGlobal = stations.some(s => String(s.id) === "global");
+    const stationItems = [];
+
+    if (hasGlobal) {
+      stationItems.push({ value: "global", text: "TP.HCM" });
+    } else {
+      // still show TP.HCM (may be empty)
+      stationItems.push({ value: "global", text: "TP.HCM" });
+    }
+
+    // add numeric stations
+    stations
+      .filter(s => String(s.id) !== "global")
+      .sort((a, b) => Number(a.id) - Number(b.id))
+      .forEach(s => {
+        const label = s.name ? s.name : `Trạm ${s.id}`;
+        // nếu name là "Trạm 1" thì OK; nếu là "S1 - ..." cũng OK
+        stationItems.push({ value: String(s.id), text: label });
+      });
 
     _stationDropdown = new Dropdown("station-dropdown", {
-      items: options,
+      items: stationItems,
       defaultItem: _activeStationId,
       onSelect: function (value) {
         renderStation(value);
-      }
+      },
+    });
+  }
+
+  function initHorizonDropdown() {
+    const horizons = (_data?.horizons || [1,3,6,12,24]).map(String);
+
+    const items = horizons.map(h => ({ value: h, text: `${h}h` }));
+
+    // default horizon: prefer 1
+    _activeHorizon = items.find(x => x.value === "1") ? "1" : (items[0]?.value ?? "1");
+
+    _horizonDropdown = new Dropdown("horizon-dropdown", {
+      items,
+      defaultItem: _activeHorizon,
+      onSelect: function (value) {
+        _activeHorizon = String(value);
+        renderStation(_activeStationId);
+      },
     });
   }
 
   function bindCreateButton() {
     const btnCreate = q(".btn-create");
     if (!btnCreate) return;
-
     btnCreate.addEventListener("click", function () {
       renderStation(_activeStationId);
     });
   }
 
+  // ----------------------------
+  // Fetch API
+  // ----------------------------
   async function fetchModelEvaluation() {
     const urls = [API_PATH, API_FALLBACK];
     let lastErr = null;
@@ -252,28 +493,43 @@
     throw lastErr || new Error("Cannot fetch model evaluation data");
   }
 
+  // ----------------------------
+  // Main load
+  // ----------------------------
   async function load() {
-    const data = await fetchModelEvaluation();
-    if (!data.ok) throw new Error(data.message || "API error");
+    const raw = await fetchModelEvaluation();
+    if (raw && raw.ok === false) throw new Error(raw.message || "API error");
 
-    _data = data;
+    _data = normalizeApi(raw);
+
     _stationById = {};
+    (_data.stations || []).forEach(s => { _stationById[String(s.id)] = s; });
 
-    (_data.stations || []).forEach((s) => {
-      _stationById[s.id] = s;
-    });
-
-    _activeStationId = data.default_station_id || ((_data.stations[0] || {}).id || null);
-    if (!_activeStationId) throw new Error("Không có dữ liệu trạm");
-
-    const chartDesc = q(".chart-description");
-    if (chartDesc) {
-      chartDesc.textContent =
-        "Biểu đồ thể hiện RMSE/MAE trung bình của các mô hình theo trạm đang chọn (đã loại dữ liệu rỗng hoặc bằng 0).";
+    // ensure global is present in map
+    if (!_stationById["global"]) {
+      _stationById["global"] = {
+        id: "global",
+        name: "TP.HCM",
+        horizons: (_data.horizons || [1,3,6,12,24]).map(h => ({ horizon: h, rows: [], best_model: null })),
+        best_model_overall: null,
+        used_rows: null,
+        dropped_rows: null,
+      };
     }
 
-    initDropdown();
+    _activeStationId = String(_data.default_station_id || "global");
+    if (!_stationById[_activeStationId]) _activeStationId = "global";
+
+    // Update chart description
+    const chartDesc = q(".chart-description");
+    if (chartDesc) {
+      chartDesc.textContent = "Biểu đồ RMSE/MAE của các mô hình theo trạm và mốc thời gian.";
+    }
+
+    initStationDropdown();
+    initHorizonDropdown();
     bindCreateButton();
+
     renderStation(_activeStationId);
   }
 
@@ -288,4 +544,5 @@
       }
     }
   });
+
 })();

@@ -18,6 +18,12 @@ document.addEventListener('DOMContentLoaded', function() {
         managementOnly.forEach(el => { el.hidden = !isManagement; });
         publicOnly.forEach(el => { el.hidden = isManagement; });
 
+        // Fix layout bottom-row: 1 card → full width, 2 card → cùng chiều cao
+        document.querySelectorAll('.bottom-row').forEach(function(row) {
+            var visible = Array.from(row.children).filter(function(el) { return !el.hidden; });
+            row.classList.toggle('single-card', visible.length === 1);
+        });
+
         // Cập nhật trạng thái nút refresh dựa trên chế độ
         const refreshButton = document.getElementById('refreshButton');
         if (refreshButton) {
@@ -50,20 +56,52 @@ document.addEventListener('DOMContentLoaded', function() {
     let trendMulti = null;   // dữ liệu xu hướng cho nhiều chỉ số (từ backend)
     let trendChart = null;   // instance Chart.js cho trendChart
 
+    // Biến dùng chung cho bản đồ Leaflet
+    let overviewMap = null;
+    let overviewMarkersLayer = null;
+
     // Cấu hình base URL cho API (chạy được cả khi mở file trực tiếp hoặc qua Flask server)
     const API_BASE = (window.location.origin && window.location.origin.startsWith('http'))
         ? window.location.origin
         : 'http://127.0.0.1:5000';
 
-    // Vị trí tương đối (theo %) của từng trạm trên bản đồ (matching với hình nền)
-    const STATION_POSITIONS = {
-        1: { x: '22%', y: '28%' },
-        2: { x: '45%', y: '34%' },
-        3: { x: '67%', y: '44%' },
-        4: { x: '36%', y: '70%' },
-        5: { x: '58%', y: '62%' },
-        6: { x: '78%', y: '26%' },
+    // Tọa độ địa lý (lat, lng) thật của từng trạm HealthyAir (HCMC)
+    // Lấy từ bảng station info trong paper HealthyAir AQMN
+    const STATION_COORDS = {
+        1: { lat: 10.8699433, lng: 106.7960143 }, // S1 - Vietnam National University, Thủ Đức
+        2: { lat: 10.7409708, lng: 106.6171323 }, // S2 - An Lạc, Bình Tân
+        3: { lat: 10.8162123, lng: 106.6204143 }, // S3 - KCN Tân Bình, Tân Phú
+        4: { lat: 10.8158455, lng: 106.7174282 }, // S4 - Thanh Đa, Bình Thạnh
+        5: { lat: 10.7763661, lng: 106.6878094 }, // S5 - Nguyễn Đình Chiểu, Quận 3
+        6: { lat: 10.7804716, lng: 106.6594579 }, // S6 - Trường Sơn, Quận 10
     };
+
+    // Tên hiển thị của trạm theo quận/khu vực
+    const STATION_LABELS = {
+        1: 'Trạm Thủ Đức',
+        2: 'Trạm Bình Tân',
+        3: 'Trạm Tân Phú',
+        4: 'Trạm Bình Thạnh',
+        5: 'Trạm Quận 3',
+        6: 'Trạm Quận 10',
+    };
+
+    // Khởi tạo bản đồ Leaflet (nếu thư viện đã được load)
+    if (typeof L !== 'undefined') {
+        const mapElement = document.getElementById('overview-map');
+        if (mapElement) {
+            overviewMap = L.map('overview-map', {
+                zoomControl: true
+            }).setView([10.79, 106.68], 11);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(overviewMap);
+
+            overviewMarkersLayer = L.layerGroup().addTo(overviewMap);
+        }
+    }
 
     // ------------------------------------------------------------------------------
     // Lấy dữ liệu KPI từ backend qua API Flask (chạy bằng python server.py)
@@ -114,80 +152,40 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             // ------------------------------------------------------------------
-            // Bản đồ các trạm: vẽ marker động từ dữ liệu backend
+            // Bản đồ các trạm: vẽ marker động bằng Leaflet từ dữ liệu backend
             // ------------------------------------------------------------------
-            const mapContainer = document.querySelector('.map-placeholder.map-visual');
-            if (mapContainer && Array.isArray(data.stations)) {
-                const riskToClass = {
-                    good: 'station-good',
-                    moderate: 'station-warn',
-                    unhealthy: 'station-hot',
-                };
+            if (overviewMap && overviewMarkersLayer && Array.isArray(data.stations)) {
+                overviewMarkersLayer.clearLayers();
 
-                const levelToRatingClass = function(levelEn) {
-                    if (!levelEn) return 'rating-warning';
-                    const lower = levelEn.toLowerCase();
-                    if (lower.includes('healthy') && !lower.includes('unhealthy')) {
-                        return 'rating-good';
-                    }
-                    if (lower.includes('fair') || lower.includes('moderate')) {
-                        return 'rating-warning';
-                    }
-                    return 'rating-bad';
-                };
+                const markerLatLngs = [];
 
                 data.stations.forEach(function(station) {
-                    const pos = STATION_POSITIONS[station.id];
-                    if (!pos) {
-                        return; // không có vị trí cố định trên bản đồ
-                    }
+                    const coord = STATION_COORDS[station.id];
+                    if (!coord) return;
 
-                    const riskClass = riskToClass[station.risk] || 'station-warn';
-                    const ratingClass = levelToRatingClass(station.level_en);
+                    const label = STATION_LABELS[station.id] || ('Trạm S' + station.id);
+                    const typeText = station.type || 'N/A';
+                    const pmText = typeof station.pm25 === 'number'
+                        ? station.pm25.toFixed(1) + ' µg/m³'
+                        : 'N/A';
+                    const levelText = station.level_vi || station.level_en || 'Không xác định';
 
-                    const btn = document.createElement('button');
-                    btn.type = 'button';
-                    btn.className = 'station-marker ' + riskClass;
-                    btn.style.setProperty('--x', pos.x);
-                    btn.style.setProperty('--y', pos.y);
+                    const popupHtml =
+                        `<strong>${label}</strong><br>` +
+                        `Loại khu vực: ${typeText}<br>` +
+                        `PM2.5: ${pmText}<br>` +
+                        `Mức: ${levelText}`;
 
-                    const dot = document.createElement('span');
-                    dot.className = 'marker-dot';
-                    btn.appendChild(dot);
+                    const marker = L.marker([coord.lat, coord.lng]);
+                    marker.bindPopup(popupHtml);
+                    marker.addTo(overviewMarkersLayer);
 
-                    const tooltip = document.createElement('span');
-                    tooltip.className = 'marker-tooltip';
-
-                    const title = document.createElement('span');
-                    title.className = 'tooltip-title';
-                    title.textContent = 'Trạm S' + station.id;
-                    tooltip.appendChild(title);
-
-                    const typeLine = document.createElement('span');
-                    typeLine.className = 'tooltip-line';
-                    typeLine.textContent = 'Loại khu vực: ' + (station.type || 'N/A');
-                    tooltip.appendChild(typeLine);
-
-                    const pmLine = document.createElement('span');
-                    pmLine.className = 'tooltip-line';
-                    if (typeof station.pm25 === 'number') {
-                        // Dùng innerHTML với HTML entities để đảm bảo hiển thị đúng ký tự đặc biệt
-                        pmLine.innerHTML = 'PM2.5: ' + station.pm25.toFixed(1) + ' &micro;g/m&sup3;';
-                    } else {
-                        pmLine.textContent = 'PM2.5: N/A';
-                    }
-                    tooltip.appendChild(pmLine);
-
-                    const levelLine = document.createElement('span');
-                    levelLine.className = 'tooltip-line ' + ratingClass;
-                    // Hiển thị mức bằng tiếng Việt nếu có, nếu không thì dùng tiếng Anh
-                    const levelText = station.level_vi || station.level_en || 'Unknown';
-                    levelLine.textContent = 'Mức: ' + levelText;
-                    tooltip.appendChild(levelLine);
-
-                    btn.appendChild(tooltip);
-                    mapContainer.appendChild(btn);
+                    markerLatLngs.push([coord.lat, coord.lng]);
                 });
+
+                if (markerLatLngs.length > 0) {
+                    overviewMap.fitBounds(markerLatLngs, { padding: [20, 20] });
+                }
             }
 
             // ------------------------------------------------------------------
@@ -302,10 +300,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     y: {
                                         min: Math.max(0, yMin - 5),
                                         max: yMax + 5,
-                                        grid: {
-                                            color: '#475569',
-                                            lineWidth: 1
-                                        },
+                                        grid: { display: false },
                                         ticks: {
                                             color: '#ffffff',
                                             font: {
@@ -329,6 +324,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Lưu hàm updateTrendChart vào window để dropdown có thể gọi
                 window.__updateTrendChartFromDropdown = updateTrendChart;
+
+                // Cập nhật items dropdown theo keys thực từ trendMulti
+                if (trendMulti) {
+                    var METRIC_LABELS = {
+                        pm25: 'PM2.5', co: 'CO', co2: 'CO2', so2: 'SO2',
+                        tsp: 'TSP', no2: 'NO2', o3: 'O3',
+                        temperature: 'Nhiệt độ', humidity: 'Độ ẩm'
+                    };
+                    var availableItems = Object.keys(trendMulti).map(function(key) {
+                        return { value: key, text: METRIC_LABELS[key] || key.toUpperCase() };
+                    });
+                    if (availableItems.length > 0 && window.__indexDropdownInstance) {
+                        window.__indexDropdownInstance.setItems(availableItems);
+                        var firstKey = availableItems.find(function(i) { return i.value === 'pm25'; })
+                            ? 'pm25' : availableItems[0].value;
+                        if (typeof window.__indexDropdownInstance._selectSilent === 'function') {
+                            window.__indexDropdownInstance._selectSilent(firstKey);
+                        }
+                    }
+                }
             }
 
             // ------------------------------------------------------------------
@@ -628,7 +643,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const indexDropdownContainer = document.getElementById('index-dropdown');
     if (indexDropdownContainer && typeof Dropdown !== 'undefined') {
-        new Dropdown('index-dropdown', {
+        window.__indexDropdownInstance = new Dropdown('index-dropdown', {
             items: [
                 { value: 'pm25', text: 'PM2.5' },
                 { value: 'co', text: 'CO' },

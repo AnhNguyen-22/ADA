@@ -37,20 +37,20 @@ body {
 ------------------------ */
 :root {
   /* Titles */
-  --fs-page-title: clamp(1.6rem, 1.1vw + 1.2rem, 2.15rem);
-  --fs-card-title: clamp(1.02rem, 0.55vw + 0.82rem, 1.18rem);
-  --fs-section-title: clamp(0.98rem, 0.5vw + 0.78rem, 1.08rem);
+  --fs-page-title: 1.25rem;
+  --fs-card-title: 1.25rem;
+  --fs-section-title: 0.9375rem;
 
   /* Body text */
-  --fs-body: clamp(0.9rem, 0.25vw + 0.82rem, 0.98rem);
-  --fs-small: clamp(0.82rem, 0.18vw + 0.78rem, 0.9rem);
-  --fs-table: clamp(0.82rem, 0.18vw + 0.78rem, 0.9rem);
+  --fs-body: 0.8125rem;
+  --fs-small: 0.8125rem;
+  --fs-table: 0.8125rem;
 
   /* Pills / tiny */
-  --fs-pill: clamp(0.78rem, 0.16vw + 0.74rem, 0.86rem);
+  --fs-pill: 0.6875rem;
 
   /* Strong line (like reason-title) */
-  --fs-strong: clamp(0.98rem, 0.35vw + 0.88rem, 1.08rem);
+  --fs-strong: 0.8125rem;
 }
 
 @supports selector(:has(*)) {
@@ -68,7 +68,7 @@ body {
 }
 
 .page-title {
-  font-family: "72-Black", "Segoe UI", Arial, sans-serif;
+  font-family: "72-Semibold", Helvetica;
   font-size: var(--fs-page-title);
   letter-spacing: 0.6px;
   color: #ffffff;
@@ -121,7 +121,7 @@ body {
 }
 
 .NB-c-khuyencao .card-title {
-  font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
+  font-family: "72-Semibold", Helvetica;
   color: #f3fbff;
   font-size: var(--fs-card-title);
   margin: 0;
@@ -143,7 +143,7 @@ body {
 
 .public-meta-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 0.9fr 1.1fr;
   gap: 12px;
   margin: 10px 0 14px;
 }
@@ -156,7 +156,7 @@ body {
 }
 
 .public-box-title {
-  font-weight: 800;
+  font-weight: 600;
   color: #131e29;
   margin-bottom: 6px;
   font-size: var(--fs-section-title);
@@ -189,7 +189,7 @@ body {
 
 .who-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 0.9fr 1.1fr;
   gap: 8px;
   font-size: var(--fs-body);
   color: #444;
@@ -203,7 +203,7 @@ body {
 }
 
 .who-label {
-  font-weight: 800;
+  font-weight: 600;
   color: #131e29;
   font-size: var(--fs-small);
 }
@@ -235,7 +235,7 @@ body {
 .NB-c-khuyencao .table-header {
   background: var(--color-table-head-bg);
   font-size: var(--fs-table);
-  font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
+  font-family: "72-Semibold", Helvetica;
   color: var(--color-text-dark);
   letter-spacing: 0.2px;
 }
@@ -248,7 +248,7 @@ body {
 }
 
 .NB-c-khuyencao .station {
-  font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
+  font-family: "72-Semibold", Helvetica;
   letter-spacing: 0.2px;
 }
 
@@ -260,7 +260,7 @@ body {
   padding: 4px 0;
   border-radius: 10px;
   font-size: var(--fs-pill);
-  font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
+  font-family: "72-Semibold", Helvetica;
   color: var(--color-text-dark);
 }
 
@@ -336,7 +336,7 @@ body.is-government .station-row {
   padding: 12px;
   border-radius: 16px;
   border: 1px solid rgba(0, 0, 0, 0.06);
-  background: rgba(255, 255, 255, 0.55);
+  background: transparent;
 }
 
 body.is-government .gov-compare-chart {
@@ -353,7 +353,7 @@ body.is-government .gov-compare-chart {
 }
 
 .gov-chart-title {
-  font-weight: 900;
+  font-weight: 600;
   color: #131e29;
   margin-bottom: 2px;
   font-size: var(--fs-section-title);
@@ -379,7 +379,7 @@ body.is-government .gov-compare-chart {
   border-radius: 999px;
   padding: 8px 10px;
   cursor: pointer;
-  font-weight: 800;
+  font-weight: 600;
   font-size: var(--fs-small);
   transition: 120ms ease;
 }
@@ -414,7 +414,7 @@ body.is-government .gov-compare-chart {
 }
 
 .NB-c-khuyencao .bottom-title {
-  font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
+  font-family: "72-Semibold", Helvetica;
   color: #f2f8ff;
   font-size: var(--fs-card-title);
   margin: 0 0 12px 0;
@@ -423,12 +423,12 @@ body.is-government .gov-compare-chart {
 
 .NB-c-khuyencao .bottom-columns {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 0.9fr 1.1fr;
   gap: 16px;
 }
 
 .NB-c-khuyencao .bottom-block h3 {
-  font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
+  font-family: "72-Semibold", Helvetica;
   color: #f2f8ff;
   font-size: var(--fs-section-title);
   margin: 0 0 8px 0;
@@ -470,7 +470,7 @@ body.is-government .gov-compare-chart {
 }
 
 .gov-title {
-  font-weight: 900;
+  font-weight: 600;
   color: #131e29;
   margin-bottom: 4px;
   font-size: var(--fs-section-title);
@@ -490,7 +490,7 @@ body.is-government .gov-compare-chart {
   border-radius: 12px;
   background: #131e29;
   color: #fff;
-  font-weight: 800;
+  font-weight: 600;
   font-size: var(--fs-small);
 }
 
@@ -557,7 +557,7 @@ body.is-government .gov-compare-chart {
   padding: 12px;
   border-radius: 16px;
   border: 1px solid rgba(0,0,0,0.06);
-  background: rgba(255,255,255,0.55);
+  background: transparent;
 }
 
 .public-chart-header{
@@ -570,7 +570,7 @@ body.is-government .gov-compare-chart {
 }
 
 .public-chart-title{
-  font-weight: 900;
+  font-weight: 600;
   color:#131e29;
   margin-bottom:2px;
   font-size: var(--fs-section-title);
@@ -604,7 +604,7 @@ body.is-government .public-summary-chart{
 
 .NB-c-khuyencao .right-stack .card:first-child .info-title{
   font-size: var(--fs-card-title);
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0.2px;
   line-height: 1.15;
   text-transform: none;
@@ -622,7 +622,7 @@ body.is-government .public-summary-chart{
 
 .NB-c-khuyencao .right-stack .card:first-child #public-top-reasons .reason-title{
   font-size: var(--fs-body);
-  font-weight: 800;
+  font-weight: 600;
   line-height: 1.45;
   margin: 0;
 }
@@ -656,7 +656,7 @@ body.is-government .public-summary-chart{
 
 /* ===================== REASONS CARD (mini-grid) ===================== */
 .reasons-card .info-title {
-  font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
+  font-family: "72-Semibold", Helvetica;
   color: #f2f8ff;
   margin: 0 0 14px 0;
   font-size: var(--fs-card-title);
@@ -692,17 +692,17 @@ body.is-government .public-summary-chart{
 }
 
 .reason-mini-num {
-  font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
+  font-family: "72-Semibold", Helvetica;
   font-size: var(--fs-small);
-  font-weight: 800;
+  font-weight: 600;
   color: rgba(255,255,255,0.5);
   letter-spacing: 0.5px;
 }
 
 .reason-mini-title {
-  font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
+  font-family: "72-Semibold", Helvetica;
   font-size: var(--fs-body);
-  font-weight: 800;
+  font-weight: 600;
   color: #f2f8ff;
   line-height: 1.3;
 }
@@ -744,9 +744,9 @@ body.is-government .public-summary-chart{
 }
 
 .accordion-num {
-  font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
+  font-family: "72-Semibold", Helvetica;
   font-size: var(--fs-small);
-  font-weight: 800;
+  font-weight: 600;
   color: rgba(255,255,255,0.45);
   letter-spacing: 0.8px;
   line-height: 1;
@@ -755,9 +755,9 @@ body.is-government .public-summary-chart{
 }
 
 .accordion-title {
-  font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
+  font-family: "72-Semibold", Helvetica;
   font-size: var(--fs-body);
-  font-weight: 800;
+  font-weight: 600;
   color: #f2f8ff;
   letter-spacing: 0.2px;
   line-height: 1.2;
@@ -805,7 +805,7 @@ body.is-government .public-summary-chart{
   margin: 0;
   padding-left: 16px;
   color: var(--color-text-dark);
-  font-family: "72-Regular", "Segoe UI", Arial, sans-serif;
+  font-family: "72-Semibold", Helvetica;
   font-size: var(--fs-body);
   line-height: 1.5;
   display: flex;
@@ -818,14 +818,14 @@ body.is-government .public-summary-chart{
 }
 
 .NB-c-khuyencao .accordion-body .info-list strong {
-  font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
-  font-weight: 700;
+  font-family: "72-Semibold", Helvetica;
+  font-weight: 600;
   color: #131e29;
 }
 
 /* ===================== INFO TITLE (non-accordion cards) ===================== */
 .NB-c-khuyencao .info-title {
-  font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
+  font-family: "72-Semibold", Helvetica;
   color: #f2f8ff;
   margin: 0 0 8px 0;
   font-size: var(--fs-card-title);
@@ -890,7 +890,7 @@ body.is-government .public-summary-chart{
   margin: 0 auto;
   border-radius: 10px;
   font-size: var(--fs-pill);
-  font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
+  font-family: "72-Semibold", Helvetica;
   color: var(--color-text-dark);
   /* Make table columns center the pill */
 }
