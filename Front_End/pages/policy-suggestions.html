@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gợi ý chính sách - ADA</title>
+    <link rel="stylesheet" href="../assets/css/policy-suggestions.css">
+    <link href="../components/sidebar.css" rel="stylesheet"/>
+    <link href="../components/dropdown.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+    <div class="background" aria-hidden="true">
+        <div class="background-overlay"></div>
+        <img src="../assets/img/background.png" alt="" class="background-image">
+    </div>
+
+    <main class="main-content">
+        <header class="content-header">
+            <h1 class="main-title">GỢI Ý CHÍNH SÁCH</h1>
+            <div class="header-info">
+                <div class="header-meta-item">
+                    <img class="header-meta-icon" src="https://c.animaapp.com/aROkQ2yh/img/place-marker@2x.png" alt="" aria-hidden="true"/>
+                    <span class="location-text">Thành phố Hồ Chí Minh</span>
+                </div>
+                <div class="header-meta-item">
+                    <img class="header-meta-icon" src="https://c.animaapp.com/aROkQ2yh/img/world-health-organization@2x.png" alt="" aria-hidden="true"/>
+                    <span class="guideline-text">WHO guideline: PM2.5 24h = 15 µg/m³</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- ══════════ SHAP PANEL ══════════ -->
+        <section class="card">
+            <div class="shap-card-header">
+                <div class="shap-title-block">
+                    <h2 class="card-title">SHAP Plot</h2>
+                    <p class="panel-subtitle" id="shap-subtitle">
+                        SHAP beeswarm: trục X là mức tác động lên dự báo PM2.5; biến trên cùng ảnh hưởng mạnh nhất.
+                    </p>
+                </div>
+                <!-- Station filter tabs — rendered by JS -->
+                <div class="shap-filters" aria-label="Bộ lọc SHAP">
+  <div class="filter-group">
+    <label class="filter-label" for="horizon-select">Mốc</label>
+    <select id="horizon-select" class="ps-select">
+      <option value="1h">1h</option>
+      <option value="3h">3h</option>
+      <option value="6h">6h</option>
+      <option value="12h">12h</option>
+      <option value="24h">24h</option>
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <label class="filter-label" for="station-select">Trạm</label>
+    <select id="station-select" class="ps-select">
+      <!-- JS sẽ đổ option -->
+    </select>
+  </div>
+</div>
+            </div>
+
+            <!-- Chart + Feature bar side by side -->
+            <div class="shap-body">
+                <div class="chart-container">
+                    <img id="shap-img" src="" alt="SHAP Summary Plot" style="display:none;" />
+                    <div class="chart-placeholder" id="shap-placeholder">
+                        <div class="chart-dot"></div>
+                        <p>Đang tải biểu đồ SHAP...</p>
+                    </div>
+                </div>
+
+                <!-- Top Features mini bar chart -->
+                <div class="feature-sidebar">
+                    <p class="feature-sidebar-title">Top features</p>
+                    <p class="feature-sidebar-sub">Mean |SHAP|</p>
+                    <div id="feature-bars">
+                        <!-- rendered by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Caption gộp legend + giải thích ngắn -->
+            <p class="shap-caption">
+                <span id="shap-legend"></span>
+                <span class="shap-note">SHAP đo mức ảnh hưởng của từng biến lên dự báo — không khẳng định quan hệ nhân quả.</span>
+            </p>
+        </section>
+
+        <!-- ══════════ POLICY SUGGESTIONS ══════════ -->
+        <section class="card">
+            <div class="policy-header-bar">
+                <h2 class="card-title">Các gợi ý chính sách</h2>
+                <span class="station-filter-badge" id="policy-station-badge">Tất cả trạm</span>
+            </div>
+            <div class="suggestions-list" id="policy-suggestions-list">
+                <div class="suggestion-item" id="policy-loading">Đang tải gợi ý chính sách...</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Sidebar -->
+    <aside class="side-ql-unchoose" id="sidebar">
+        <img class="image-3 logo-large" src="../assets/img/logo_lon.png" alt="AirSense HCMC Logo" id="sidebar-logo"/>
+        <img class="image-3 logo-small" src="../assets/img/logo_nho.png" alt="AirSense HCMC Logo Small" id="sidebar-logo-small" style="display: none;"/>
+        <img class="show-left-side-panel" id="sidebarToggle" src="https://c.animaapp.com/aROkQ2yh/img/show-left-side-panel@2x.png" alt="Toggle sidebar" style="cursor: pointer;"/>
+        <div class="group-12">
+            <div class="rectangle-26"></div>
+            <div class="rectangle-27"></div>
+            <div class="text-wrapper-76" data-mode="public">Công khai</div>
+            <div class="text-wrapper-77" data-mode="management">Quản lý</div>
+        </div>
+        <div class="rectangle-28"></div>
+        <a href="overview.html" class="nav-link" data-page="overview">
+            <img class="analyze" src="https://c.animaapp.com/aROkQ2yh/img/analyze@2x.png" alt="Tổng quan"/>
+            <div class="text-wrapper-78">Tổng quan</div>
+        </a>
+        <a href="station-tracking.html" class="nav-link" data-page="station-tracking">
+            <img class="place-marker-2" src="https://c.animaapp.com/aROkQ2yh/img/place-marker-1@2x.png" alt="Theo dõi theo trạm"/>
+            <div class="theo-d-i-tr-m">Theo dõi theo trạm</div>
+        </a>
+        <a href="recommendations.html" class="nav-link" data-page="recommendations">
+            <img class="good-quality" src="https://c.animaapp.com/aROkQ2yh/img/good-quality@2x.png" alt="Khuyến cáo"/>
+            <div class="text-wrapper-79">Khuyến cáo</div>
+        </a>
+        <a href="dataset.html" class="nav-link" data-page="dataset">
+            <img class="database" src="https://c.animaapp.com/aROkQ2yh/img/database@2x.png" alt="Dữ liệu"/>
+            <div class="text-wrapper-80">Dữ liệu</div>
+        </a>
+        <a href="model-evaluation.html" class="nav-link" data-page="model-evaluation">
+            <img class="intelligence" src="https://c.animaapp.com/aROkQ2yh/img/intelligence@2x.png" alt="Đánh giá mô hình"/>
+            <div class="text-wrapper-81">Đánh giá mô hình</div>
+        </a>
+        <a href="policy-suggestions.html" class="nav-link active" data-page="policy-suggestions">
+            <img class="light-on" src="https://c.animaapp.com/aROkQ2yh/img/light-on@2x.png" alt="Gợi ý chính sách"/>
+            <div class="text-wrapper-82">Gợi ý chính sách</div>
+        </a>
+        <div class="group-11">
+            <div class="rectangle-25"></div>
+            <img class="image-2" src="../assets/img/avatar.jpeg" alt="Avatar"/>
+            <div class="text-wrapper-74">Quản lý</div>
+            <p class="text-wrapper-75">Bạn đang ở trang quản lý</p>
+            <img class="logout-rounded" src="https://c.animaapp.com/aROkQ2yh/img/logout-rounded@2x.png" alt="Logout" style="cursor: pointer;"/>
+        </div>
+    </aside>
+
+    <script src="../assets/js/policy-suggestions.js"></script>
+    <script src="../components/sidebar.js"></script>
+    <script src="../components/dropdown.js"></script>
+</body>
+</html>

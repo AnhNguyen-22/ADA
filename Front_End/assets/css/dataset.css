@@ -1,0 +1,363 @@
+/* --- BIẾN TOÀN CỤC --- */
+:root {
+    --base-font-size: clamp(12px, 1.2vw, 16px);
+    --sidebar-width: clamp(60px, 5vw, 80px);
+    --primary-blue: #013a59;
+    --light-blue: rgba(79, 195, 247, 0.3);
+    --medium-blue: rgba(46, 114, 145, 0.3);
+    --teal-light: #4fc3f7;
+    --teal-medium: #26a69a;
+    --teal-dark: #00695c;
+    --border-color: rgba(176, 190, 197, 0.9);
+    --text-dark: #131e29;
+    --text-gray: #546e7a;
+    --card-bg: rgba(255, 255, 255, 0.2);
+}
+
+/* --- BỐ CỤC CHUNG --- */
+.dashboard-container {
+    position: relative;
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    overflow-x: hidden;
+}
+
+.data-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(clamp(250px, 30vw, 350px), 1fr));
+    gap: clamp(15px, 2vw, 20px);
+    margin-bottom: clamp(20px, 2.5vw, 30px);
+}
+
+.card-value {
+    font-family: '72', sans-serif;
+    font-weight: 700;
+    font-size: clamp(24px, 3.5vw, 36px);
+    color: var(--text-dark);
+    margin: 0;
+}
+
+.card-subtitle {
+    font-family: '72', sans-serif;
+    font-weight: 300;
+    font-size: clamp(11px, 1.2vw, 13px);
+    color: white;
+    margin-top: clamp(4px, 0.5vw, 6px);
+}
+
+/* --- HEATMAP SECTION --- */
+.heatmap-section {
+    margin-bottom: clamp(20px, 2.5vw, 30px);
+}
+
+#heatmapContainer {
+    margin-top: 15px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+.heatmap-header-cell, .heatmap-row-label {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important; 
+    text-align: center !important;
+    font-weight: 600;
+    font-size: 13px;
+    color: #013a59;
+    background-color: #e1f5fe;
+    border-radius: 4px;
+    padding: 12px;
+}
+
+.heatmap-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 4px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.heatmap-cell:hover {
+    transform: scale(1.15);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+    z-index: 10;
+    position: relative;
+    border: 1px solid #fff;
+}
+
+/* --- VARIABLE SECTION CONTROLS --- */
+.variable-controls {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.control-label {
+    font-weight: 600;
+    color: white;
+    font-size: 14px;
+}
+
+/* =========================================================
+   1. BẢNG DANH SÁCH BIẾN (.variable-table)
+   ========================================================= */
+.variable-table-container {
+    width: 100%;
+    overflow-x: auto; 
+    background: transparent; 
+    border: none; 
+    box-shadow: none;
+}
+
+.variable-table {
+    width: 100%;
+    min-width: 850px; 
+    table-layout: fixed; 
+    border-collapse: separate; 
+    border-spacing: 0;
+    
+    background: #ffffff !important; 
+    border-radius: 12px;
+    border: 1px solid #eee;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.variable-table thead th {
+    background-color: #e1f5fe !important;
+    color: var(--primary-blue) !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    text-align: center !important;
+    vertical-align: middle;
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.variable-table tbody td {
+    color: #131e29 !important; 
+    background-color: #ffffff !important;
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0; 
+    vertical-align: middle;
+    word-wrap: break-word;
+}
+
+/* Căn chỉnh độ rộng các cột Danh sách biến */
+.variable-table th:nth-child(1), .variable-table td:nth-child(1) {
+    width: 100px; 
+    text-align: center !important;
+}
+
+.variable-table th:nth-child(2), .variable-table td:nth-child(2) {
+    width: 100px; 
+    text-align: center !important;
+    white-space: nowrap; 
+}
+
+.variable-table th:nth-child(3), .variable-table td:nth-child(3) {
+    width: 320px; 
+    text-align: center !important;
+    padding: 15px 10px;
+}
+
+.variable-table th:nth-child(4), .variable-table td:nth-child(4) {
+    text-align: left; 
+    padding-left: 20px;
+    line-height: 1.5;
+}
+
+/* --- CHẾ ĐỘ LƯỚI (CARD VIEW) & POPOVER --- */
+.variable-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 10px 0;
+}
+
+.variable-card {
+    background: white;
+    border: 1px solid #b0bec5;
+    border-radius: 12px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.2s ease;
+}
+
+.variable-card:hover {
+    transform: translateY(-5px);
+    z-index: 999; 
+    border-color: var(--teal-medium);
+}
+
+.var-card-name { font-size: 20px; font-weight: 800; color: var(--primary-blue); }
+.var-card-unit { 
+    font-size: 12px; color: var(--teal-dark); background: #e0f2f1; 
+    padding: 4px 12px; border-radius: 15px; margin: 10px 0;
+}
+
+.var-explanation-popover {
+    display: none; 
+    position: absolute;
+    top: 50%;
+    left: 105%; 
+    transform: translateY(-50%);
+    width: 450px;
+    height: 240px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    z-index: 1000;
+    overflow: hidden;
+    pointer-events: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.var-explanation-popover.popover-flip {
+    left: auto;
+    right: 105%;
+}
+
+.variable-card:hover .var-explanation-popover {
+    display: flex;
+}
+
+.popover-left {
+    width: 55%;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    background: #fcfdfe;
+}
+
+.popover-title { font-size: 32px; color: var(--primary-blue); font-weight: 800; margin: 0; }
+.popover-full { color: var(--teal-medium); font-weight: 600; font-size: 14px; margin-bottom: 10px; }
+.phonetic { color: #90a4ae; font-size: 11px; font-style: italic; }
+.popover-text { color: var(--text-gray); font-size: 13px; line-height: 1.6; }
+
+.popover-right {
+    width: 45%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: #131e29;
+    border-left: 1px solid #f0f0f0;
+}
+
+/* =========================================================
+   2. BẢNG DỮ LIỆU CHI TIẾT RAW DATA (#dataTable)
+   ========================================================= */
+.csv-table-container {
+    height: 500px;
+    overflow: auto; /* Kích hoạt thanh cuộn */
+    position: relative; /* Đóng khung không gian để Sticky hoạt động */
+    border-radius: 12px; 
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05); 
+    backdrop-filter: blur(10px);
+}
+
+#dataTable {
+    width: 100%;
+    border-collapse: separate; /* Bắt buộc để Freeze Row hoạt động */
+    border-spacing: 0;
+}
+
+/* --- GIA CỐ TÍNH NĂNG FREEZE ROW (EXCEL) --- */
+#dataTable th {
+    position: sticky;
+    top: 0; 
+    z-index: 10; /* Luôn nổi trên dữ liệu */
+    background-color: #e1f5fe; 
+    color: var(--primary-blue);
+    padding: 15px 10px;
+    font-size: 13px;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-align: center;
+    /* Dùng box-shadow làm viền để không bị đứt gãy khi cuộn */
+    box-shadow: inset 0 -2px 0 rgba(1, 58, 89, 0.15), inset -1px 0 0 rgba(1, 58, 89, 0.1);
+}
+
+/* Fix bo góc cho Header */
+#dataTable th:first-child { 
+    border-top-left-radius: 12px; 
+}
+#dataTable th:last-child { 
+    border-top-right-radius: 12px; 
+    box-shadow: inset 0 -2px 0 rgba(1, 58, 89, 0.15); /* Bỏ vạch kẻ dọc ở cột cuối */
+}
+
+/* Body Dữ liệu chi tiết: Trong suốt, chữ trắng */
+#dataTable tbody td {
+    color: #ffffff; 
+    padding: 12px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.1); 
+    text-align: center;
+    font-size: 13px;
+}
+
+#dataTable td:last-child {
+    border-right: none; 
+}
+
+/* Đổi màu nhẹ khi hover dòng */
+#dataTable tbody tr:hover td {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Độ rộng cột Data Table */
+#dataTable th, #dataTable td { min-width: 100px; }
+#dataTable th:nth-child(3), #dataTable td:nth-child(3) {
+    width: 120px;
+    max-width: 120px;
+}
+#dataTable th:last-child, #dataTable td:last-child {
+    min-width: 160px;
+}
+
+/* --- THANH CUỘN CUSTOM --- */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); }
+::-webkit-scrollbar-thumb { background: var(--primary-blue); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--teal-dark); }
+
+/* --- HIỆU ỨNG & RESPONSIVE --- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-50%) translateX(-10px); }
+    to { opacity: 1; transform: translateY(-50%) translateX(0); }
+}
+
+@media (max-width: 1024px) {
+    .var-explanation-popover {
+        left: 50% !important;
+        top: -120%;
+        transform: translateX(-50%);
+        width: 90vw;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content { padding: 15px; margin-left: 60px; }
+    .variable-controls { flex-direction: column; }
+}
