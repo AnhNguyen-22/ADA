@@ -139,7 +139,7 @@ body {
 .card-title {
     font-family: '72', sans-serif;
     font-weight: 600;
-    font-size: clamp(13px, 1.5vw, 16px);
+    font-size: clamp(28px, 1.5vw, 16px);
     color: white;
     margin-bottom: clamp(10px, 1.5vw, 15px);
 }
