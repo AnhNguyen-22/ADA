@@ -291,7 +291,7 @@
             const stationAvg = calculateAverage(stationPM25Data[stationId]);
             const hcmcAvg = 35; // Trung bình TP.HCM
             const whoGuideline = 15; // Ngưỡng WHO
-            
+
             // Tính trạm có PM2.5 cao nhất và thấp nhất
             const allStations = Object.keys(stationPM25Data);
             const stationAverages = allStations.map(s => ({
@@ -299,12 +299,12 @@
                 avg: calculateAverage(stationPM25Data[s])
             }));
             stationAverages.sort((a, b) => b.avg - a.avg);
-            
+
             const highestStation = stationAverages[0];
             const lowestStation = stationAverages[stationAverages.length - 1];
-            
+
             const explanations = [];
-            
+
             // So sánh với WHO
             if (stationAvg > whoGuideline) {
                 const diff = Math.round(stationAvg - whoGuideline);
@@ -312,7 +312,7 @@
             } else {
                 explanations.push(`Chỉ số PM2.5 của trạm nằm trong ngưỡng an toàn theo khuyến cáo WHO (15 µg/m³).`);
             }
-            
+
             // So sánh với trung bình TP
             if (stationAvg > hcmcAvg) {
                 explanations.push(`Trạm này có mức ô nhiễm cao hơn trung bình TP.HCM (${hcmcAvg} µg/m³).`);
@@ -321,7 +321,7 @@
             } else {
                 explanations.push(`Trạm này có mức ô nhiễm bằng trung bình TP.HCM (${hcmcAvg} µg/m³).`);
             }
-            
+
             // So sánh với các trạm khác
             if (stationId === highestStation.id) {
                 explanations.push(`Đây là trạm có mức ô nhiễm cao nhất trong hệ thống.`);
@@ -332,12 +332,12 @@
                 const diff2 = Math.round(stationAvg - lowestStation.avg);
                 explanations.push(`Trạm này thấp hơn trạm ô nhiễm nhất ${diff1} µg/m³ và cao hơn trạm sạch nhất ${diff2} µg/m³.`);
             }
-            
+
             // Đánh giá xu hướng trong ngày
             const values = stationPM25Data[stationId];
             const firstHalf = calculateAverage(values.slice(0, 6));
             const secondHalf = calculateAverage(values.slice(6, 12));
-            
+
             if (secondHalf > firstHalf + 3) {
                 explanations.push(`Chất lượng không khí có xu hướng xấu đi vào buổi chiều/tối.`);
             } else if (firstHalf > secondHalf + 3) {
@@ -345,7 +345,7 @@
             } else {
                 explanations.push(`Chất lượng không khí khá ổn định trong suốt cả ngày.`);
             }
-            
+
             return explanations;
         }
 
@@ -353,7 +353,7 @@
         function updateStationInfo(stationId) {
             const listElement = document.getElementById('station-info-list');
             if (!listElement) return;
-            
+
             const explanations = generateStationExplanation(stationId);
             listElement.innerHTML = explanations.map(text => `<li>${text}</li>`).join('');
         }
@@ -523,7 +523,7 @@
                 let color = colorStops[0].color;
                 for (let j = 0; j < colorStops.length - 1; j++) {
                     if (currentValue >= colorStops[j].value && currentValue < colorStops[j + 1].value) {
-                        const localPercent = (currentValue - colorStops[j].value) / 
+                        const localPercent = (currentValue - colorStops[j].value) /
                                            (colorStops[j + 1].value - colorStops[j].value);
                         color = interpolateColor(colorStops[j].color, colorStops[j + 1].color, localPercent);
                         break;
@@ -551,7 +551,11 @@
             ctx.font = `${unitFontSize}px Arial`;
             ctx.fillStyle = '#FFFFFF';
             ctx.fillText('µg/m³', centerX, centerY + Math.round(22 * scale));
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> main
             // Vẽ labels xung quanh - CĂN ĐỀU KHOẢNG CÁCH
             function drawCurvedLabel(text, percent, radius) {
                 ctx.save();
@@ -575,7 +579,11 @@
 
             ctx.font = `${Math.round(15 * scale)}px Arial`;
             ctx.fillStyle = "#000000";
+<<<<<<< HEAD
             const r = Math.round(185 * scale);  
+=======
+            const r = Math.round(185 * scale);
+>>>>>>> main
 
             // Gauge: TRÁI (percent 0.0) = Math.PI = Xanh/Tốt
             //        PHẢI (percent 1.0) = 0 = Tím/Nguy hại
@@ -586,21 +594,21 @@
             drawCurvedLabel("Rất xấu", 0.8, r);
             drawCurvedLabel("Nguy hại", 1.0, r);
         }
-        
+
         // Helper function để nội suy màu
         function interpolateColor(color1, color2, percent) {
             const r1 = parseInt(color1.slice(1, 3), 16);
             const g1 = parseInt(color1.slice(3, 5), 16);
             const b1 = parseInt(color1.slice(5, 7), 16);
-            
+
             const r2 = parseInt(color2.slice(1, 3), 16);
             const g2 = parseInt(color2.slice(3, 5), 16);
             const b2 = parseInt(color2.slice(5, 7), 16);
-            
+
             const r = Math.round(r1 + (r2 - r1) * percent);
             const g = Math.round(g1 + (g2 - g1) * percent);
             const b = Math.round(b1 + (b2 - b1) * percent);
-            
+
             return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
         }
 
@@ -635,7 +643,7 @@
             ctx.moveTo(padding.left, padding.top + chartHeight);
             ctx.lineTo(width - padding.right + 15, padding.top + chartHeight);
             ctx.stroke();
-            
+
             // X-axis arrow (tam giác trắng)
             ctx.beginPath();
             ctx.moveTo(width - padding.right + 15, padding.top + chartHeight);
@@ -644,7 +652,7 @@
             ctx.closePath();
             ctx.fillStyle = '#FFFFFF';
             ctx.fill();
-            
+
             // Draw Y-axis - TRẮNG ĐẬM
             ctx.strokeStyle = '#FFFFFF';
             ctx.lineWidth = 3;
@@ -652,7 +660,7 @@
             ctx.moveTo(padding.left, padding.top + chartHeight);
             ctx.lineTo(padding.left, padding.top - 15);
             ctx.stroke();
-            
+
             // Y-axis arrow (tam giác trắng)
             ctx.beginPath();
             ctx.moveTo(padding.left, padding.top - 15);
@@ -675,7 +683,7 @@
             // Draw bars
             const barWidth = chartWidth / labels.length;
             const barData = []; // Lưu data cho tooltip
-            
+
             labels.forEach((label, index) => {
                 if (index === 0) return; // Skip first bar (0)
 
@@ -685,7 +693,7 @@
                 const y = padding.top + chartHeight - barHeight;
                 const w = barWidth * 0.6;
                 const radius = 10;
-                
+
                 // Lưu data
                 barData.push({ x, y, w, h: barHeight, value, label });
 
@@ -718,11 +726,11 @@
             ctx.textAlign = 'center';
             ctx.fillText('µg/m³', 0, 0);
             ctx.restore();
-            
+
             // Thêm tooltip
             if (canvas && !canvas.hasComparisonTooltip) {
                 canvas.hasComparisonTooltip = true;
-                
+
                 let tooltip = document.getElementById('comparison-chart-tooltip');
                 if (!tooltip) {
                     tooltip = document.createElement('div');
@@ -731,15 +739,15 @@
                     canvas.parentElement.style.position = 'relative';
                     canvas.parentElement.appendChild(tooltip);
                 }
-                
+
                 canvas.addEventListener('mousemove', (e) => {
                     const rect = canvas.getBoundingClientRect();
                     const mouseX = e.clientX - rect.left;
                     const mouseY = e.clientY - rect.top;
-                    
+
                     let found = false;
                     for (const bar of barData) {
-                        if (mouseX >= bar.x && mouseX <= bar.x + bar.w && 
+                        if (mouseX >= bar.x && mouseX <= bar.x + bar.w &&
                             mouseY >= bar.y && mouseY <= bar.y + bar.h) {
                             tooltip.textContent = `${Math.round(bar.value)}`;
                             tooltip.style.display = 'block';
@@ -749,12 +757,12 @@
                             break;
                         }
                     }
-                    
+
                     if (!found) {
                         tooltip.style.display = 'none';
                     }
                 });
-                
+
                 canvas.addEventListener('mouseleave', () => {
                     tooltip.style.display = 'none';
                 });
@@ -987,7 +995,7 @@ document.addEventListener('DOMContentLoaded', function () {
         ctx.moveTo(padding.left, padding.top + chartH);
         ctx.lineTo(width - padding.right + 15, padding.top + chartH);
         ctx.stroke();
-        
+
         // X-axis arrow (tam giác trắng)
         ctx.beginPath();
         ctx.moveTo(width - padding.right + 15, padding.top + chartH);
@@ -996,7 +1004,7 @@ document.addEventListener('DOMContentLoaded', function () {
         ctx.closePath();
         ctx.fillStyle = '#FFFFFF';
         ctx.fill();
-        
+
         // Draw Y-axis - TRẮNG ĐẬM
         ctx.strokeStyle = '#FFFFFF';
         ctx.lineWidth = 3;
@@ -1004,7 +1012,7 @@ document.addEventListener('DOMContentLoaded', function () {
         ctx.moveTo(padding.left, padding.top + chartH);
         ctx.lineTo(padding.left, padding.top - 15);
         ctx.stroke();
-        
+
         // Y-axis arrow (tam giác trắng)
         ctx.beginPath();
         ctx.moveTo(padding.left, padding.top - 15);
@@ -1027,7 +1035,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const barW = chartW / labels.length;
         const barData = []; // Lưu vị trí các cột để dùng cho tooltip
-        
+
         ctx.textAlign = 'center';
         labels.forEach((lb, i) => {
             const val = values[i];
@@ -1036,7 +1044,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const y = padding.top + chartH - h;
             const w = barW * 0.6;
             const radius = 10;
-            
+
             // Lưu thông tin cột
             barData.push({ x, y, w, h, value: val, label: lb });
 
@@ -1068,12 +1076,12 @@ document.addEventListener('DOMContentLoaded', function () {
         ctx.textAlign = 'center';
         ctx.fillText(yLabel, 0, 0);
         ctx.restore();
-        
+
         // Thêm tooltip khi hover
         const canvas = document.getElementById(canvasId);
         if (canvas && !canvas.hasTooltip) {
             canvas.hasTooltip = true;
-            
+
             // Tạo tooltip div
             let tooltip = document.getElementById(`${canvasId}-tooltip`);
             if (!tooltip) {
@@ -1083,15 +1091,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 canvas.parentElement.style.position = 'relative';
                 canvas.parentElement.appendChild(tooltip);
             }
-            
+
             canvas.addEventListener('mousemove', (e) => {
                 const rect = canvas.getBoundingClientRect();
                 const mouseX = e.clientX - rect.left;
                 const mouseY = e.clientY - rect.top;
-                
+
                 let found = false;
                 for (const bar of barData) {
-                    if (mouseX >= bar.x && mouseX <= bar.x + bar.w && 
+                    if (mouseX >= bar.x && mouseX <= bar.x + bar.w &&
                         mouseY >= bar.y && mouseY <= bar.y + bar.h) {
                         tooltip.textContent = `${Math.round(bar.value)}${valueSuffix}`;
                         tooltip.style.display = 'block';
@@ -1101,12 +1109,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         break;
                     }
                 }
-                
+
                 if (!found) {
                     tooltip.style.display = 'none';
                 }
             });
-            
+
             canvas.addEventListener('mouseleave', () => {
                 tooltip.style.display = 'none';
             });

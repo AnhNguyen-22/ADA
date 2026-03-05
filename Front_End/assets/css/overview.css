@@ -1,5 +1,3 @@
-
-
 /* Summary Cards */
 .summary-cards {
   display: grid;
@@ -36,19 +34,21 @@
 }
 
 .summary-band-title {
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 600;
   color: #f8fafc;
+  margin-bottom: 4px;
 }
 
 .summary-band-value {
-  font-size: 20px;
+  font-size: 26px;
   font-weight: 700;
   color: #ffffff;
+  margin-bottom: 4px;
 }
 
 .summary-band-subtitle {
-  font-size: 12px;
+  font-size: 16px;
   color: rgba(248, 250, 252, 0.8);
 }
 
@@ -89,15 +89,10 @@
 /* Map Card */
 .map-container {
   width: 100%;
-  height: 400px;
+  height: 460px;
   border-radius: 12px;
   overflow: hidden;
   background: #F8FAFC;
-}
-
-.map-placeholder {
-  width: 100%;
-  height: 100%;
 }
 
 .map-visual {
@@ -105,11 +100,10 @@
   height: 100%;
 }
 
-.map-image {
+/* Leaflet map chiếm toàn bộ khung */
+#overview-map {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  display: block;
 }
 
 .station-marker {
@@ -238,22 +232,25 @@
 .chart-controls {
   display: flex;
   gap: 16px;
-  align-items: flex-end;
+  align-items: center;
   margin-bottom: 24px;
   flex-wrap: wrap;
 }
 
 .control-group {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
   min-width: 140px;
 }
 
 .control-group label {
-  font-size: 12px;
+  font-size: 18px;
   color: #64748B;
   font-weight: 500;
+  margin: 0;
+  white-space: nowrap; /* Giữ "Chỉ số" trên một dòng */
 }
 
 .time-button {
@@ -313,11 +310,13 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
+  align-items: stretch;
 }
 
 .ranking-container {
-  height: 350px;
+  height: 300px;
   position: relative;
+  flex-shrink: 0;
 }
 
 .explanation-content {
@@ -353,7 +352,7 @@
   .summary-cards {
       grid-template-columns: repeat(3, 1fr);
   }
-  
+
   .middle-row,
   .bottom-row {
       grid-template-columns: 1fr;
@@ -364,12 +363,12 @@
   .summary-cards {
       grid-template-columns: 1fr;
   }
-  
+
   .content-header {
       flex-direction: column;
       gap: 16px;
   }
-  
+
   .header-info {
       align-items: flex-start;
   }
@@ -380,13 +379,107 @@
       margin-left: 60px;
       padding: 20px;
   }
-  
+
   .chart-controls {
       flex-direction: column;
       align-items: stretch;
   }
-  
+
   .time-button {
       width: 100%;
   }
+}
+
+/* ── 2 card trong bottom-row cùng chiều cao ── */
+.combined-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(176, 190, 197, 0.35);
+  margin: 20px 0 16px;
+  flex-shrink: 0;
+}
+
+.card-title--secondary {
+  font-size: 15px;
+  margin-bottom: 10px;
+  opacity: 0.9;
+  flex-shrink: 0;
+}
+
+/* Chart giữ height cố định, không co lại */
+.management-chart-container {
+  height: 300px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Phần text giải thích tự fill phần còn lại */
+.combined-card .explanation-content {
+  flex: 1;
+}
+
+/* single-card: chế độ công khai chỉ có 1 card → full width */
+.bottom-row.single-card {
+  grid-template-columns: 1fr;
+}
+/* 2 card cùng chiều cao */
+.bottom-row {
+  align-items: stretch;
+}
+
+.combined-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(176, 190, 197, 0.35);
+  margin: 20px 0 16px;
+  flex-shrink: 0;
+}
+
+.card-title--secondary {
+  font-size: 15px;
+  margin-bottom: 10px;
+  opacity: 0.9;
+  flex-shrink: 0;
+}
+
+.ranking-container {
+  height: 300px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.management-chart-container {
+  height: 300px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.combined-card .explanation-content {
+  flex: 1;
+}
+
+/* Chart xu hướng */
+.chart {
+  position: relative;
+  width: 100%;
+  height: 380px;
+}
+.chart canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Công khai: 1 card full width */
+.bottom-row.single-card {
+  grid-template-columns: 1fr;
 }
