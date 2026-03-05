@@ -20,37 +20,43 @@ print(f"[INFO] CSV Path: {CSV_FILE}")
 # WHO Guideline
 WHO_GUIDELINE_PM25 = 15
 
-# Station Metadata
+# Station Metadata (HealthyAir AQMN – 6 trạm)
 STATION_METADATA = {
     '1': {
-        'name': 'S1 - Giao thông',
-        'type': 'traffic',
-        'location': 'Quận 1, TP.HCM',
-        'description': 'Trạm đo chất lượng không khí tại khu vực giao thông đông đúc'
+        'name': 'Trạm Thủ Đức',
+        'type': 'urban_background',  # Industry + Traffic + Residential
+        'location': 'Đại học Quốc gia TP.HCM, phường Linh Trung, TP. Thủ Đức',
+        'description': 'Trạm nền đô thị đại diện cho khu vực công nghiệp, giao thông và dân cư tại TP. Thủ Đức'
     },
     '2': {
-        'name': 'S2 - Công nghiệp',
-        'type': 'industrial',
-        'location': 'Quận 12, TP.HCM',
-        'description': 'Trạm đo chất lượng không khí tại khu công nghiệp'
+        'name': 'Trạm Bình Tân',
+        'type': 'traffic',
+        'location': '20 Nguyễn Trọng Trí, phường An Lạc, quận Bình Tân',
+        'description': 'Trạm giao thông đặt gần trục đường lớn tại quận Bình Tân'
     },
     '3': {
-        'name': 'S3 - Dân cư',
-        'type': 'residential',
-        'location': 'Quận 3, TP.HCM',
-        'description': 'Trạm đo chất lượng không khí tại khu dân cư'
+        'name': 'Trạm Tân Phú',
+        'type': 'industrial',
+        'location': 'Khu công nghiệp Tân Bình, phường Tây Thạnh, quận Tân Phú',
+        'description': 'Trạm công nghiệp trong khu công nghiệp Tân Bình, quận Tân Phú'
     },
     '4': {
-        'name': 'S4 - Giao thông',
-        'type': 'traffic',
-        'location': 'Quận 7, TP.HCM',
-        'description': 'Trạm đo chất lượng không khí tại khu vực giao thông'
+        'name': 'Trạm Bình Thạnh',
+        'type': 'residential',
+        'location': '49 đường Thanh Đa, phường 27, quận Bình Thạnh',
+        'description': 'Trạm khu dân cư tại bán đảo Thanh Đa, quận Bình Thạnh'
     },
     '5': {
-        'name': 'S5 - Công nghiệp',
-        'type': 'industrial',
-        'location': 'Quận Bình Tân, TP.HCM',
-        'description': 'Trạm đo chất lượng không khí tại khu công nghiệp'
+        'name': 'Trạm Quận 3',
+        'type': 'traffic',
+        'location': '268 Nguyễn Đình Chiểu, phường 6, quận 3',
+        'description': 'Trạm giao thông nằm trên trục đường trung tâm quận 3'
+    },
+    '6': {
+        'name': 'Trạm Quận 10',
+        'type': 'traffic_residential',
+        'location': 'MM18 Trường Sơn, phường 14, quận 10',
+        'description': 'Trạm giao thông kết hợp dân cư tại quận 10'
     }
 }
 
@@ -58,7 +64,9 @@ STATION_METADATA = {
 TYPE_LABELS_VI = {
     'traffic': 'Giao thông',
     'industrial': 'Công nghiệp',
-    'residential': 'Dân cư'
+    'residential': 'Dân cư',
+    'urban_background': 'Nền đô thị',
+    'traffic_residential': 'Giao thông + Dân cư'
 }
 
 # Cache cho data

@@ -19,14 +19,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.pa
 CSV_PATH = os.path.join(BASE_DIR, "data", "processed", "df_after_step_7_outlier_clean.csv")
 
 
-# Mapping S1..S6 -> loại khu vực (theo map ở frontend)
+# Mapping S1..S6 -> loại khu vực / vùng (theo mô tả HealthyAir AQMN)
 STATION_TYPE_MAP = {
-    1: "Giao thông",
-    2: "Dân cư",
-    3: "Công nghiệp",
-    4: "Dân cư",
-    5: "Giao thông",
-    6: "Công nghiệp",
+    1: "Nền đô thị (CN+GT+DC)",   # Vietnam National University - TP. Thủ Đức
+    2: "Giao thông",              # Bình Tân
+    3: "Công nghiệp",             # Tân Phú (khu CN Tân Bình)
+    4: "Dân cư",                  # Bình Thạnh
+    5: "Giao thông",              # Quận 3
+    6: "Giao thông + Dân cư",     # Quận 10
 }
 
 
