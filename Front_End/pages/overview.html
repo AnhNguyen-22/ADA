@@ -17,8 +17,10 @@
             <div class="background-overlay"></div>
             <img src="../assets/img/background.png" alt="" class="background-image">
         </div>
+
         <!-- Main Content -->
         <main class="main-content">
+
             <!-- Header -->
             <header class="content-header">
                 <h1 class="main-title">TỔNG QUAN</h1>
@@ -51,21 +53,19 @@
                         <span class="summary-band-value"></span>
                         <span class="summary-band-pill"></span>
                     </div>
-                    <!-- Chỉ hiển thị guideline chi tiết ở chế độ quản lý -->
                     <p class="summary-band-subtitle" data-requires="management">
                         WHO guideline: PM2.5 24h = 15 µg/m³
                     </p>
                 </div>
             </div>
 
-            <!-- Middle Row -->
+            <!-- Middle Row: Bản đồ + Biểu đồ xu hướng -->
             <div class="middle-row">
                 <div class="card">
                     <h2 class="card-title">Bản đồ các trạm</h2>
                     <div class="map-container">
                         <div class="map-placeholder map-visual">
                             <img src="../assets/img/map.png" alt="Bản đồ các trạm" class="map-image"/>
-                            <!-- Các marker trạm sẽ được vẽ động bằng JavaScript dựa trên dữ liệu backend -->
                         </div>
                     </div>
                 </div>
@@ -73,10 +73,6 @@
                 <div class="card">
                     <h2 class="card-title">Biểu đồ xu hướng</h2>
                     <div class="chart-controls">
-                        <div class="control-group">
-                            <label for="timeRangeButton" class="control-label">Khoảng thời gian</label>
-                            <button class="time-button" type="button" id="timeRangeButton">24h</button>
-                        </div>
                         <div class="control-group">
                             <label for="indexDropdownButton" class="control-label">Chỉ số</label>
                             <div class="dropdown-container" id="index-dropdown">
@@ -87,13 +83,6 @@
                                 <div class="dropdown-menu" role="menu"></div>
                             </div>
                         </div>
-                        <button class="btn-refresh" type="button" aria-label="Refresh" id="refreshButton" title="Làm mới dữ liệu">
-                            <svg class="refresh-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M1 4V10H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M23 20V14H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10M23 14L18.36 18.36A9 9 0 0 1 3.51 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </button>
                     </div>
                     <div class="chart">
                         <canvas id="trendChart"></canvas>
@@ -101,98 +90,76 @@
                 </div>
             </div>
 
-            <!-- Bottom Row -->
+            <!-- Bottom Row: 2 combined cards -->
             <div class="bottom-row">
-                <!-- Dữ liệu xếp hạng theo PM2.5 trung bình cho 6 trạm -->
-                <div class="card">
+
+                <!-- Card 1: Xếp hạng + Giải thích xu hướng -->
+                <div class="card combined-card">
                     <h2 class="card-title">Xếp hạng mức độ ô nhiễm theo trạm</h2>
                     <div class="ranking-container">
                         <canvas id="rankingChart"></canvas>
                     </div>
-                </div>
-
-                <div class="card">
-                    <h2 class="card-title">Giải thích xu hướng</h2>
+                    <div class="card-divider"></div>
+                    <h2 class="card-title card-title--secondary">Giải thích xu hướng</h2>
                     <div class="explanation-content">
-                        <ul class="explanation-list">
-                            <!-- Nội dung này sẽ được điền động bằng JavaScript từ dữ liệu backend -->
-                        </ul>
+                        <ul class="explanation-list"></ul>
                     </div>
                 </div>
-            </div>
 
-            <br><br>
-            <!-- Bottom Row last row: chỉ cho chế độ quản lý -->
-            <div class="bottom-row">
-                <div data-requires="management" class="card">
+                <!-- Card 2: Số giờ + Nhận xét (chỉ chế độ quản lý) -->
+                <div data-requires="management" class="card combined-card">
                     <h2 class="card-title">Số giờ trong ngày PM2.5 &gt; 15 µg/m³ tại top 3 trạm tệ nhất</h2>
                     <div class="management-chart-container">
                         <canvas id="hoursAboveThresholdChart"></canvas>
                     </div>
-                </div>
-                <div data-requires="management" class="card">
-                    <h2 class="card-title">Nhận xét xu hướng</h2>
+                    <div class="card-divider"></div>
+                    <h2 class="card-title card-title--secondary">Nhận xét xu hướng</h2>
                     <div class="explanation-content">
-                        <ul class="explanation-list" id="management-details">
-                            <!-- Nhận xét chi tiết sẽ được sinh tự động bằng JavaScript -->
-                        </ul>
+                        <ul class="explanation-list" id="management-details"></ul>
                     </div>
                 </div>
+
             </div>
+
         </main>
     </div>
-     <!-- Sidebar Component -->
-     <aside class="side-ql-unchoose" id="sidebar">
-        <!-- Logo ở trên cùng -->
+
+    <!-- Sidebar -->
+    <aside class="side-ql-unchoose" id="sidebar">
         <img class="image-3 logo-large" src="../assets/img/logo_lon.png" alt="AirSense HCMC Logo" id="sidebar-logo"/>
         <img class="image-3 logo-small" src="../assets/img/logo_nho.png" alt="AirSense HCMC Logo Small" id="sidebar-logo-small" style="display: none;"/>
-        
-        <!-- Toggle Button -->
         <img class="show-left-side-panel" id="sidebarToggle" src="https://c.animaapp.com/aROkQ2yh/img/show-left-side-panel@2x.png" alt="Toggle sidebar" style="cursor: pointer;"/>
-        
-        <!-- Mode Switcher -->
         <div class="group-12">
             <div class="rectangle-26"></div>
             <div class="rectangle-27"></div>
             <div class="text-wrapper-76" data-mode="public">Công khai</div>
             <div class="text-wrapper-77" data-mode="management">Quản lý</div>
         </div>
-        
-        <!-- Active Menu Item Background -->
         <div class="rectangle-28"></div>
-        
-        <!-- Navigation Icons -->
         <a href="overview.html" class="nav-link" data-page="overview">
             <img class="analyze" src="https://c.animaapp.com/aROkQ2yh/img/analyze@2x.png" alt="Tổng quan"/>
             <div class="text-wrapper-78">Tổng quan</div>
         </a>
-        
         <a href="station-tracking.html" class="nav-link" data-page="station-tracking">
             <img class="place-marker-2" src="https://c.animaapp.com/aROkQ2yh/img/place-marker-1@2x.png" alt="Theo dõi theo trạm"/>
             <div class="theo-d-i-tr-m">Theo dõi theo trạm</div>
         </a>
-        
         <a href="recommendations.html" class="nav-link" data-page="recommendations">
             <img class="good-quality" src="https://c.animaapp.com/aROkQ2yh/img/good-quality@2x.png" alt="Khuyến cáo"/>
             <div class="text-wrapper-79">Khuyến cáo</div>
         </a>
-        
         <a href="dataset.html" class="nav-link active" data-page="dataset">
             <img class="database" src="https://c.animaapp.com/aROkQ2yh/img/database@2x.png" alt="Dữ liệu"/>
             <div class="text-wrapper-80">Dữ liệu</div>
         </a>
-        
         <a href="model-evaluation.html" class="nav-link" data-page="model-evaluation">
             <img class="intelligence" src="https://c.animaapp.com/aROkQ2yh/img/intelligence@2x.png" alt="Đánh giá mô hình"/>
             <div class="text-wrapper-81">Đánh giá mô hình</div>
         </a>
-        
         <a href="policy-suggestions.html" class="nav-link" data-page="policy-suggestions">
             <img class="light-on" src="https://c.animaapp.com/aROkQ2yh/img/light-on@2x.png" alt="Gợi ý chính sách"/>
             <div class="text-wrapper-82">Gợi ý chính sách</div>
         </a>
-        
-        <!-- User Profile Section -->
         <div class="group-11">
             <div class="rectangle-25"></div>
             <img class="image-2" src="../assets/img/avatar.jpeg" alt="Avatar"/>

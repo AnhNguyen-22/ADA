@@ -18,6 +18,12 @@ document.addEventListener('DOMContentLoaded', function() {
         managementOnly.forEach(el => { el.hidden = !isManagement; });
         publicOnly.forEach(el => { el.hidden = isManagement; });
 
+        // Fix layout bottom-row: 1 card → full width, 2 card → cùng chiều cao
+        document.querySelectorAll('.bottom-row').forEach(function(row) {
+            var visible = Array.from(row.children).filter(function(el) { return !el.hidden; });
+            row.classList.toggle('single-card', visible.length === 1);
+        });
+
         // Cập nhật trạng thái nút refresh dựa trên chế độ
         const refreshButton = document.getElementById('refreshButton');
         if (refreshButton) {
@@ -302,10 +308,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     y: {
                                         min: Math.max(0, yMin - 5),
                                         max: yMax + 5,
-                                        grid: {
-                                            color: '#475569',
-                                            lineWidth: 1
-                                        },
+                                        grid: { display: false },
                                         ticks: {
                                             color: '#ffffff',
                                             font: {
@@ -329,6 +332,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Lưu hàm updateTrendChart vào window để dropdown có thể gọi
                 window.__updateTrendChartFromDropdown = updateTrendChart;
+
+                // Cập nhật items dropdown theo keys thực từ trendMulti
+                if (trendMulti) {
+                    var METRIC_LABELS = {
+                        pm25: 'PM2.5', co: 'CO', co2: 'CO2', so2: 'SO2',
+                        tsp: 'TSP', no2: 'NO2', o3: 'O3',
+                        temperature: 'Nhiệt độ', humidity: 'Độ ẩm'
+                    };
+                    var availableItems = Object.keys(trendMulti).map(function(key) {
+                        return { value: key, text: METRIC_LABELS[key] || key.toUpperCase() };
+                    });
+                    if (availableItems.length > 0 && window.__indexDropdownInstance) {
+                        window.__indexDropdownInstance.setItems(availableItems);
+                        var firstKey = availableItems.find(function(i) { return i.value === 'pm25'; })
+                            ? 'pm25' : availableItems[0].value;
+                        if (typeof window.__indexDropdownInstance._selectSilent === 'function') {
+                            window.__indexDropdownInstance._selectSilent(firstKey);
+                        }
+                    }
+                }
             }
 
             // ------------------------------------------------------------------
@@ -628,7 +651,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const indexDropdownContainer = document.getElementById('index-dropdown');
     if (indexDropdownContainer && typeof Dropdown !== 'undefined') {
-        new Dropdown('index-dropdown', {
+        window.__indexDropdownInstance = new Dropdown('index-dropdown', {
             items: [
                 { value: 'pm25', text: 'PM2.5' },
                 { value: 'co', text: 'CO' },
