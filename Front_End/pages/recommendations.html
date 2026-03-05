@@ -55,21 +55,47 @@
             <!-- Legend + WHO -->
             <div class="public-meta-grid">
               <div class="public-box">
-                <div class="public-box-title">Cảnh báo màu (tham khảo)</div>
+                <div class="public-box-title">Cảnh báo màu</div>
+                <div
+  class="legend-grid"
+  style="
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 16px;
+    margin-top: 10px;
+  "
+>
+  <!-- item template: pill 140px | range 120px -->
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,0.25);border:1px solid rgba(255,255,255,0.35);">
+    <span class="value-pill pill-green legend-pill" style="flex:0 0 140px;justify-content:center;text-align:center;">Tốt</span>
+    <span class="legend-range" style="flex:0 0 120px;text-align:right;font-weight:700;opacity:0.75;white-space:nowrap;">0–12</span>
+  </div>
 
-                <div class="legend-row">
-                  <span class="value-pill pill-green legend-pill">Tốt</span>
-                  <span class="legend-range">0–15</span>
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,0.25);border:1px solid rgba(255,255,255,0.35);">
+    <span class="value-pill pill-yellow legend-pill" style="flex:0 0 140px;justify-content:center;text-align:center;">Trung bình</span>
+    <span class="legend-range" style="flex:0 0 120px;text-align:right;font-weight:700;opacity:0.75;white-space:nowrap;">12.1–35.4</span>
+  </div>
 
-                  <span class="value-pill pill-yellow legend-pill">Trung bình</span>
-                  <span class="legend-range">&gt;15–35</span>
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,0.25);border:1px solid rgba(255,255,255,0.35);">
+    <span class="value-pill pill-orange legend-pill" style="flex:0 0 140px;justify-content:center;text-align:center;">Kém</span>
+    <span class="legend-range" style="flex:0 0 120px;text-align:right;font-weight:700;opacity:0.75;white-space:nowrap;">35.5–55.4</span>
+  </div>
 
-                  <span class="value-pill pill-orange legend-pill">Kém</span>
-                  <span class="legend-range">&gt;35–55</span>
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,0.25);border:1px solid rgba(255,255,255,0.35);">
+    <span class="value-pill pill-red legend-pill" style="flex:0 0 140px;justify-content:center;text-align:center;">Xấu</span>
+    <span class="legend-range" style="flex:0 0 120px;text-align:right;font-weight:700;opacity:0.75;white-space:nowrap;">55.5–150.4</span>
+  </div>
 
-                  <span class="value-pill pill-red legend-pill">Xấu</span>
-                  <span class="legend-range">&gt;55</span>
-                </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,0.25);border:1px solid rgba(255,255,255,0.35);">
+    <span class="value-pill pill-purple legend-pill" style="flex:0 0 140px;justify-content:center;text-align:center;">Rất xấu</span>
+    <span class="legend-range" style="flex:0 0 120px;text-align:right;font-weight:700;opacity:0.75;white-space:nowrap;">150.5–250.4</span>
+  </div>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,0.25);border:1px solid rgba(255,255,255,0.35);">
+    <span class="value-pill pill-plum legend-pill" style="flex:0 0 140px;justify-content:center;text-align:center;">Nguy hại</span>
+    <span class="legend-range" style="flex:0 0 120px;text-align:right;font-weight:700;opacity:0.75;white-space:nowrap;">250.5–500.4</span>
+  </div>
+</div>
               </div>
 
               <div class="public-box">
@@ -98,6 +124,7 @@
                 <div>Khu vực</div>
                 <div></div>
 
+                <div class="hoverable-col" data-col="1h"><span>1h</span></div>
                 <div class="hoverable-col" data-col="3h"><span>3h</span></div>
                 <div class="hoverable-col" data-col="6h"><span>6h</span></div>
                 <div class="hoverable-col" data-col="12h"><span>12h</span></div>
@@ -109,6 +136,7 @@
                 <div class="station">TP.HCM</div>
                 <div>Tổng hợp</div>
 
+                <div class="value-pill pill-gray" data-col="1h">--</div>
                 <div class="value-pill pill-gray" data-col="3h">--</div>
                 <div class="value-pill pill-gray" data-col="6h">--</div>
                 <div class="value-pill pill-gray" data-col="12h">--</div>
@@ -123,7 +151,7 @@
             <div class="public-summary-chart" id="public-summary-chart">
               <div class="public-chart-header">
                 <div>
-                  <div class="public-chart-title">Xu hướng dự báo TP.HCM (3h → 24h)</div>
+                  <div class="public-chart-title">Xu hướng dự báo TP.HCM (1h → 24h)</div>
                   <div class="public-chart-sub">
                     Minh hoạ nhanh biến động theo mốc thời gian (từ dòng "TP.HCM").
                   </div>
@@ -152,45 +180,81 @@
 
           <!-- RIGHT STACK -->
           <aside class="right-stack">
-            <div class="card">
+
+            <!-- Card 1: Vì sao PM2.5 tăng → mini-cards ngang -->
+            <div class="card reasons-card">
               <h3 class="info-title">VÌ SAO PM2.5 TĂNG?</h3>
-              <ul class="info-list" id="public-top-reasons">
-                <li>--</li>
-              </ul>
+              <div class="reasons-mini-grid" id="public-top-reasons">
+                <div class="reason-mini-card skeleton">
+                  <div class="reason-mini-title">Đang tải...</div>
+                </div>
+              </div>
             </div>
 
-            <div class="card">
-              <h3 class="info-title">1. GIÓ</h3>
-              <ul class="info-list">
-                <li><strong>Gió yếu</strong> → bụi mịn khó khuếch tán, dễ tích tụ quanh khu dân cư và trục đường đông xe.</li>
-  <li><strong>Gió đổi hướng</strong> có thể “đẩy” khói bụi từ khu công nghiệp/ngoại thành vào nội đô, làm PM2.5 tăng cục bộ.</li>
-  <li><strong>Gió mạnh</strong> thường giúp PM2.5 giảm nhanh hơn; nhưng nếu kèm bụi đường/công trình có thể gây “bụi thô” tăng tạm thời.</li>
-  <li><strong>Gợi ý nhanh:</strong> Nếu dự báo 3h–6h tăng và gió yếu → hạn chế hoạt động ngoài trời, đặc biệt buổi sáng & chiều tối.</li>
-  <li><strong>Đi lại:</strong> Ưu tiên đường ít xe, đeo KN95/N95 khi di chuyển đường dài hoặc khu vực nhiều công trình.</li>
-              </ul>
+            <!-- Card 2: Gió (accordion) -->
+            <div class="card accordion-card">
+              <button class="accordion-header" aria-expanded="false">
+                <span class="accordion-icon" aria-hidden="true">🌬️</span>
+                <span class="accordion-meta">
+                  <span class="accordion-num">01</span>
+                  <span class="accordion-title">Gió</span>
+                  <span class="accordion-subtitle">Ảnh hưởng đến khả năng khuếch tán bụi...</span>
+                </span>
+                <span class="accordion-chevron" aria-hidden="true">›</span>
+              </button>
+              <div class="accordion-body">
+                <ul class="info-list">
+                  <li><strong>Gió yếu</strong> → bụi mịn khó khuếch tán, tích tụ quanh khu dân cư và trục đường đông xe.</li>
+                  <li><strong>Gió đổi hướng</strong> có thể "đẩy" khói bụi từ khu công nghiệp vào nội đô, làm PM2.5 tăng cục bộ.</li>
+                  <li><strong>Gió mạnh</strong> thường giúp PM2.5 giảm nhanh; nhưng nếu kèm bụi đường có thể gây bụi thô tăng tạm thời.</li>
+                  <li><strong>Gợi ý:</strong> Dự báo 3h–6h tăng + gió yếu → đeo KN95/N95, tránh giờ cao điểm.</li>
+                </ul>
+              </div>
             </div>
 
-            <div class="card">
-              <h3 class="info-title">2. NHIỆT ĐỘ &amp; ĐỘ ẨM</h3>
-              <ul class="info-list">
-                <li><strong>Độ ẩm cao</strong> làm hạt bụi “bám” lâu trong không khí, dễ gây cảm giác ngột ngạt và kích ứng mũi/họng.</li>
-  <li><strong>Nghịch nhiệt</strong> (thường gặp sáng sớm/đêm) khiến lớp không khí “đè” xuống, bụi khó thoát lên cao → PM2.5 tăng.</li>
-  <li><strong>Nắng nóng</strong> có thể thúc đẩy phản ứng hoá học tạo bụi mịn thứ cấp (khi có NO₂/VOC), làm PM2.5 tăng dù gió không đổi.</li>
-  <li><strong>Trời có mưa</strong> thường giúp “rửa” bụi, PM2.5 giảm rõ sau mưa; nhưng có thể tăng lại nếu giao thông đông + gió yếu.</li>
-  <li><strong>Gợi ý nhanh:</strong> Nếu độ ẩm cao + dự báo 12h–24h xấu → đóng cửa sổ lúc giờ cao điểm, ưu tiên ở trong nhà.</li>
-              </ul>
+            <!-- Card 3: Nhiệt độ & Độ ẩm (accordion) -->
+            <div class="card accordion-card">
+              <button class="accordion-header" aria-expanded="false">
+                <span class="accordion-icon" aria-hidden="true">🌡️</span>
+                <span class="accordion-meta">
+                  <span class="accordion-num">02</span>
+                  <span class="accordion-title">Nhiệt độ &amp; Độ ẩm</span>
+                  <span class="accordion-subtitle">Tác động đến độ bám và lan tán của bụi</span>
+                </span>
+                <span class="accordion-chevron" aria-hidden="true">›</span>
+              </button>
+              <div class="accordion-body">
+                <ul class="info-list">
+                  <li><strong>Độ ẩm cao</strong> làm hạt bụi "bám" lâu trong không khí, dễ kích ứng mũi/họng.</li>
+                  <li><strong>Nghịch nhiệt</strong> (sáng sớm/đêm) khiến bụi khó thoát lên cao → PM2.5 tăng.</li>
+                  <li><strong>Nắng nóng</strong> thúc đẩy phản ứng tạo bụi mịn thứ cấp (NO₂/VOC), PM2.5 tăng dù gió không đổi.</li>
+                  <li><strong>Mưa</strong> thường "rửa" bụi; PM2.5 giảm rõ nhưng có thể tăng lại khi giao thông đông + gió yếu.</li>
+                  <li><strong>Gợi ý:</strong> Độ ẩm cao + dự báo 12–24h xấu → đóng cửa sổ giờ cao điểm, ở trong nhà.</li>
+                </ul>
+              </div>
             </div>
 
-            <div class="card">
-              <h3 class="info-title">3. GIAO THÔNG</h3>
-              <ul class="info-list">
-                <li><strong>Giờ cao điểm</strong> làm NO₂ tăng và tạo bụi mịn thứ cấp; PM2.5 có thể tăng nhanh trong 1–3 giờ.</li>
-  <li><strong>Kẹt xe</strong> + xe tải/xe buýt nhiều → phát thải tập trung, người đi đường dễ hít phải bụi mịn ở tầm thấp.</li>
-  <li><strong>Bụi đường</strong> từ công trình/đường khô có thể làm không khí “mù” hơn, nhất là khi gió yếu.</li>
-  <li><strong>Gợi ý khi di chuyển:</strong> Tránh 7–9h và 17–19h nếu có thể; chọn tuyến ít xe, hạn chế đứng chờ lâu ở ngã tư.</li>
-  <li><strong>Trong xe:</strong> Đóng kính, bật tuần hoàn; sau khi về nhà rửa mặt/súc họng và thay quần áo để giảm bụi bám.</li>
-              </ul>
+            <!-- Card 4: Giao thông (accordion) -->
+            <div class="card accordion-card">
+              <button class="accordion-header" aria-expanded="false">
+                <span class="accordion-icon" aria-hidden="true">🚗</span>
+                <span class="accordion-meta">
+                  <span class="accordion-num">03</span>
+                  <span class="accordion-title">Giao thông</span>
+                  <span class="accordion-subtitle">Nguồn phát thải NO₂ và bụi mịn thứ cấp</span>
+                </span>
+                <span class="accordion-chevron" aria-hidden="true">›</span>
+              </button>
+              <div class="accordion-body">
+                <ul class="info-list">
+                  <li><strong>Giờ cao điểm</strong> làm NO₂ tăng và tạo bụi mịn thứ cấp; PM2.5 có thể tăng nhanh trong 1–3 giờ.</li>
+                  <li><strong>Kẹt xe</strong> + xe tải/buýt → phát thải tập trung, người đi đường dễ hít bụi mịn tầm thấp.</li>
+                  <li><strong>Bụi đường</strong> từ công trình/đường khô làm không khí "mù" hơn khi gió yếu.</li>
+                  <li><strong>Gợi ý:</strong> Tránh 7–9h và 17–19h; chọn tuyến ít xe, đóng kính và bật tuần hoàn trong xe.</li>
+                </ul>
+              </div>
             </div>
+
           </aside>
         </div>
 
@@ -219,14 +283,36 @@
 
           <div class="gov-grid">
             <div class="gov-box">
-              <div class="gov-row">
-                <div>
-                  <div class="gov-title">Tải CSV dự báo</div>
-                  <div class="gov-desc">Xuất dữ liệu dự báo từ bảng (TP.HCM + theo trạm, 3h/6h/12h/24h).</div>
-                </div>
-                <button id="btn-download-csv" class="btn-primary">Tải CSV</button>
-              </div>
-            </div>
+  <div class="gov-row">
+    <div>
+      <div class="gov-title">Tải CSV dự báo</div>
+      <div class="gov-desc">
+        Xuất dữ liệu dự báo từ bảng (TP.HCM + theo trạm, 1h/3h/6h/12h/24h).
+      </div>
+    </div>
+    <button id="btn-download-csv" class="btn-primary">Tải CSV</button>
+  </div>
+
+  <!-- ✅ PREVIEW TABLE -->
+  <div class="gov-preview-wrap">
+    <table class="gov-preview-table">
+      <thead>
+        <tr>
+          <th>Khu vực</th>
+          <th>Loại</th>
+          <th>1h</th>
+          <th>3h</th>
+          <th>6h</th>
+          <th>12h</th>
+          <th>24h</th>
+        </tr>
+      </thead>
+      <tbody id="gov-preview-body">
+        <tr><td colspan="7">Đang tải dữ liệu...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 
             <div class="gov-box">
               <div class="gov-title">Đánh giá độ tin cậy dự báo</div>
@@ -298,8 +384,11 @@
 
     <script>
   document.addEventListener("DOMContentLoaded", function () {
+    // =====================
+    // Column highlight
+    // =====================
     const header = document.getElementById("forecast-table-header");
-    const table = document.getElementById("forecast-table");
+    const table  = document.getElementById("forecast-table");
 
     function clearHighlight() {
       table.querySelectorAll(".col-highlight").forEach((el) => el.classList.remove("col-highlight"));
@@ -318,86 +407,57 @@
       col.addEventListener("mouseleave", clearHighlight);
     });
 
-    function isAuthedLikely() {
-      try {
-        const currentMode = localStorage.getItem("currentMode");
-        if (currentMode === "management") return true;
-        const roleReco = localStorage.getItem("airsense_role_reco");
-        if (roleReco === "government") return true;
-        const keys = ["token", "accessToken", "authToken", "jwt", "airsense_token", "user", "profile"];
-        for (const k of keys) {
-          const v = localStorage.getItem(k);
-          if (v && String(v).trim() && String(v).trim() !== "null" && String(v).trim() !== "undefined") return true;
-        }
-      } catch (e) {}
-      return false;
-    }
+    // =====================
+    // Gov mode UI — driven entirely by sidebar.js modeChanged event
+    // =====================
+    function applyGovUI(isGov) {
+      // Toggle gov CSS class (dùng cho CSS selector: body.is-government)
+      document.body.classList.toggle("is-government", isGov);
 
-    function setGovVisible(isVisible) {
-      if (isVisible) {
-        document.body.classList.add("is-government");
-      } else {
-        document.body.classList.remove("is-government");
-      }
-      const btnPublic = document.querySelector('.text-wrapper-76[data-mode="public"]');
-  const btnMgmt   = document.querySelector('.text-wrapper-77[data-mode="management"]');
-  const rect27    = document.querySelector('.rectangle-27');
-      if (isVisible) {
-    // Quản lý active: rect27 đè phải → chữ trái (Công khai) = đen, chữ phải (Quản lý) = trắng
-    if (btnPublic) { btnPublic.style.color = '#131e29'; btnPublic.style.opacity = '0.5'; }
-    if (btnMgmt)   { btnMgmt.style.color   = '#ffffff'; btnMgmt.style.opacity   = '1';   }
-    if (rect27)    rect27.style.left = '50%';
-  } else {
-    // Công khai active: rect27 đè trái → chữ trái (Công khai) = trắng, chữ phải (Quản lý) = đen
-    if (btnPublic) { btnPublic.style.color = '#ffffff'; btnPublic.style.opacity = '1';   }
-    if (btnMgmt)   { btnMgmt.style.color   = '#131e29'; btnMgmt.style.opacity   = '0.5'; }
-    if (rect27)    rect27.style.left = '0%';
-  }
+      // Gov section (download CSV, reliability chart)
       const govSection = document.getElementById("government-section");
-      if (govSection) govSection.style.display = isVisible ? "block" : "none";
-      window.__IS_GOV__ = !!isVisible;
-      if (typeof window.__setGovMode === "function") window.__setGovMode(!!isVisible);
+      if (govSection) govSection.style.display = isGov ? "block" : "none";
+
+      // Notify recommendations.js charts
+      window.__IS_GOV__ = isGov;
+      if (typeof window.__setGovMode === "function") window.__setGovMode(isGov);
     }
 
-    const btnPublic = document.querySelector('.text-wrapper-76[data-mode="public"]');
-    const btnMgmt = document.querySelector('.text-wrapper-77[data-mode="management"]');
+    // Lắng nghe sidebar.js phát event khi mode thay đổi
+    window.addEventListener("modeChanged", function (e) {
+      const isGov = e.detail?.mode === "management";
+      applyGovUI(isGov);
+    });
 
-    if (btnPublic) {
-      btnPublic.addEventListener("click", function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-        setGovVisible(false);
-      }, true);
-    }
-
-    if (btnMgmt) {
-      btnMgmt.addEventListener("click", function (e) {
-        if (isAuthedLikely()) {
-          e.preventDefault();
-          e.stopPropagation();
-          e.stopImmediatePropagation();
-          setGovVisible(true);
-        }
-      }, true);
-    }
-
-    let previousAuthState = isAuthedLikely();
-    setInterval(function() {
-      const currentAuthState = isAuthedLikely();
-      if (currentAuthState !== previousAuthState) {
-        previousAuthState = currentAuthState;
-        setGovVisible(currentAuthState);
-        if (typeof window !== 'undefined') {
-          window.dispatchEvent(new CustomEvent('recommendations:reload'));
-        }
-      }
-    }, 500);
-
-    setGovVisible(isAuthedLikely());
+    // Init: đọc mode hiện tại từ sidebar (mặc định public)
+    const initMode = localStorage.getItem("currentMode") === "management";
+    applyGovUI(initMode);
   });
 </script>
 
    <script src="../assets/js/recommendations.js"></script>
+
+    <!-- Accordion Logic -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".accordion-header").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            const card = btn.closest(".accordion-card");
+            const isOpen = card.classList.contains("open");
+            // Close all others
+            document.querySelectorAll(".accordion-card.open").forEach(function (c) {
+              c.classList.remove("open");
+              c.querySelector(".accordion-header").setAttribute("aria-expanded", "false");
+            });
+            // Toggle current
+            if (!isOpen) {
+              card.classList.add("open");
+              btn.setAttribute("aria-expanded", "true");
+            }
+          });
+        });
+      });
+    </script>
+
   </body>
 </html>

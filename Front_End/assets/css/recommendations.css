@@ -224,9 +224,9 @@ body {
 .NB-c-khuyencao .table-header,
 .NB-c-khuyencao .table-row {
   display: grid;
-  grid-template-columns: 90px 160px repeat(4, 1fr);
+  grid-template-columns: 70px 110px repeat(5, 1fr);
   align-items: center;
-  gap: 10px;
+  gap: 6px;
   padding: 10px 12px;
   border-radius: 12px;
 }
@@ -406,29 +406,7 @@ body.is-government .gov-compare-chart {
   display: block;
 }
 
-/* ===================== RIGHT STACK ===================== */
-.NB-c-khuyencao .right-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.NB-c-khuyencao .info-title {
-  font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
-  color: #f2f8ff;
-  margin: 0 0 8px 0;
-  font-size: var(--fs-card-title);
-  letter-spacing: 0.6px;
-  line-height: 1.15;
-}
-
-.NB-c-khuyencao .info-list {
-  margin: 0;
-  padding-left: 16px;
-  color: var(--color-text-dark);
-  font-size: var(--fs-body);
-  line-height: 1.45;
-}
+/* RIGHT STACK — see bottom of file for clean rewrite */
 
 /* ===================== BOTTOM ===================== */
 .NB-c-khuyencao .bottom-card {
@@ -540,7 +518,7 @@ body.is-government .gov-compare-chart {
 
   .NB-c-khuyencao .table-header,
   .NB-c-khuyencao .table-row {
-    grid-template-columns: 70px 1fr repeat(4, 1fr);
+    grid-template-columns: 70px 1fr repeat(5, 1fr);
     font-size: var(--fs-table);
   }
 
@@ -668,182 +646,324 @@ body.is-government .public-summary-chart{
   opacity: 0.75;
   margin-top: 12px;
 }
-/* ==================================================
-   FIX 1: TÁCH CÁC Ô TRẮNG (TABLE ROWS) RÕ RÀNG
-   Fix chắc ăn: dùng margin thay vì chỉ rely vào gap
-================================================== */
 
-/* đảm bảo table có khoảng thở */
-.NB-c-khuyencao .table{
-  gap: 12px; /* tăng nhẹ */
+/* ===================== RIGHT STACK — CLEAN REWRITE ===================== */
+.NB-c-khuyencao .right-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
-/* mỗi row tự có khoảng cách -> không còn cảm giác dính */
-.NB-c-khuyencao .table-row{
-  margin-top: 0;
-  margin-bottom: 12px;
-}
-
-/* row cuối không cần margin */
-.NB-c-khuyencao .table-row:last-child{
-  margin-bottom: 0;
-}
-
-/* header cách row đầu ra rõ hơn */
-.NB-c-khuyencao .table-header{
-  margin-bottom: 12px;
-}
-
-/* ==================================================
-   FIX 2: CARD "VÌ SAO PM2.5 TĂNG?" = ĐÚNG FONT/VIBE NHƯ CARD DƯỚI
-================================================== */
-
-/* ép font hệ của card trên giống card dưới */
-.NB-c-khuyencao .right-stack .card:first-child,
-.NB-c-khuyencao .right-stack .card:first-child *{
+/* ===================== REASONS CARD (mini-grid) ===================== */
+.reasons-card .info-title {
   font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
-}
-
-/* title giống card dưới */
-.NB-c-khuyencao .right-stack .card:first-child .info-title{
+  color: #f2f8ff;
+  margin: 0 0 14px 0;
   font-size: var(--fs-card-title);
-  font-weight: 800;
-  letter-spacing: 0.6px; /* giống hệt .info-title card dưới */
+  letter-spacing: 0.4px;
   line-height: 1.15;
-  margin-bottom: 10px;
 }
 
-/* list trong card trên giống .info-list card dưới */
-.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons{
-  margin: 0;
-  padding-left: 16px;         /* giống .info-list */
-  font-size: var(--fs-body);  /* cùng size */
-  line-height: 1.45;
-  letter-spacing: 0;          /* bỏ kiểu “reason” */
+.reasons-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
 }
 
-/* mỗi bullet spacing giống card dưới */
-.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons li.reason-item{
-  margin: 10px 0;
+.reason-mini-card {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 14px;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: background 160ms ease, transform 160ms ease;
+  cursor: default;
 }
 
-/* reason-title = phần in đậm trong bullet của card dưới */
-.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons .reason-title{
-  font-size: inherit;
-  font-weight: 800;
-  line-height: inherit;
-  margin: 0;
-  letter-spacing: 0; /* bỏ lệch vibe */
+.reason-mini-card:hover {
+  background: rgba(255, 255, 255, 0.26);
+  transform: translateY(-2px);
 }
 
-/* reason-detail = text thường ngay dưới */
-.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons .reason-detail{
-  font-size: inherit;
-  font-weight: 500;
-  line-height: inherit;
-  margin: 4px 0 0 0;
-  opacity: 0.92;
+.reason-mini-card.skeleton {
+  opacity: 0.5;
 }
 
-/* marker giống card dưới */
-.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons li::marker{
-  font-size: 0.95em;
-  color: rgba(10,20,30,0.55);
-}
-
-/* note (*) giống style phụ của card dưới */
-.NB-c-khuyencao .right-stack .card:first-child .public-note{
-  font-family: "72-Regular", "Segoe UI", Arial, sans-serif;
+.reason-mini-num {
+  font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
   font-size: var(--fs-small);
-  line-height: 1.35;
-  opacity: 0.75;
-  margin-top: 12px;
-}
-/* ================================
-   FIX: PM2.5 card dùng đúng font như card dưới
-================================ */
-
-/* Bỏ mọi override riêng cho #public-top-reasons */
-#public-top-reasons,
-#public-top-reasons li,
-#public-top-reasons .reason-title,
-#public-top-reasons .reason-detail {
-  font-size: var(--fs-body) !important;
-  font-weight: inherit !important;
-  line-height: 1.45 !important;
-  letter-spacing: normal !important;
+  font-weight: 800;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.5px;
 }
 
-/* Title đậm giống các strong bên dưới */
-#public-top-reasons strong,
-#public-top-reasons .reason-title {
-  font-weight: 800 !important;
-}
-/* ==================================================
-   HARD FIX: PM2.5 card giống 100% card dưới (GIÓ)
-   (override cuối file)
-================================================== */
-
-/* Card PM2.5 = card đầu tiên trong right-stack */
-.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons,
-.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons li,
-.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons * {
-  font-family: inherit !important;
-  font-size: var(--fs-body) !important;
-  line-height: 1.45 !important;
-  letter-spacing: 0 !important;
+.reason-mini-title {
+  font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
+  font-size: var(--fs-body);
+  font-weight: 800;
+  color: #f2f8ff;
+  line-height: 1.3;
 }
 
-/* title trong mỗi bullet: ép giống <strong> ở card dưới */
-.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons .reason-title {
-  display: inline !important;      /* giống strong inline */
-  font-weight: 800 !important;     /* giống strong */
-  margin: 0 !important;
+.reason-mini-detail {
+  font-size: var(--fs-small);
+  color: rgba(242, 248, 255, 0.75);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* ===================== ACCORDION CARDS ===================== */
+.accordion-card {
   padding: 0 !important;
+  overflow: hidden;
 }
 
-/* phần mô tả: ép giống text thường ngay sau strong */
-.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons .reason-detail {
-  display: inline !important;      /* để nó đọc như 1 bullet, giống card dưới */
-  font-weight: 500 !important;
-  opacity: 1 !important;
-  margin: 0 !important;
-  padding: 0 !important;
+.accordion-header {
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  text-align: left;
+  transition: background 140ms ease;
+  border-radius: 18px;
 }
 
-/* Nếu JS bọc detail bằng <p> thì p mặc định hay có margin -> bỏ đi */
-.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons p {
-  display: inline !important;
-  margin: 0 !important;
+.accordion-card.open .accordion-header {
+  border-radius: 18px 18px 0 0;
+  background: rgba(255,255,255,0.08);
 }
 
-/* marker giống card dưới */
-.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons li::marker {
-  font-size: 1em !important;
-  color: rgba(10,20,30,0.55) !important;
+.accordion-header:hover {
+  background: rgba(255,255,255,0.08);
 }
-/* ================================
-   FIX: PM2.5 bớt đậm, match card dưới
-   (paste cuối file)
-================================ */
 
-/* Card PM2.5 */
-.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons{
+.accordion-num {
+  font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
+  font-size: var(--fs-small);
+  font-weight: 800;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.8px;
+  line-height: 1;
+  flex-shrink: 0;
+  width: 22px;
+}
+
+.accordion-title {
+  font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
+  font-size: var(--fs-body);
+  font-weight: 800;
+  color: #f2f8ff;
+  letter-spacing: 0.2px;
+  line-height: 1.2;
+  flex: 1;
+}
+
+.accordion-toggle-label {
+  font-size: var(--fs-small);
+  color: rgba(242,248,255,0.5);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color 140ms ease;
+}
+
+.accordion-card.open .accordion-toggle-label {
+  color: rgba(242,248,255,0.0);
+}
+
+.accordion-chevron {
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.45);
+  transition: transform 220ms ease;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.accordion-card.open .accordion-chevron {
+  transform: rotate(90deg);
+}
+
+.accordion-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 300ms ease, padding 220ms ease;
+  padding: 0 18px;
+}
+
+.accordion-card.open .accordion-body {
+  max-height: 600px;
+  padding: 4px 18px 16px;
+}
+
+/* Info list inside accordion */
+.NB-c-khuyencao .accordion-body .info-list {
+  margin: 0;
+  padding-left: 16px;
+  color: var(--color-text-dark);
+  font-family: "72-Regular", "Segoe UI", Arial, sans-serif;
+  font-size: var(--fs-body);
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.NB-c-khuyencao .accordion-body .info-list li {
+  margin: 0;
+}
+
+.NB-c-khuyencao .accordion-body .info-list strong {
+  font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
+  font-weight: 700;
+  color: #131e29;
+}
+
+/* ===================== INFO TITLE (non-accordion cards) ===================== */
+.NB-c-khuyencao .info-title {
+  font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
+  color: #f2f8ff;
+  margin: 0 0 8px 0;
+  font-size: var(--fs-card-title);
+  letter-spacing: 0.4px;
+  line-height: 1.15;
+}
+
+.NB-c-khuyencao .info-list {
+  margin: 0;
+  padding-left: 16px;
+  color: var(--color-text-dark);
   font-size: var(--fs-body);
   line-height: 1.45;
 }
 
-/* Title trong bullet: giảm đậm xuống giống strong của card dưới */
-.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons .reason-title{
-  font-weight: 700 !important; /* trước đang 800 nên nhìn nặng */
+/* ===================== TABLE spacing cleanup ===================== */
+.NB-c-khuyencao .table {
+  gap: 10px;
 }
 
-/* Detail luôn là thường */
-.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons .reason-detail{
-  font-weight: 500 !important;
+.NB-c-khuyencao .table-row {
+  margin-bottom: 0;
 }
 
-/* Nếu cả <li> bị inherit đậm từ đâu đó -> ép lại */
-.NB-c-khuyencao .right-stack .card:first-child #public-top-reasons li{
-  font-weight: 500 !important;
+.NB-c-khuyencao .table-header {
+  margin-bottom: 4px;
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 700px) {
+  .reasons-mini-grid {
+    grid-template-columns: 1fr;
+  }
+  .accordion-summary {
+    display: none;
+  }
+  .accordion-header {
+    grid-template-columns: 36px 1fr 20px;
+  }
+}
+/* ===================== TABLE spacing — PATCH ===================== */
+
+/* ✅ FIX 1: stations-container phải là flex column với gap, tách khỏi summary */
+#stations-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.09);
+}
+
+/* ✅ FIX 2: Pill không chiếm full width cell — canh giữa, có min-width */
+.NB-c-khuyencao .value-pill {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  min-width: 56px;
+  max-width: 110px;
+  width: auto;
+  padding: 4px 10px;
+  margin: 0 auto;
+  border-radius: 10px;
+  font-size: var(--fs-pill);
+  font-family: "72-Bold", "Segoe UI", Arial, sans-serif;
+  color: var(--color-text-dark);
+  /* Make table columns center the pill */
+}
+
+/* ✅ FIX 3: Table value columns center content */
+.NB-c-khuyencao .table-header div,
+.NB-c-khuyencao .table-row > div:nth-child(n+3) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ✅ FIX 4: Legend wrap fix — each pill+range pair stays together */
+.legend-row {
+  display: flex;
+  gap: 6px 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.legend-pair {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+/* ✅ FIX 5: Table gap tighter */
+.NB-c-khuyencao .table {
+  gap: 6px !important;
+}
+.toggle-btn.toggle-no-data {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+  border-style: dashed;
+}
+/* ================= GOV PREVIEW TABLE ================= */
+
+.gov-preview-wrap {
+  margin-top: 14px;
+  max-height: 260px;
+  overflow-y: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: rgba(255,255,255,0.65);
+}
+
+.gov-preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-small);
+  color: #131e29;
+}
+
+.gov-preview-table thead {
+  background: rgba(19,30,41,0.08);
+  position: sticky;
+  top: 0;
+}
+
+.gov-preview-table th,
+.gov-preview-table td {
+  padding: 8px 10px;
+  text-align: center;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.gov-preview-table th:first-child,
+.gov-preview-table td:first-child {
+  text-align: left;
+}
+
+.gov-preview-table tbody tr:hover {
+  background: rgba(19,30,41,0.05);
 }

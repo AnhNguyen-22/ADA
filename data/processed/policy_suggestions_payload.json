@@ -1,0 +1,432 @@
+{
+  "generated_at": "2026-02-28T18:19:09.864816",
+  "location": "Thành phố Hồ Chí Minh",
+  "who_guideline": {
+    "metric": "PM2.5",
+    "period": "24h",
+    "value": 15.0,
+    "unit": "µg/m³"
+  },
+  "model_used": {
+    "horizon": 1,
+    "model_type": "Random Forest",
+    "mae": 3.9947
+  },
+  "shap": {
+    "available": true,
+    "plot_url": "/content/drive/Shareddrives/ADA/DATA/policy_suggestions/shap_by_station/tplus_1h/shap_summary_global.png",
+    "bar_url": "/content/drive/Shareddrives/ADA/DATA/policy_suggestions/shap_by_station/tplus_1h/shap_bar_global.png",
+    "horizon": 1,
+    "subtitle": "SHAP beeswarm: trục X là mức tác động lên dự báo PM2.5; biến trên cùng ảnh hưởng mạnh nhất.",
+    "color_legend": "Màu đỏ = giá trị biến cao; màu xanh = giá trị biến thấp."
+  },
+  "shap_station_plots": {
+    "3": "/content/drive/Shareddrives/ADA/DATA/policy_suggestions/shap_by_station/tplus_1h/shap_summary_station_3.png",
+    "1": "/content/drive/Shareddrives/ADA/DATA/policy_suggestions/shap_by_station/tplus_1h/shap_summary_station_1.png",
+    "4": "/content/drive/Shareddrives/ADA/DATA/policy_suggestions/shap_by_station/tplus_1h/shap_summary_station_4.png",
+    "5": "/content/drive/Shareddrives/ADA/DATA/policy_suggestions/shap_by_station/tplus_1h/shap_summary_station_5.png",
+    "6": "/content/drive/Shareddrives/ADA/DATA/policy_suggestions/shap_by_station/tplus_1h/shap_summary_station_6.png"
+  },
+  "top_features": [
+    {
+      "feature": "PM2.5_lag1",
+      "mean_abs_shap": 7.462993
+    },
+    {
+      "feature": "CO_current",
+      "mean_abs_shap": 1.325383
+    },
+    {
+      "feature": "CO",
+      "mean_abs_shap": 1.323658
+    },
+    {
+      "feature": "CO_lag1",
+      "mean_abs_shap": 1.267517
+    },
+    {
+      "feature": "Temperature_lag1",
+      "mean_abs_shap": 0.647618
+    },
+    {
+      "feature": "PM2.5_lag2",
+      "mean_abs_shap": 0.361208
+    },
+    {
+      "feature": "Humidity_lag3",
+      "mean_abs_shap": 0.329493
+    },
+    {
+      "feature": "CO_lag3",
+      "mean_abs_shap": 0.319975
+    },
+    {
+      "feature": "PM2.5_lag48",
+      "mean_abs_shap": 0.317856
+    },
+    {
+      "feature": "PM2.5_roll_24h",
+      "mean_abs_shap": 0.231842
+    },
+    {
+      "feature": "PM2.5_roll_6h",
+      "mean_abs_shap": 0.220203
+    },
+    {
+      "feature": "PM2.5_roll_3h",
+      "mean_abs_shap": 0.193602
+    },
+    {
+      "feature": "PM2.5_lag24",
+      "mean_abs_shap": 0.188684
+    },
+    {
+      "feature": "PM2.5_roll_12h",
+      "mean_abs_shap": 0.187491
+    },
+    {
+      "feature": "Temperature_current",
+      "mean_abs_shap": 0.170725
+    }
+  ],
+  "top_features_by_station": {
+    "1.0": [
+      {
+        "feature": "PM2.5_lag1",
+        "mean_abs_shap": 6.642746
+      },
+      {
+        "feature": "CO_lag1",
+        "mean_abs_shap": 1.264535
+      },
+      {
+        "feature": "CO_current",
+        "mean_abs_shap": 1.253766
+      },
+      {
+        "feature": "CO",
+        "mean_abs_shap": 1.240692
+      },
+      {
+        "feature": "Temperature_lag1",
+        "mean_abs_shap": 0.733685
+      },
+      {
+        "feature": "PM2.5_lag48",
+        "mean_abs_shap": 0.318053
+      },
+      {
+        "feature": "CO_lag3",
+        "mean_abs_shap": 0.284593
+      },
+      {
+        "feature": "Humidity_lag3",
+        "mean_abs_shap": 0.283498
+      }
+    ],
+    "3.0": [
+      {
+        "feature": "PM2.5_lag1",
+        "mean_abs_shap": 9.149183
+      },
+      {
+        "feature": "CO",
+        "mean_abs_shap": 1.555348
+      },
+      {
+        "feature": "CO_current",
+        "mean_abs_shap": 1.52994
+      },
+      {
+        "feature": "CO_lag1",
+        "mean_abs_shap": 1.37118
+      },
+      {
+        "feature": "Temperature_lag1",
+        "mean_abs_shap": 0.628797
+      },
+      {
+        "feature": "PM2.5_lag2",
+        "mean_abs_shap": 0.573465
+      },
+      {
+        "feature": "PM2.5_lag48",
+        "mean_abs_shap": 0.372757
+      },
+      {
+        "feature": "CO_lag3",
+        "mean_abs_shap": 0.348041
+      }
+    ],
+    "4.0": [
+      {
+        "feature": "PM2.5_lag1",
+        "mean_abs_shap": 6.916412
+      },
+      {
+        "feature": "CO_lag1",
+        "mean_abs_shap": 1.396469
+      },
+      {
+        "feature": "CO_current",
+        "mean_abs_shap": 1.325333
+      },
+      {
+        "feature": "CO",
+        "mean_abs_shap": 1.324746
+      },
+      {
+        "feature": "Temperature_lag1",
+        "mean_abs_shap": 0.6453
+      },
+      {
+        "feature": "Humidity_lag3",
+        "mean_abs_shap": 0.55303
+      },
+      {
+        "feature": "CO_lag3",
+        "mean_abs_shap": 0.403828
+      },
+      {
+        "feature": "PM2.5_lag2",
+        "mean_abs_shap": 0.334923
+      }
+    ],
+    "5.0": [
+      {
+        "feature": "PM2.5_lag1",
+        "mean_abs_shap": 7.348189
+      },
+      {
+        "feature": "CO_current",
+        "mean_abs_shap": 1.159391
+      },
+      {
+        "feature": "CO",
+        "mean_abs_shap": 1.13985
+      },
+      {
+        "feature": "CO_lag1",
+        "mean_abs_shap": 1.019351
+      },
+      {
+        "feature": "Temperature_lag1",
+        "mean_abs_shap": 0.488571
+      },
+      {
+        "feature": "Humidity_lag3",
+        "mean_abs_shap": 0.312502
+      },
+      {
+        "feature": "PM2.5_lag48",
+        "mean_abs_shap": 0.301736
+      },
+      {
+        "feature": "CO_lag3",
+        "mean_abs_shap": 0.284753
+      }
+    ],
+    "6.0": [
+      {
+        "feature": "PM2.5_lag1",
+        "mean_abs_shap": 7.258434
+      },
+      {
+        "feature": "CO_current",
+        "mean_abs_shap": 1.358487
+      },
+      {
+        "feature": "CO",
+        "mean_abs_shap": 1.357654
+      },
+      {
+        "feature": "CO_lag1",
+        "mean_abs_shap": 1.286051
+      },
+      {
+        "feature": "Temperature_lag1",
+        "mean_abs_shap": 0.741736
+      },
+      {
+        "feature": "PM2.5_lag2",
+        "mean_abs_shap": 0.456669
+      },
+      {
+        "feature": "Humidity_lag3",
+        "mean_abs_shap": 0.359383
+      },
+      {
+        "feature": "PM2.5_lag48",
+        "mean_abs_shap": 0.290118
+      }
+    ]
+  },
+  "detected_scenarios": [
+    {
+      "station": "1.0",
+      "scenarios": [
+        "PM2.5 tăng, NO₂ & CO có SHAP dương mạnh",
+        "PM2.5 tăng khi độ ẩm cao kéo dài",
+        "PM2.5 duy trì > ngưỡng WHO 24h (15 µg/m³) nhiều ngày"
+      ]
+    },
+    {
+      "station": "2.0",
+      "scenarios": [
+        "PM2.5 tăng khi độ ẩm cao kéo dài",
+        "PM2.5 duy trì > ngưỡng WHO 24h (15 µg/m³) nhiều ngày"
+      ]
+    },
+    {
+      "station": "4.0",
+      "scenarios": [
+        "PM2.5 tăng, NO₂ & CO có SHAP dương mạnh",
+        "PM2.5 duy trì > ngưỡng WHO 24h (15 µg/m³) nhiều ngày"
+      ]
+    },
+    {
+      "station": "6.0",
+      "scenarios": [
+        "PM2.5 tăng, NO₂ & CO có SHAP dương mạnh",
+        "PM2.5 tăng khi độ ẩm cao kéo dài",
+        "PM2.5 duy trì > ngưỡng WHO 24h (15 µg/m³) nhiều ngày"
+      ]
+    }
+  ],
+  "policy_suggestions": [
+    {
+      "scenario": "PM2.5 duy trì > ngưỡng WHO 24h (15 µg/m³) nhiều ngày",
+      "interpretation": "Tăng rủi ro phơi nhiễm",
+      "policies": {
+        "health": "Phát đi cảnh báo đợt ô nhiễm kéo dài; tăng cường theo dõi, điều trị nhóm nhạy cảm",
+        "urban_env": "Kế hoạch giảm phát thải trung hạn; kiểm soát đốt than/củi",
+        "education": "Giáo dục kỹ năng tự bảo vệ cho học sinh"
+      },
+      "priority": "HIGH",
+      "trigger": "Rule-based: PM2.5 > 15 µg/m³ liên tục ≥ 3 ngày"
+    },
+    {
+      "scenario": "PM2.5 tăng, NO₂ & CO có SHAP dương mạnh",
+      "interpretation": "Phát thải đốt từ giao thông; đồng phát thải NO₂/CO đi cùng bụi mịn",
+      "policies": {
+        "health": "Phát cảnh báo theo cấp; chuẩn bị tiếp nhận tăng ca hô hấp; tư vấn giảm gắng sức",
+        "urban_env": "Điều tiết giao thông theo khung giờ; tăng kiểm tra khí thải/khói đen; rửa đường, che chắn công trình",
+        "education": "Giảm thể dục ngoài trời; bố trí ca học linh hoạt cho giáo dục thể chất, hoạt động ngoại khóa ngoài trời"
+      },
+      "priority": "MEDIUM",
+      "trigger": "SHAP-based: NO2/CO positive SHAP + PM2.5 tăng"
+    },
+    {
+      "scenario": "PM2.5 tăng khi độ ẩm cao kéo dài",
+      "interpretation": "Bụi hút ẩm & hình thành aerosol (sương mù bụi); bụi tích lũy do khuếch tán kém",
+      "policies": {
+        "health": "Phát cảnh báo giảm phơi nhiễm cho nhóm nhạy cảm; theo dõi triệu chứng sức khỏe bất thường",
+        "urban_env": "Tăng rửa đường; kiểm soát nguồn đốt mở; cập nhật cảnh báo theo giờ",
+        "education": "Hạn chế vận động ngoài trời; tăng nghỉ xen kẽ"
+      },
+      "priority": "MEDIUM",
+      "trigger": "Rule-based: Humidity cao kéo dài + PM2.5 tăng"
+    }
+  ],
+  "policy_table_full": [
+    {
+      "scenario": "PM2.5 tăng, NO₂ & CO có SHAP dương mạnh",
+      "interpretation": "Phát thải đốt từ giao thông; đồng phát thải NO₂/CO đi cùng bụi mịn",
+      "policies": {
+        "health": "Phát cảnh báo theo cấp; chuẩn bị tiếp nhận tăng ca hô hấp; tư vấn giảm gắng sức",
+        "urban_env": "Điều tiết giao thông theo khung giờ; tăng kiểm tra khí thải/khói đen; rửa đường, che chắn công trình",
+        "education": "Giảm thể dục ngoài trời; bố trí ca học linh hoạt cho giáo dục thể chất, hoạt động ngoại khóa ngoài trời"
+      },
+      "priority": "MEDIUM",
+      "trigger": "SHAP-based: NO2/CO positive SHAP + PM2.5 tăng"
+    },
+    {
+      "scenario": "PM2.5 tăng, SO₂ có SHAP dương mạnh",
+      "interpretation": "Nguồn đốt điểm, nguồn đốt công nghiệp",
+      "policies": {
+        "health": "Tăng trực cấp cứu; thông báo khẩn khu vực bị ảnh hưởng",
+        "urban_env": "Kiểm tra tuân thủ phát thải; tạm hạn chế nguồn điểm nghi vấn; lấy mẫu tăng cường 24–72h",
+        "education": "Chuyển hoạt động vào trong nhà; giảm thời gian phơi nhiễm"
+      },
+      "priority": "MEDIUM",
+      "trigger": "SHAP-based: SO2 positive SHAP + PM2.5 tăng"
+    },
+    {
+      "scenario": "PM2.5 tăng khi độ ẩm cao kéo dài",
+      "interpretation": "Bụi hút ẩm & hình thành aerosol (sương mù bụi); bụi tích lũy do khuếch tán kém",
+      "policies": {
+        "health": "Phát cảnh báo giảm phơi nhiễm cho nhóm nhạy cảm; theo dõi triệu chứng sức khỏe bất thường",
+        "urban_env": "Tăng rửa đường; kiểm soát nguồn đốt mở; cập nhật cảnh báo theo giờ",
+        "education": "Hạn chế vận động ngoài trời; tăng nghỉ xen kẽ"
+      },
+      "priority": "MEDIUM",
+      "trigger": "Rule-based: Humidity cao kéo dài + PM2.5 tăng"
+    },
+    {
+      "scenario": "PM2.5 tăng khi nhiệt độ thấp",
+      "interpretation": "Nhiệt độ thấp giữ bụi mịn ở tầng sát mặt đất",
+      "policies": {
+        "health": "Phát đi cảnh báo ô nhiễm nghiêm trọng; bố trí lực lượng tư vấn sức khỏe từ xa cho người dân",
+        "urban_env": "Hạn chế thi công công trình ngoài trời; kiểm soát điểm đốt phụ phẩm; khuyến khích người dân sử dụng phương tiện công cộng",
+        "education": "Chuyển hoạt động thể chất vào nhà"
+      },
+      "priority": "MEDIUM",
+      "trigger": "Rule-based: Temperature thấp + PM2.5 tăng"
+    },
+    {
+      "scenario": "PM2.5 tăng kèm O₃ & nhiệt độ cao",
+      "interpretation": "Quang hóa mạnh; hình thành aerosol hữu cơ thứ cấp",
+      "policies": {
+        "health": "Phát đi khuyến cáo người dân hạn chế ra đường khung giờ nắng nóng; tăng cường theo dõi, tư vấn cho nhóm nhạy cảm",
+        "urban_env": "Kiểm soát các nguồn dễ bay hơi (xăng, dầu, cồn,...); điều tiết giao thông giờ nắng gắt",
+        "education": "Điều chỉnh giờ học/hoạt động tránh khung giờ nắng gắt 11–15h"
+      },
+      "priority": "MEDIUM",
+      "trigger": "Rule-based: O3 cao + Temperature cao + PM2.5 tăng"
+    },
+    {
+      "scenario": "Spike PM2.5 đột ngột tại một trạm",
+      "interpretation": "Sự cố cục bộ",
+      "policies": {
+        "health": "Phát đi cảnh báo cục bộ; tăng cường đội ngũ y tế khu vực ảnh hưởng",
+        "urban_env": "Điều tra nguồn khởi điểm; xử phạt vi phạm; giám sát tăng cường",
+        "education": "Thông báo phụ huynh; hạn chế hoạt động ngoài trời tại khu vực ảnh hưởng"
+      },
+      "priority": "HIGH",
+      "trigger": "Rule-based: PM2.5 tăng đột ngột ≥ 3× rolling mean tại 1 trạm"
+    },
+    {
+      "scenario": "PM2.5 duy trì > ngưỡng WHO 24h (15 µg/m³) nhiều ngày",
+      "interpretation": "Tăng rủi ro phơi nhiễm",
+      "policies": {
+        "health": "Phát đi cảnh báo đợt ô nhiễm kéo dài; tăng cường theo dõi, điều trị nhóm nhạy cảm",
+        "urban_env": "Kế hoạch giảm phát thải trung hạn; kiểm soát đốt than/củi",
+        "education": "Giáo dục kỹ năng tự bảo vệ cho học sinh"
+      },
+      "priority": "HIGH",
+      "trigger": "Rule-based: PM2.5 > 15 µg/m³ liên tục ≥ 3 ngày"
+    },
+    {
+      "scenario": "PM2.5 ≥ 151 AQI nhiều ngày liên tiếp",
+      "interpretation": "Đợt ô nhiễm diện rộng",
+      "policies": {
+        "health": "Kích hoạt cơ chế ứng phó cấp địa phương; tăng năng lực cấp cứu",
+        "urban_env": "Hạn chế phương tiện cá nhân giờ cao điểm; tạm dừng thi công ngoài trời",
+        "education": "Giảm/hoãn hoạt động ngoài trời; xem xét học linh hoạt"
+      },
+      "priority": "HIGH",
+      "trigger": "Rule-based: AQI ≥ 151 liên tục ≥ 2 ngày"
+    },
+    {
+      "scenario": "PM2.5 ≥ 301 AQI (nguy hại), kéo dài ≥ 3 ngày",
+      "interpretation": "Tình trạng khẩn cấp sức khỏe",
+      "policies": {
+        "health": "Cảnh báo y tế khẩn cấp; đường dây nóng; dự phòng vật tư y tế; tăng cường đội ngũ y tế trực; đề xuất nghỉ học",
+        "urban_env": "Tạm dừng hoạt động ngoài trời không thiết yếu; giảm lưu lượng giao thông tối đa",
+        "education": "Xem xét cho học sinh nghỉ học trực tiếp; dừng hoạt động ngoài trời không thiết yếu"
+      },
+      "priority": "CRITICAL",
+      "trigger": "Rule-based: AQI ≥ 301 kéo dài ≥ 3 ngày"
+    }
+  ]
+}
