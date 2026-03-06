@@ -51,6 +51,12 @@ body {
 
   /* Strong line (like reason-title) */
   --fs-strong: 0.8125rem;
+
+  /* Override panel backgrounds → trong suốt */
+  --color-panel-bg: rgba(255, 255, 255, 0.08);
+  --color-panel-border: rgba(255, 255, 255, 0.18);
+  --color-table-head-bg: rgba(255, 255, 255, 0.12);
+  --color-surface: rgba(255, 255, 255, 0.07);
 }
 
 @supports selector(:has(*)) {
@@ -100,13 +106,13 @@ body {
 
 .page-grid {
   display: grid;
-  grid-template-columns: 1.35fr 0.9fr;
+  grid-template-columns: 1fr 1fr;
   gap: 18px;
 }
 
 .NB-c-khuyencao .card {
-  background: var(--color-panel-bg);
-  border: 1px solid var(--color-panel-border);
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
   border-radius: 18px;
   padding: 14px;
   box-shadow: var(--shadow-card);
@@ -143,16 +149,16 @@ body {
 
 .public-meta-grid {
   display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
+  grid-template-columns: 1fr;
   gap: 12px;
   margin: 10px 0 14px;
 }
 
 .public-box {
   padding: 10px 12px;
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.55);
+  background: transparent;
 }
 
 .public-box-title {
@@ -165,9 +171,21 @@ body {
 
 .legend-row {
   display: flex;
-  gap: 10px;
+  gap: 8px 12px;
   flex-wrap: wrap;
   align-items: center;
+  margin-top: 10px;
+}
+
+.legend-pair {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.22);
+  border: 1px solid rgba(255,255,255,0.30);
 }
 
 .legend-pill {
@@ -175,8 +193,10 @@ body {
 }
 
 .legend-range {
-  color: #666;
+  color: #444;
   font-size: var(--fs-small);
+  font-weight: 600;
+  opacity: 0.80;
 }
 
 .public-note {
@@ -198,8 +218,8 @@ body {
 .who-item {
   padding: 8px 10px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .who-label {
@@ -224,7 +244,7 @@ body {
 .NB-c-khuyencao .table-header,
 .NB-c-khuyencao .table-row {
   display: grid;
-  grid-template-columns: 70px 110px repeat(5, 1fr);
+  grid-template-columns: 130px repeat(5, 1fr);
   align-items: center;
   gap: 6px;
   padding: 10px 12px;
@@ -233,18 +253,28 @@ body {
 
 /* Header rõ hơn chút (theo vibe card) */
 .NB-c-khuyencao .table-header {
-  background: var(--color-table-head-bg);
+  background: rgba(255, 255, 255, 0.12) !important;
   font-size: var(--fs-table);
   font-family: "72-Semibold", Helvetica;
   color: var(--color-text-dark);
   letter-spacing: 0.2px;
 }
 
-/* Body table: giống body text */
+/* Body table: trong suốt */
 .NB-c-khuyencao .table-row {
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.07) !important;
   font-size: var(--fs-table);
   color: var(--color-text-dark);
+}
+
+/* ✅ FORCE override main.css bất kể selector nào */
+.NB-c-khuyencao #forecast-table .table-row,
+.NB-c-khuyencao #forecast-table #hcmc-summary-row,
+.NB-c-khuyencao #forecast-table #stations-container .table-row {
+  background: rgba(255, 255, 255, 0.07) !important;
+}
+.NB-c-khuyencao #forecast-table .table-header {
+  background: rgba(255, 255, 255, 0.12) !important;
 }
 
 .NB-c-khuyencao .station {
@@ -289,6 +319,17 @@ body {
   background: rgba(159, 118, 132, 0.45);
 }
 
+.pill-gray {
+  background: rgba(180, 185, 190, 0.35);
+  color: #6b7280;
+}
+
+/* ===================== CANVAS MIN HEIGHT ===================== */
+.public-chart-canvas-wrap,
+.gov-chart-canvas-wrap {
+  min-height: 180px;
+}
+
 /* ===================== HOVER COLUMN HIGHLIGHT ===================== */
 #forecast-table .table-header .hoverable-col {
   cursor: pointer;
@@ -296,21 +337,21 @@ body {
 }
 
 .col-highlight {
-  background: rgba(255, 255, 255, 0.35) !important;
-  border: 2px solid rgba(19, 30, 41, 0.35) !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  border: 2px solid rgba(255, 255, 255, 0.35) !important;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08) !important;
   transform: translateY(-1px);
   transition: 120ms ease;
 }
 
 .col-highlight-header {
-  background: rgba(255, 255, 255, 0.28) !important;
+  background: rgba(255, 255, 255, 0.15) !important;
   border-radius: 999px;
   padding: 6px 10px;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  border: 1px solid rgba(19, 30, 41, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 /* ===================== PUBLIC vs GOVERNMENT VISIBILITY ===================== */
@@ -330,17 +371,19 @@ body.is-government .station-row {
 }
 
 /* ===================== GOVERNMENT COMPARE CHART (nằm dưới bảng) ===================== */
-.gov-compare-chart {
-  display: none; /* chỉ hiện khi gov */
-  margin-top: 12px;
-  padding: 12px;
-  border-radius: 16px;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  background: transparent;
+/* ✅ GOV CHART — full-width card standalone (bên dưới page-grid) */
+#gov-compare-chart {
+  display: none; /* ẩn khi public */
+  margin-top: 0;
 }
 
-body.is-government .gov-compare-chart {
+body.is-government #gov-compare-chart {
   display: block;
+}
+
+/* Giữ class cũ để không break JS nào còn tham chiếu */
+.gov-compare-chart-card {
+  width: 100%;
 }
 
 .gov-chart-header {
@@ -373,8 +416,8 @@ body.is-government .gov-compare-chart {
 }
 
 .toggle-btn {
-  border: 1px solid rgba(19, 30, 41, 0.18);
-  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.12);
   color: #131e29;
   border-radius: 999px;
   padding: 8px 10px;
@@ -399,11 +442,17 @@ body.is-government .gov-compare-chart {
 
 .gov-chart-canvas-wrap {
   width: 100%;
+  min-height: 220px;
 }
 
 #compare-line-chart {
   width: 100%;
   display: block;
+}
+
+/* spacing giữa page-grid và chart card */
+.NB-c-khuyencao main > * + * {
+  margin-top: 18px;
 }
 
 /* RIGHT STACK — see bottom of file for clean rewrite */
@@ -457,8 +506,8 @@ body.is-government .gov-compare-chart {
   min-width: 320px;
   padding: 14px;
   border-radius: 16px;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: transparent;
 }
 
 .gov-row {
@@ -471,13 +520,13 @@ body.is-government .gov-compare-chart {
 
 .gov-title {
   font-weight: 600;
-  color: #131e29;
+  color: #f2f8ff;
   margin-bottom: 4px;
   font-size: var(--fs-section-title);
 }
 
 .gov-desc {
-  color: #666;
+  color: rgba(242, 248, 255, 0.70);
   font-size: var(--fs-body);
   margin-bottom: 10px;
   line-height: 1.4;
@@ -488,7 +537,8 @@ body.is-government .gov-compare-chart {
   cursor: pointer;
   padding: 10px 14px;
   border-radius: 12px;
-  background: #131e29;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   color: #fff;
   font-weight: 600;
   font-size: var(--fs-small);
@@ -796,8 +846,9 @@ body.is-government .public-summary-chart{
 }
 
 .accordion-card.open .accordion-body {
-  max-height: 600px;
+  max-height: 9999px;
   padding: 4px 18px 16px;
+  transition: max-height 400ms cubic-bezier(0.4, 0, 0.2, 1), padding 220ms ease;
 }
 
 /* Info list inside accordion */
@@ -897,7 +948,7 @@ body.is-government .public-summary-chart{
 
 /* ✅ FIX 3: Table value columns center content */
 .NB-c-khuyencao .table-header div,
-.NB-c-khuyencao .table-row > div:nth-child(n+3) {
+.NB-c-khuyencao .table-row > div:nth-child(n+2) {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -935,19 +986,19 @@ body.is-government .public-summary-chart{
   max-height: 260px;
   overflow-y: auto;
   border-radius: 12px;
-  border: 1px solid rgba(0,0,0,0.08);
-  background: rgba(255,255,255,0.65);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: transparent;
 }
 
 .gov-preview-table {
   width: 100%;
   border-collapse: collapse;
   font-size: var(--fs-small);
-  color: #131e29;
+  color: #f2f8ff;
 }
 
 .gov-preview-table thead {
-  background: rgba(19,30,41,0.08);
+  background: rgba(255, 255, 255, 0.12);
   position: sticky;
   top: 0;
 }
@@ -956,7 +1007,7 @@ body.is-government .public-summary-chart{
 .gov-preview-table td {
   padding: 8px 10px;
   text-align: center;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
 }
 
 .gov-preview-table th:first-child,
@@ -965,5 +1016,54 @@ body.is-government .public-summary-chart{
 }
 
 .gov-preview-table tbody tr:hover {
-  background: rgba(19,30,41,0.05);
+  background: rgba(255, 255, 255, 0.08);
+}
+/* ===================== LEGEND GRID — cân đối 3x2 ===================== */
+.legend-row {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.legend-pair {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.22);
+  border: 1px solid rgba(255,255,255,0.30);
+  white-space: nowrap;
+}
+
+.legend-pill {
+  min-width: 62px !important;
+  max-width: none !important;
+  margin: 0 !important;
+  text-align: center;
+  justify-content: center;
+}
+
+.legend-range {
+  color: #444;
+  font-size: var(--fs-small);
+  font-weight: 600;
+  opacity: 0.80;
+  flex-shrink: 0;
+}
+
+/* Bảng cột 2 (type) đã bị xoá — fix nth-child selector */
+.NB-c-khuyencao .table-header div,
+.NB-c-khuyencao .table-row > div:nth-child(n+2) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Cột đầu (khu vực) vẫn căn trái */
+.NB-c-khuyencao .table-row > div:first-child,
+.NB-c-khuyencao .table-header > div:first-child {
+  justify-content: flex-start;
 }

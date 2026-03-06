@@ -39,6 +39,20 @@
     });
   }
 
+  // ✅ Map mã trạm → tên hiển thị theo bảng dữ liệu thực
+  const STATION_NAMES = {
+    "S1": "Thủ Đức",
+    "S2": "Bình Tân",
+    "S3": "Tân Phú",
+    "S4": "Bình Thạnh",
+    "S5": "Quận 3",
+    "S6": "Quận 10",
+  };
+
+  function stationDisplayName(code) {
+    return STATION_NAMES[code] || code;
+  }
+
   // ✅ Để CSS QUYẾT ĐỊNH (CSS dùng body.is-government)
   function applyRoleToStations() {
     document.querySelectorAll(".station-row").forEach((row) => {
@@ -101,13 +115,10 @@
 
       const col1 = document.createElement("div");
       col1.className = "station";
-      col1.textContent = code;
+      col1.textContent = stationDisplayName(code);
 
-      const col2 = document.createElement("div");
-      col2.textContent = type || "–";
 
       row.appendChild(col1);
-      row.appendChild(col2);
 
       COLS.forEach((c) => {
         const cell = document.createElement("div");
@@ -216,11 +227,11 @@
 
       if (hasData) {
         box.insertAdjacentHTML("beforeend",
-          `<button class="toggle-btn is-on" data-series="${code}" type="button">${code}</button>`
+          `<button class="toggle-btn is-on" data-series="${code}" type="button">${stationDisplayName(code)}</button>`
         );
       } else {
         box.insertAdjacentHTML("beforeend",
-          `<button class="toggle-btn toggle-no-data" data-series="${code}" type="button" disabled title="Không có dữ liệu">${code}</button>`
+          `<button class="toggle-btn toggle-no-data" data-series="${code}" type="button" disabled title="Không có dữ liệu">${stationDisplayName(code)}</button>`
         );
       }
     });
@@ -417,7 +428,7 @@
       if (!row) return null;
 
       const values = COLS.map((c) => safeNumFromCell(row.querySelector(`[data-col="${c}"]`)));
-      const labelLeft = row.querySelector(".station")?.textContent?.trim() || seriesKey;
+      const labelLeft = row.querySelector(".station")?.textContent?.trim() || stationDisplayName(seriesKey);
       const typeText = row.children?.[1]?.textContent?.trim() || "";
       return { key: seriesKey, label: labelLeft, type: typeText, values };
     }
@@ -456,7 +467,7 @@
       series.forEach((s) => s.values.forEach((v) => (v !== null ? all.push(v) : null)));
 
       if (!all.length) {
-        ctx.fillStyle = "#666";
+        ctx.fillStyle = "rgba(242,248,255,0.7)";
         ctx.font = "14px sans-serif";
         ctx.textAlign = "center";
         ctx.fillText("Chưa có dữ liệu để so sánh", w / 2, h / 2);
@@ -478,7 +489,7 @@
       const mapY = (v) => padding.top + chartH - (v - minVal) * yScale;
 
       // grid
-      ctx.strokeStyle = "rgba(0,0,0,0.10)";
+      ctx.strokeStyle = "rgba(255,255,255,0.15)";
       ctx.lineWidth = 1;
       for (let i = 0; i <= 4; i++) {
         const y = padding.top + (chartH / 4) * i;
@@ -488,14 +499,14 @@
         ctx.stroke();
 
         const val = maxVal - (range / 4) * i;
-        ctx.fillStyle = "#666";
+        ctx.fillStyle = "rgba(242,248,255,0.65)";
         ctx.font = "11px sans-serif";
         ctx.textAlign = "right";
         ctx.fillText(val.toFixed(1), padding.left - 10, y + 4);
       }
 
       // x labels
-      ctx.fillStyle = "#666";
+      ctx.fillStyle = "rgba(242,248,255,0.65)";
       ctx.font = "12px sans-serif";
       ctx.textAlign = "center";
       COLS.forEach((c, i) => ctx.fillText(c, mapX(i), h - padding.bottom + 22));
@@ -567,7 +578,7 @@
 
       const valid = data.filter((v) => v !== null);
       if (!valid.length) {
-        ctx.fillStyle = "#666";
+        ctx.fillStyle = "rgba(242,248,255,0.7)";
         ctx.font = "14px sans-serif";
         ctx.textAlign = "center";
         ctx.fillText("Chưa có dữ liệu confidence", w / 2, h / 2);
@@ -579,7 +590,7 @@
       const chartH = h - padding.top - padding.bottom;
 
       // y grid 0..100
-      ctx.strokeStyle = "rgba(0,0,0,0.10)";
+      ctx.strokeStyle = "rgba(255,255,255,0.15)";
       ctx.lineWidth = 1;
       for (let i = 0; i <= 4; i++) {
         const y = padding.top + (chartH / 4) * i;
@@ -589,7 +600,7 @@
         ctx.stroke();
 
         const val = 100 - 25 * i;
-        ctx.fillStyle = "#666";
+        ctx.fillStyle = "rgba(242,248,255,0.65)";
         ctx.font = "11px sans-serif";
         ctx.textAlign = "right";
         ctx.fillText(String(val), padding.left - 10, y + 4);
@@ -604,7 +615,7 @@
         const labelX = x + barW / 2;
 
         // x labels
-        ctx.fillStyle = "#666";
+        ctx.fillStyle = "rgba(242,248,255,0.65)";
         ctx.font = "12px sans-serif";
         ctx.textAlign = "center";
         ctx.fillText(COLS[i], labelX, h - padding.bottom + 22);
@@ -615,11 +626,11 @@
         const y = padding.top + chartH - bh;
 
         // bar
-        ctx.fillStyle = "rgba(19, 30, 41, 0.75)";
+        ctx.fillStyle = "rgba(255,255,255,0.55)";
         ctx.fillRect(x, y, barW, bh);
 
         // value text
-        ctx.fillStyle = "#131e29";
+        ctx.fillStyle = "#ffffff";
         ctx.font = "12px sans-serif";
         ctx.textAlign = "center";
         ctx.fillText(`${Math.round(v)}%`, labelX, y - 8);
@@ -713,6 +724,175 @@
    4) GOV PREVIEW TABLE
 ========================= */
 
+/* =========================
+   5) CHART HOVER TOOLTIPS
+========================= */
+(function () {
+  const tip = document.createElement("div");
+  tip.id = "chart-tooltip";
+  tip.style.cssText = [
+    "position:fixed","pointer-events:none","display:none","z-index:9999",
+    "background:rgba(19,30,41,0.90)","backdrop-filter:blur(10px)",
+    "-webkit-backdrop-filter:blur(10px)",
+    "border:1px solid rgba(255,255,255,0.18)","border-radius:10px",
+    "padding:8px 12px","color:#f2f8ff",
+    "font-family:'72-Semibold',Helvetica,sans-serif","font-size:12px",
+    "line-height:1.6","min-width:120px",
+    "box-shadow:0 8px 24px rgba(0,0,0,0.28)"
+  ].join(";");
+  document.body.appendChild(tip);
+
+  function showTip(html, cx, cy) {
+    tip.innerHTML = html;
+    tip.style.display = "block";
+    let left = cx + 14, top = cy - 10;
+    const tw = tip.offsetWidth, th = tip.offsetHeight;
+    if (left + tw > window.innerWidth  - 8) left = cx - tw - 14;
+    if (top  + th > window.innerHeight - 8) top  = cy - th - 8;
+    tip.style.left = left + "px";
+    tip.style.top  = top  + "px";
+  }
+  function hideTip() { tip.style.display = "none"; }
+
+  const COLS_H = ["1h","3h","6h","12h","24h"];
+  const PALETTE = {
+    "HCMC":"#131e29","S1":"#2f6fda","S2":"#d14b4b",
+    "S3":"#1e8e5a","S4":"#8b5cf6","S5":"#f59e0b","S6":"#0ea5e9"
+  };
+
+  /* ── A) Public line chart ── */
+  function attachPublicHover() {
+    const canvas = document.getElementById("public-line-chart");
+    if (!canvas) return;
+    const PAD = { top:34, right:20, bottom:44, left:56 };
+    canvas.style.cursor = "crosshair";
+
+    canvas.addEventListener("mousemove", function(e) {
+      const row = document.querySelector('[data-series="HCMC"]') || document.getElementById("hcmc-summary-row");
+      if (!row) return;
+      const vals = COLS_H.map(c => {
+        const n = parseFloat((row.querySelector('[data-col="'+c+'"]')?.textContent||"").trim());
+        return isNaN(n) ? null : n;
+      });
+      const rect = canvas.getBoundingClientRect();
+      const mx   = (e.clientX - rect.left) * (canvas.width / rect.width);
+      const cW   = canvas.width - PAD.left - PAD.right;
+      const xSt  = cW / (COLS_H.length - 1);
+      let ni = 0, md = Infinity;
+      COLS_H.forEach((_,i) => { const d=Math.abs(mx-(PAD.left+i*xSt)); if(d<md){md=d;ni=i;} });
+      if (md > xSt * 0.7 || vals[ni] === null) { hideTip(); return; }
+      showTip(
+        '<div style="opacity:.6;font-size:11px;margin-bottom:2px">TP.HCM &middot; '+COLS_H[ni]+'</div>'+
+        '<div style="font-size:15px;font-weight:700">'+vals[ni].toFixed(1)+
+        ' <span style="font-size:11px;opacity:.65">µg/m³</span></div>',
+        e.clientX, e.clientY
+      );
+    });
+    canvas.addEventListener("mouseleave", hideTip);
+  }
+
+  /* ── B) Gov compare chart ── */
+  function attachCompareHover() {
+    const canvas = document.getElementById("compare-line-chart");
+    if (!canvas) return;
+    const PAD = { top:34, right:24, bottom:44, left:56 };
+    canvas.style.cursor = "crosshair";
+
+    canvas.addEventListener("mousemove", function(e) {
+      const btns = Array.from(document.querySelectorAll("#gov-chart-toggles .toggle-btn.is-on"));
+      const keys = btns.map(b => b.getAttribute("data-series")).filter(Boolean);
+      if (!keys.length) { hideTip(); return; }
+
+      const rect = canvas.getBoundingClientRect();
+      const mx   = (e.clientX - rect.left) * (canvas.width / rect.width);
+      const cW   = canvas.width - PAD.left - PAD.right;
+      const xSt  = cW / (COLS_H.length - 1);
+      let ni = 0, md = Infinity;
+      COLS_H.forEach((_,i) => { const d=Math.abs(mx-(PAD.left+i*xSt)); if(d<md){md=d;ni=i;} });
+      if (md > xSt * 0.7) { hideTip(); return; }
+
+      const lines = keys.map(k => {
+        const row = document.querySelector('[data-series="'+k+'"]');
+        if (!row) return null;
+        const v = parseFloat((row.querySelector('[data-col="'+COLS_H[ni]+'"]')?.textContent||"").trim());
+        const label = row.querySelector(".station")?.textContent?.trim() || k;
+        return isNaN(v) ? null : { k, label, v };
+      }).filter(Boolean).sort((a,b) => b.v - a.v);
+
+      if (!lines.length) { hideTip(); return; }
+
+      const html =
+        '<div style="opacity:.6;font-size:11px;margin-bottom:6px">'+COLS_H[ni]+'</div>' +
+        lines.map(s =>
+          '<div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">' +
+          '<span style="width:9px;height:9px;border-radius:50%;background:'+(PALETTE[s.k]||"#aaa")+';flex-shrink:0;display:inline-block"></span>' +
+          '<span style="flex:1">'+s.label+'</span>' +
+          '<span style="font-weight:700;margin-left:8px">'+s.v.toFixed(1)+'</span>' +
+          '</div>'
+        ).join('') +
+        '<div style="opacity:.45;font-size:10px;margin-top:4px">µg/m³</div>';
+
+      showTip(html, e.clientX, e.clientY);
+    });
+    canvas.addEventListener("mouseleave", hideTip);
+  }
+
+  /* ── C) Reliability bar chart ── */
+  function attachReliabilityHover() {
+    const canvas = document.getElementById("reliability-chart");
+    if (!canvas) return;
+    const PAD = { top:24, right:18, bottom:44, left:46 };
+    canvas.style.cursor = "crosshair";
+
+    canvas.addEventListener("mousemove", function(e) {
+      const vals = (window.__CONF_VALUES__ || []).map(v => {
+        const n = Number(v); return Number.isFinite(n) ? Math.max(0,Math.min(100,n)) : null;
+      });
+      const rect = canvas.getBoundingClientRect();
+      const mx   = (e.clientX - rect.left) * (canvas.width  / rect.width);
+      const my   = (e.clientY - rect.top)  * (canvas.height / rect.height);
+      const cW   = canvas.width  - PAD.left - PAD.right;
+      const cH   = canvas.height - PAD.top  - PAD.bottom;
+      const barW = Math.max(24, cW / (COLS_H.length * 1.6));
+      const gap  = (cW - barW * COLS_H.length) / (COLS_H.length + 1);
+
+      let hit = -1;
+      vals.forEach((v, i) => {
+        if (v === null) return;
+        const x  = PAD.left + gap + i * (barW + gap);
+        const bh = (v / 100) * cH;
+        const y  = PAD.top + cH - bh;
+        if (mx >= x && mx <= x+barW && my >= y && my <= PAD.top+cH) hit = i;
+      });
+
+      if (hit === -1) { hideTip(); return; }
+      const v = vals[hit];
+      const lbl   = v>=85?"Rất cao":v>=70?"Cao":v>=55?"Trung bình":"Thấp";
+      const lcolor= v>=85?"#4ade80":v>=70?"#facc15":v>=55?"#fb923c":"#f87171";
+      showTip(
+        '<div style="opacity:.6;font-size:11px;margin-bottom:2px">Độ tin cậy &middot; '+COLS_H[hit]+'</div>'+
+        '<div style="font-size:15px;font-weight:700">'+Math.round(v)+'%</div>'+
+        '<div style="font-size:11px;color:'+lcolor+';margin-top:2px">'+lbl+'</div>',
+        e.clientX, e.clientY
+      );
+    });
+    canvas.addEventListener("mouseleave", hideTip);
+  }
+
+  function attachAll() {
+    attachPublicHover();
+    attachCompareHover();
+    attachReliabilityHover();
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){ setTimeout(attachAll, 900); });
+  window.addEventListener("resize",      function(){ setTimeout(attachAll, 300); });
+  window.addEventListener("modeChanged", function(){ setTimeout(attachAll, 400); });
+})();
+
+/* =========================
+   4) GOV PREVIEW TABLE
+========================= */
 function fillGovPreviewTable() {
   const body = document.getElementById("gov-preview-body");
   if (!body) return;

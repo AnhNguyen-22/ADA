@@ -56,46 +56,32 @@
             <div class="public-meta-grid">
               <div class="public-box">
                 <div class="public-box-title">Cảnh báo màu</div>
-                <div
-  class="legend-grid"
-  style="
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 10px 14px;
-    margin-top: 10px;
-  "
->
-  <!-- item template: pill 140px | range 120px -->
-  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,0.25);border:1px solid rgba(255,255,255,0.35);">
-    <span class="value-pill pill-green legend-pill" style="flex:0 0 140px;justify-content:center;text-align:center;">Tốt</span>
-    <span class="legend-range" style="flex:0 0 120px;text-align:right;font-weight:700;opacity:0.75;white-space:nowrap;">0–12</span>
-  </div>
-
-  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,0.25);border:1px solid rgba(255,255,255,0.35);">
-    <span class="value-pill pill-yellow legend-pill" style="flex:0 0 140px;justify-content:center;text-align:center;">Trung bình</span>
-    <span class="legend-range" style="flex:0 0 120px;text-align:right;font-weight:700;opacity:0.75;white-space:nowrap;">12.1–35.4</span>
-  </div>
-
-  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,0.25);border:1px solid rgba(255,255,255,0.35);">
-    <span class="value-pill pill-orange legend-pill" style="flex:0 0 140px;justify-content:center;text-align:center;">Kém</span>
-    <span class="legend-range" style="flex:0 0 120px;text-align:right;font-weight:700;opacity:0.75;white-space:nowrap;">35.5–55.4</span>
-  </div>
-
-  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,0.25);border:1px solid rgba(255,255,255,0.35);">
-    <span class="value-pill pill-red legend-pill" style="flex:0 0 140px;justify-content:center;text-align:center;">Xấu</span>
-    <span class="legend-range" style="flex:0 0 120px;text-align:right;font-weight:700;opacity:0.75;white-space:nowrap;">55.5–150.4</span>
-  </div>
-
-  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,0.25);border:1px solid rgba(255,255,255,0.35);">
-    <span class="value-pill pill-purple legend-pill" style="flex:0 0 140px;justify-content:center;text-align:center;">Rất xấu</span>
-    <span class="legend-range" style="flex:0 0 120px;text-align:right;font-weight:700;opacity:0.75;white-space:nowrap;">150.5–250.4</span>
-  </div>
-
-  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,0.25);border:1px solid rgba(255,255,255,0.35);">
-    <span class="value-pill pill-plum legend-pill" style="flex:0 0 140px;justify-content:center;text-align:center;">Nguy hại</span>
-    <span class="legend-range" style="flex:0 0 120px;text-align:right;font-weight:700;opacity:0.75;white-space:nowrap;">250.5–500.4</span>
-  </div>
-</div>
+                <div class="legend-row">
+                  <div class="legend-pair">
+                    <span class="value-pill pill-green legend-pill">Tốt</span>
+                    <span class="legend-range">0–12</span>
+                  </div>
+                  <div class="legend-pair">
+                    <span class="value-pill pill-yellow legend-pill">Trung bình</span>
+                    <span class="legend-range">12.1–35.4</span>
+                  </div>
+                  <div class="legend-pair">
+                    <span class="value-pill pill-orange legend-pill">Kém</span>
+                    <span class="legend-range">35.5–55.4</span>
+                  </div>
+                  <div class="legend-pair">
+                    <span class="value-pill pill-red legend-pill">Xấu</span>
+                    <span class="legend-range">55.5–150.4</span>
+                  </div>
+                  <div class="legend-pair">
+                    <span class="value-pill pill-purple legend-pill">Rất xấu</span>
+                    <span class="legend-range">150.5–250.4</span>
+                  </div>
+                  <div class="legend-pair">
+                    <span class="value-pill pill-plum legend-pill">Nguy hại</span>
+                    <span class="legend-range">250.5–500.4</span>
+                  </div>
+                </div>
               </div>
 
             </div>
@@ -104,7 +90,6 @@
             <div class="table" id="forecast-table">
               <div class="table-header" id="forecast-table-header">
                 <div>Khu vực</div>
-                <div></div>
 
                 <div class="hoverable-col" data-col="1h"><span>1h</span></div>
                 <div class="hoverable-col" data-col="3h"><span>3h</span></div>
@@ -116,7 +101,6 @@
               <!-- ✅ PUBLIC: chỉ 1 dòng tổng thể -->
               <div class="table-row" id="hcmc-summary-row" data-series="HCMC">
                 <div class="station">TP.HCM</div>
-                <div>Tổng hợp</div>
 
                 <div class="value-pill pill-gray" data-col="1h">--</div>
                 <div class="value-pill pill-gray" data-col="3h">--</div>
@@ -144,20 +128,6 @@
               </div>
             </div>
 
-            <!-- ✅ GOV CHART -->
-            <div class="gov-compare-chart" id="gov-compare-chart" aria-hidden="true">
-              <div class="gov-chart-header">
-                <div>
-                  <div class="gov-chart-title">So sánh dự báo: TP.HCM vs các trạm</div>
-                  <div class="gov-chart-sub">Click để bật/tắt từng đường (dữ liệu lấy trực tiếp từ bảng).</div>
-                </div>
-                <div class="gov-chart-toggles" id="gov-chart-toggles"></div>
-              </div>
-
-              <div class="gov-chart-canvas-wrap">
-                <canvas id="compare-line-chart"></canvas>
-              </div>
-            </div>
           </section>
 
           <!-- RIGHT STACK -->
@@ -239,6 +209,20 @@
 
           </aside>
         </div>
+
+        <!-- ✅ GOV CHART — full-width card, bên dưới 2 cột -->
+        <section class="card gov-compare-chart-card" id="gov-compare-chart" aria-hidden="true">
+          <div class="gov-chart-header">
+            <div>
+              <div class="gov-chart-title">So sánh dự báo: TP.HCM vs các trạm</div>
+              <div class="gov-chart-sub">Click để bật/tắt từng đường (dữ liệu lấy trực tiếp từ bảng).</div>
+            </div>
+            <div class="gov-chart-toggles" id="gov-chart-toggles"></div>
+          </div>
+          <div class="gov-chart-canvas-wrap">
+            <canvas id="compare-line-chart"></canvas>
+          </div>
+        </section>
 
         <!-- PUBLIC RECOMMENDATIONS -->
         <section class="card bottom-card">
