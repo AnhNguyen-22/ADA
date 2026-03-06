@@ -173,8 +173,8 @@ def get_recommendations():
     summary_level = {k: _pill_class(summary_values.get(k)) for k in ["1h", "3h", "6h", "12h", "24h"]}
 
     station_labels = [
-        "Giao thông", "Dân cư", "Công nghiệp",
-        "Nông nghiệp", "Thương mại", "Hỗn hợp",
+        "Thủ Đức", "Bình Tân", "Tân Phú",
+        "Bình Thạch", "Quận 3", "Quận 10",
     ]
 
     stations_out = []
