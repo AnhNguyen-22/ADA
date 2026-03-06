@@ -117,15 +117,19 @@ body {
     display: flex;
     gap: 16px;
     align-items: stretch;
+    min-width: 0;
 }
 
 .chart-container {
-    flex: 1;
-    background: var(--color-panel-bg);
+    flex: 6;
+    min-width: 0;
+    background: rgba(255,255,255,0.14);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-radius: 15px;
-    border: 1px solid var(--color-panel-border);
-    padding: 20px;
-    min-height: 380px;
+    border: 1px solid rgba(255,255,255,0.22);
+    padding: 12px;
+    height: 420px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -138,8 +142,9 @@ body {
 
 #shap-img {
     width: 100%;
-    border-radius: 10px;
+    height: 100%;
     object-fit: contain;
+    display: block;
     transition: opacity 0.35s ease;
 }
 
@@ -174,14 +179,16 @@ body {
    FEATURE SIDEBAR (top features bars)
 ══════════════════════════════════════ */
 .feature-sidebar {
-    width: 250px;
-    flex-shrink: 0;
+    flex: 4;
+    min-width: 260px;
+    max-width: 360px;
     background: var(--color-panel-bg);
     border: 1px solid var(--color-panel-border);
     border-radius: 15px;
-    padding: 18px 16px;
+    padding: 20px 22px;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
 .feature-sidebar-title {
@@ -203,7 +210,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 9px;
-    flex: 1;
+    overflow: hidden;
 }
 
 .feature-row {
@@ -288,10 +295,10 @@ body {
     padding: 4px 12px;
     border-radius: 20px;
     font-size: 12px;
-    font-weight: 700;
-    background: rgba(79, 195, 247, 0.2);
-    border: 1px solid rgba(79, 195, 247, 0.45);
-    color: #4fc3f7;
+    font-weight: 600;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.75);
     transition: all 0.3s ease;
     white-space: nowrap;
 }
@@ -400,23 +407,11 @@ body {
     text-transform: uppercase;
 }
 
-.priority-badge.HIGH {
-    background: rgba(239, 68, 68, 0.18);
-    color: #ef4444;
-    border: 1px solid rgba(239, 68, 68, 0.4);
-}
+.priority-badge.HIGH   { background: #c0392b; color: #fff; border: none; }
 
-.priority-badge.MEDIUM {
-    background: rgba(245, 158, 11, 0.18);
-    color: #f59e0b;
-    border: 1px solid rgba(245, 158, 11, 0.4);
-}
+.priority-badge.MEDIUM { background: #b7770d; color: #fff; border: none; }
 
-.priority-badge.LOW {
-    background: rgba(34, 197, 94, 0.18);
-    color: #22c55e;
-    border: 1px solid rgba(34, 197, 94, 0.4);
-}
+.priority-badge.LOW    { background: #1e8449; color: #fff; border: none; }
 
 .policy-interpretation {
     font-size: 13px;
@@ -452,9 +447,9 @@ body {
     margin-top: 1px;
 }
 
-.policy-detail-label.health { background: rgba(239,68,68,.28); color: #f87171; }
-.policy-detail-label.env    { background: rgba(34,197,94,.28);  color: #4ade80; }
-.policy-detail-label.edu    { background: rgba(59,130,246,.28); color: #60a5fa; }
+.policy-detail-label.health { background: #c0392b; color: #fff; border: none; }
+.policy-detail-label.env    { background: #1e8449; color: #fff; border: none; }
+.policy-detail-label.edu    { background: #1a5276; color: #fff; border: none; }
 
 /* Empty / error states */
 .policy-empty {

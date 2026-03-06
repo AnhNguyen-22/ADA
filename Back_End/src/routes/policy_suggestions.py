@@ -1,6 +1,9 @@
 import os
+import io
 import json
-from flask import Blueprint, jsonify, send_from_directory
+import numpy as np
+from PIL import Image
+from flask import Blueprint, jsonify, send_from_directory, send_file
 
 bp = Blueprint("policy_suggestions", __name__)
 
@@ -17,6 +20,28 @@ def _read_json(path: str):
         return None
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
+
+def _strip_white_bg(img: Image.Image) -> Image.Image:
+    """Xóa nền trắng/xám nhạt của matplotlib PNG, trả về RGBA trong suốt."""
+    img = img.convert("RGBA")
+    data = np.array(img)
+    r, g, b, a = data[:,:,0], data[:,:,1], data[:,:,2], data[:,:,3]
+    ri, gi, bi = r.astype(int), g.astype(int), b.astype(int)
+
+    near_white     = (r > 235) & (g > 235) & (b > 235)
+    near_lightgray = (r > 220) & (g > 220) & (b > 220) \
+                   & (np.abs(ri - gi) < 15) & (np.abs(gi - bi) < 15)
+    soft_mask      = (r > 200) & (g > 200) & (b > 200) \
+                   & (np.abs(ri - gi) < 20) & (np.abs(gi - bi) < 20) \
+                   & ~near_white & ~near_lightgray
+
+    hard_mask = near_white | near_lightgray
+    data[:,:,3] = np.where(
+        hard_mask, 0,
+        np.where(soft_mask, np.clip((255 - ri) * 3, 0, 255).astype(np.uint8), a)
+    )
+    return Image.fromarray(data)
+
 
 @bp.get("/api/policy-suggestions/ping")
 def ping():
@@ -40,8 +65,6 @@ def get_policy_suggestions():
             "missing": ["policy_suggestions_payload.json"]
         }), 404
 
-    # Chuẩn hoá đường dẫn ảnh SHAP để FE load được
-    # Ảnh nằm: data/processed/shap_summary.png
     shap = payload.get("shap", {}) or {}
     shap["available"] = True if shap.get("available") is True else bool(shap.get("available"))
     shap["plot_url"] = "/data/processed/shap_summary.png"
@@ -51,7 +74,25 @@ def get_policy_suggestions():
     payload["processed_dir_used"] = pdir
     return jsonify(payload)
 
+
 # Serve static files inside data/processed (png/json)
+# PNG có tên chứa "shap_" → tự động strip nền trắng on-the-fly
 @bp.get("/data/processed/<path:filename>")
 def serve_processed(filename):
-    return send_from_directory(_processed_dir(), filename)
+    pdir = _processed_dir()
+    filepath = os.path.join(pdir, filename)
+
+    # Chỉ xử lý shap PNG, còn lại serve bình thường
+    if filename.lower().endswith(".png") and "shap_" in os.path.basename(filename).lower():
+        if not os.path.exists(filepath):
+            return jsonify({"ok": False, "message": "File not found"}), 404
+
+        img = Image.open(filepath)
+        img_nobg = _strip_white_bg(img)
+
+        buf = io.BytesIO()
+        img_nobg.save(buf, format="PNG")
+        buf.seek(0)
+        return send_file(buf, mimetype="image/png")
+
+    return send_from_directory(pdir, filename)

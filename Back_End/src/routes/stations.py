@@ -105,19 +105,19 @@ def load_data():
 
 
 def calculate_aqi_status(pm25_value):
-    """Tính trạng thái AQI từ giá trị PM2.5"""
-    if pm25_value <= 12:
+    """Tính trạng thái AQI từ giá trị PM2.5 theo bảng chuẩn PM2.5-AQI"""
+    if pm25_value <= 12.0:
         return {'status': 'good', 'label': 'Tốt', 'color': '#00e400'}
     elif pm25_value <= 35.4:
         return {'status': 'moderate', 'label': 'Trung bình', 'color': '#ffff00'}
     elif pm25_value <= 55.4:
-        return {'status': 'poor', 'label': 'Kém', 'color': '#ff7e00'}
+        return {'status': 'poor', 'label': 'Không tốt cho nhóm nhạy cảm', 'color': '#ff7e00'}
     elif pm25_value <= 150.4:
-        return {'status': 'bad', 'label': 'Xấu', 'color': '#ff0000'}
+        return {'status': 'bad', 'label': 'Không tốt cho sức khỏe', 'color': '#ff0000'}
     elif pm25_value <= 250.4:
-        return {'status': 'very_bad', 'label': 'Rất xấu', 'color': '#8f3f97'}
+        return {'status': 'very_bad', 'label': 'Rất không tốt', 'color': '#8f3f97'}
     else:
-        return {'status': 'hazardous', 'label': 'Nguy hại', 'color': '#7e0023'}
+        return {'status': 'hazardous', 'label': 'Nguy hiểm', 'color': '#7e0023'}
 
 
 # ===================================

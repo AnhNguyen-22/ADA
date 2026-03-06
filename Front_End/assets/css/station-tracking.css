@@ -238,11 +238,8 @@ h3.card-title { font-size: 0.9375rem !important; }
     height: 2.5rem;
     border-radius: 0.75rem;
     overflow: hidden;
-<<<<<<< HEAD
-    background: linear-gradient(to right, 
-=======
+
     background: linear-gradient(to right,
->>>>>>> main
         #9ccc65 0%,     #9ccc65 16.67%,
         #ffeb3b 16.67%, #ffeb3b 33.33%,
         #ff9800 33.33%, #ff9800 50%,
