@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-05T05:14:47.312164Z",
+  "generated_at": "2026-03-07T02:26:15.590927Z",
   "location": "Thành phố Hồ Chí Minh",
   "stations": [
     "1",
@@ -8,12 +8,33 @@
     "5",
     "6"
   ],
+  "station_names": {
+    "1": "Thủ Đức",
+    "3": "Tân Phú",
+    "4": "Bình Thạnh",
+    "5": "Quận 3",
+    "6": "Quận 10"
+  },
   "station_labels": {
-    "1": "Trạm 1 (Dân cư)",
-    "3": "Trạm 3 (Công nghiệp)",
-    "4": "Trạm 4 (Dân cư)",
-    "5": "Trạm 5 (Công nghiệp)",
-    "6": "Trạm 6 (Giao thông)"
+    "1": "Thủ Đức",
+    "3": "Tân Phú",
+    "4": "Bình Thạnh",
+    "5": "Quận 3",
+    "6": "Quận 10"
+  },
+  "station_region_types": {
+    "1": "Urban background",
+    "3": "Industrial",
+    "4": "Residential",
+    "5": "Traffic",
+    "6": "Traffic + Residential"
+  },
+  "station_locations": {
+    "1": "Vietnam National University, Linh Trung ward, Thủ Đức, HCMC",
+    "3": "Tân Bình industrial zone/park, Tây Thạnh ward, Tân Phú, HCMC",
+    "4": "49 Thanh Đa street, Ward 27, Bình Thạnh, HCMC",
+    "5": "268 Nguyễn Đình Chiểu street, Ward 6, District 3, HCMC",
+    "6": "MM18 Trường Sơn street, Ward 14, District 10, HCMC"
   },
   "horizons": [
     1,
@@ -136,9 +157,9 @@
           },
           {
             "model": "Random Forest",
-            "rmse": 9.55620136165308,
-            "mae": 7.79678379551265,
-            "mape": 49.80852997995518,
+            "rmse": 9.556201361653079,
+            "mae": 7.796783795512651,
+            "mape": 49.808529979955196,
             "comparable": 1,
             "is_best": 0
           },
@@ -179,7 +200,7 @@
           {
             "model": "Random Forest",
             "rmse": 9.270277457862322,
-            "mae": 7.710761264234015,
+            "mae": 7.710761264234013,
             "mape": 48.51616230856893,
             "comparable": 1,
             "is_best": 0
@@ -434,7 +455,7 @@
             "model": "Random Forest",
             "rmse": 19.916660319074232,
             "mae": 12.380976776656462,
-            "mape": 57.97210450177661,
+            "mape": 57.9721045017766,
             "comparable": 1,
             "is_best": 0
           },
@@ -942,9 +963,9 @@
           },
           {
             "model": "Random Forest",
-            "rmse": 7.482816046645866,
+            "rmse": 7.482816046645867,
             "mae": 5.284494651099508,
-            "mape": 31.12468376467256,
+            "mape": 31.124683764672557,
             "comparable": 1,
             "is_best": 0
           },
@@ -1122,6 +1143,80 @@
         "24": "Ridge"
       }
     },
+    "best_reason": {
+      "1": {
+        "1": "Naive được chọn cho Thủ Đức (Urban background) ở mốc 1h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=5.501, MAE=3.575, MAPE=19.08%. Mô hình này tốt hơn mô hình xếp sau khoảng 1.590 MAE.",
+        "3": "Ridge được chọn cho Thủ Đức (Urban background) ở mốc 3h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=8.455, MAE=6.605, MAPE=40.18%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.037 MAE.",
+        "6": "Ridge được chọn cho Thủ Đức (Urban background) ở mốc 6h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=9.249, MAE=7.539, MAPE=46.95%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.244 MAE.",
+        "12": "XGBoost được chọn cho Thủ Đức (Urban background) ở mốc 12h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=9.147, MAE=7.700, MAPE=49.07%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.001 MAE.",
+        "24": "Ridge được chọn cho Thủ Đức (Urban background) ở mốc 24h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=9.502, MAE=7.545, MAPE=47.52%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.214 MAE."
+      },
+      "3": {
+        "1": "Naive được chọn cho Tân Phú (Industrial) ở mốc 1h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=11.191, MAE=6.100, MAPE=24.09%. Mô hình này tốt hơn mô hình xếp sau khoảng 2.222 MAE.",
+        "3": "Ridge được chọn cho Tân Phú (Industrial) ở mốc 3h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=16.886, MAE=10.443, MAPE=48.17%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.514 MAE.",
+        "6": "Ridge được chọn cho Tân Phú (Industrial) ở mốc 6h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=18.566, MAE=11.645, MAPE=54.60%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.528 MAE.",
+        "12": "XGBoost được chọn cho Tân Phú (Industrial) ở mốc 12h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=19.409, MAE=12.335, MAPE=57.66%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.018 MAE.",
+        "24": "Ridge được chọn cho Tân Phú (Industrial) ở mốc 24h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=19.455, MAE=11.924, MAPE=53.89%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.457 MAE."
+      },
+      "4": {
+        "1": "Naive được chọn cho Bình Thạnh (Residential) ở mốc 1h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=9.695, MAE=4.676, MAPE=16.36%. Mô hình này tốt hơn mô hình xếp sau khoảng 2.107 MAE.",
+        "3": "Naive được chọn cho Bình Thạnh (Residential) ở mốc 3h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=14.709, MAE=8.353, MAPE=31.48%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.469 MAE.",
+        "6": "Ridge được chọn cho Bình Thạnh (Residential) ở mốc 6h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=15.428, MAE=9.974, MAPE=44.65%. Mô hình này tốt hơn mô hình xếp sau khoảng 1.086 MAE.",
+        "12": "Ridge được chọn cho Bình Thạnh (Residential) ở mốc 12h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=16.880, MAE=10.253, MAPE=45.51%. Mô hình này tốt hơn mô hình xếp sau khoảng 1.013 MAE.",
+        "24": "Ridge được chọn cho Bình Thạnh (Residential) ở mốc 24h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=16.788, MAE=10.603, MAPE=48.47%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.215 MAE."
+      },
+      "5": {
+        "1": "Naive được chọn cho Quận 3 (Traffic) ở mốc 1h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=3.382, MAE=2.012, MAPE=12.70%. Mô hình này tốt hơn mô hình xếp sau khoảng 1.218 MAE.",
+        "3": "Naive được chọn cho Quận 3 (Traffic) ở mốc 3h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=6.294, MAE=3.952, MAPE=24.71%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.489 MAE.",
+        "6": "Naive được chọn cho Quận 3 (Traffic) ở mốc 6h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=8.056, MAE=5.351, MAPE=35.30%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.087 MAE.",
+        "12": "Ridge được chọn cho Quận 3 (Traffic) ở mốc 12h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=7.534, MAE=6.009, MAPE=46.62%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.463 MAE.",
+        "24": "Ridge được chọn cho Quận 3 (Traffic) ở mốc 24h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=7.741, MAE=5.902, MAPE=43.47%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.258 MAE."
+      },
+      "6": {
+        "1": "Naive được chọn cho Quận 10 (Traffic + Residential) ở mốc 1h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=4.257, MAE=2.521, MAPE=12.75%. Mô hình này tốt hơn mô hình xếp sau khoảng 1.295 MAE.",
+        "3": "Naive được chọn cho Quận 10 (Traffic + Residential) ở mốc 3h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=7.553, MAE=4.802, MAPE=25.22%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.205 MAE.",
+        "6": "Naive được chọn cho Quận 10 (Traffic + Residential) ở mốc 6h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=9.911, MAE=6.483, MAPE=33.97%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.162 MAE.",
+        "12": "XGBoost được chọn cho Quận 10 (Traffic + Residential) ở mốc 12h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=9.229, MAE=6.978, MAPE=43.94%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.182 MAE.",
+        "24": "Ridge được chọn cho Quận 10 (Traffic + Residential) ở mốc 24h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=8.392, MAE=5.836, MAPE=33.12%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.593 MAE."
+      }
+    },
+    "region_difference_reason": {
+      "1": {
+        "1": "Thủ Đức (Urban background): mô hình tốt nhất là Naive (RMSE=5.501), tốt hơn mô hình xếp sau khoảng 1.590 MAE.",
+        "3": "Thủ Đức (Urban background): mô hình tốt nhất là Ridge (RMSE=8.455), tốt hơn mô hình xếp sau khoảng 0.037 MAE.",
+        "6": "Thủ Đức (Urban background): mô hình tốt nhất là Ridge (RMSE=9.249), tốt hơn mô hình xếp sau khoảng 0.244 MAE.",
+        "12": "Thủ Đức (Urban background): mô hình tốt nhất là XGBoost (RMSE=9.147), tốt hơn mô hình xếp sau khoảng 0.001 MAE.",
+        "24": "Thủ Đức (Urban background): mô hình tốt nhất là Ridge (RMSE=9.502), tốt hơn mô hình xếp sau khoảng 0.214 MAE."
+      },
+      "3": {
+        "1": "Tân Phú (Industrial): mô hình tốt nhất là Naive (RMSE=11.191), tốt hơn mô hình xếp sau khoảng 2.222 MAE.",
+        "3": "Tân Phú (Industrial): mô hình tốt nhất là Ridge (RMSE=16.886), tốt hơn mô hình xếp sau khoảng 0.514 MAE.",
+        "6": "Tân Phú (Industrial): mô hình tốt nhất là Ridge (RMSE=18.566), tốt hơn mô hình xếp sau khoảng 0.528 MAE.",
+        "12": "Tân Phú (Industrial): mô hình tốt nhất là XGBoost (RMSE=19.409), tốt hơn mô hình xếp sau khoảng 0.018 MAE.",
+        "24": "Tân Phú (Industrial): mô hình tốt nhất là Ridge (RMSE=19.455), tốt hơn mô hình xếp sau khoảng 0.457 MAE."
+      },
+      "4": {
+        "1": "Bình Thạnh (Residential): mô hình tốt nhất là Naive (RMSE=9.695), tốt hơn mô hình xếp sau khoảng 2.107 MAE.",
+        "3": "Bình Thạnh (Residential): mô hình tốt nhất là Naive (RMSE=14.709), tốt hơn mô hình xếp sau khoảng 0.469 MAE.",
+        "6": "Bình Thạnh (Residential): mô hình tốt nhất là Ridge (RMSE=15.428), tốt hơn mô hình xếp sau khoảng 1.086 MAE.",
+        "12": "Bình Thạnh (Residential): mô hình tốt nhất là Ridge (RMSE=16.880), tốt hơn mô hình xếp sau khoảng 1.013 MAE.",
+        "24": "Bình Thạnh (Residential): mô hình tốt nhất là Ridge (RMSE=16.788), tốt hơn mô hình xếp sau khoảng 0.215 MAE."
+      },
+      "5": {
+        "1": "Quận 3 (Traffic): mô hình tốt nhất là Naive (RMSE=3.382), tốt hơn mô hình xếp sau khoảng 1.218 MAE.",
+        "3": "Quận 3 (Traffic): mô hình tốt nhất là Naive (RMSE=6.294), tốt hơn mô hình xếp sau khoảng 0.489 MAE.",
+        "6": "Quận 3 (Traffic): mô hình tốt nhất là Naive (RMSE=8.056), tốt hơn mô hình xếp sau khoảng 0.087 MAE.",
+        "12": "Quận 3 (Traffic): mô hình tốt nhất là Ridge (RMSE=7.534), tốt hơn mô hình xếp sau khoảng 0.463 MAE.",
+        "24": "Quận 3 (Traffic): mô hình tốt nhất là Ridge (RMSE=7.741), tốt hơn mô hình xếp sau khoảng 0.258 MAE."
+      },
+      "6": {
+        "1": "Quận 10 (Traffic + Residential): mô hình tốt nhất là Naive (RMSE=4.257), tốt hơn mô hình xếp sau khoảng 1.295 MAE.",
+        "3": "Quận 10 (Traffic + Residential): mô hình tốt nhất là Naive (RMSE=7.553), tốt hơn mô hình xếp sau khoảng 0.205 MAE.",
+        "6": "Quận 10 (Traffic + Residential): mô hình tốt nhất là Naive (RMSE=9.911), tốt hơn mô hình xếp sau khoảng 0.162 MAE.",
+        "12": "Quận 10 (Traffic + Residential): mô hình tốt nhất là XGBoost (RMSE=9.229), tốt hơn mô hình xếp sau khoảng 0.182 MAE.",
+        "24": "Quận 10 (Traffic + Residential): mô hình tốt nhất là Ridge (RMSE=8.392), tốt hơn mô hình xếp sau khoảng 0.593 MAE."
+      }
+    },
     "exclude_from_comparison": [
       "Holt-Winters"
     ],
@@ -1158,7 +1253,7 @@
           "mae": 5.952802026289257,
           "mape": 27.840600220076695,
           "rmae_pct": 25.34590697773022,
-          "rmsle": 0.31848846077087895,
+          "rmsle": 0.3184884607708789,
           "n_eval": 20008,
           "comparable": 1,
           "is_best": 0
@@ -1329,7 +1424,7 @@
           "mae": 9.343576955290978,
           "mape": 47.1841431977701,
           "rmae_pct": 39.50443508041788,
-          "rmsle": 0.46225371995124287,
+          "rmsle": 0.4622537199512428,
           "n_eval": 19200,
           "comparable": 1,
           "is_best": 0
@@ -1422,6 +1517,13 @@
       "12": "XGBoost",
       "24": "XGBoost"
     },
+    "best_reason_by_horizon": {
+      "1": "Naive được chọn cho toàn thành phố ở mốc 1h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=8.340, MAE=4.115, MAPE=16.76%. Mô hình này tốt hơn mô hình xếp sau khoảng 1.748 MAE.",
+      "3": "Ridge được chọn cho toàn thành phố ở mốc 3h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=12.234, MAE=7.476, MAPE=36.50%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.112 MAE.",
+      "6": "XGBoost được chọn cho toàn thành phố ở mốc 6h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=13.728, MAE=8.539, MAPE=42.27%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.133 MAE.",
+      "12": "XGBoost được chọn cho toàn thành phố ở mốc 12h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=14.507, MAE=8.861, MAPE=43.61%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.414 MAE.",
+      "24": "XGBoost được chọn cho toàn thành phố ở mốc 24h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=14.562, MAE=8.832, MAPE=43.50%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.173 MAE."
+    },
     "all_horizons_avg": [
       {
         "model": "Holt-Winters",
@@ -1480,6 +1582,7 @@
       }
     ],
     "best_overall": "XGBoost",
+    "best_reason_overall": "XGBoost được chọn cho toàn bộ các mốc dự báo ở mốc allh vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=13.130, MAE=7.980, MAPE=38.88%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.099 MAE.",
     "exclude_from_comparison": [
       "Holt-Winters"
     ],

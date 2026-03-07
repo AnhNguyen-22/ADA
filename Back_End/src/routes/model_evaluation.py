@@ -6,12 +6,12 @@ from flask import Blueprint, jsonify
 bp = Blueprint("model_evaluation", __name__)
 
 STATION_NAMES = {
-    "1": "S1 - Giao thông",
-    "2": "S2 - Khu dân cư",
-    "3": "S3 - Giao thông",
-    "4": "S4 - Khu công nghiệp",
-    "5": "S5 - Giao thông",
-    "6": "S6 - Khu dân cư",
+    "1": "Thủ Đức",
+    "2": "Bình Tân",
+    "3": "Tân Phú",
+    "4": "Bình Thạnh",
+    "5": "Quận 3",
+    "6": "Quận 10",
 }
 
 HORIZON_LABELS = {
@@ -87,20 +87,28 @@ def _is_rankable_row(row):
 
 def _best_model_from_rows(rows):
     """
-    Chọn best ML model: LUÔN loại baseline (Naive, Holt-Winters) trước.
-    is_best trong JSON có thể trỏ vào Naive — không dùng trực tiếp.
-    Tính lại theo RMSE thấp nhất trong ML models hợp lệ.
+    Chọn best model: Naive được tham gia bình đẳng.
+    Chỉ loại Holt-Winters nếu RMSE bất thường (> 10x median các model khác).
+    Ưu tiên is_best flag từ JSON, sau đó tính theo RMSE thấp nhất.
     """
-    ml_rows = [r for r in rows if (not _is_baseline(r.get("model"))) and r.get("rankable")]
-    if not ml_rows:
+    rankable_rows = [r for r in rows if r.get("rankable")]
+    if not rankable_rows:
         return None
 
-    best_by_flag = [r for r in ml_rows if r.get("is_best") == 1]
-    if best_by_flag:
-        return best_by_flag[0].get("model")
+    # Loại Holt-Winters nếu RMSE quá lớn bất thường
+    non_hw = [r for r in rankable_rows if not r.get("model", "").strip().lower().startswith("holt")]
+    if non_hw:
+        rmse_vals = sorted([r["rmse"] for r in non_hw if r.get("rmse")])
+        if rmse_vals:
+            median_rmse = rmse_vals[len(rmse_vals) // 2]
+            rankable_rows = [r for r in rankable_rows if r.get("rmse") and r["rmse"] <= median_rmse * 10]
 
-    ml_rows.sort(key=lambda r: (r["rmse"], r.get("mae") or 999999, r.get("mape") or 999999))
-    return ml_rows[0].get("model")
+    if not rankable_rows:
+        return None
+
+    # Tính lại theo RMSE thấp nhất — không dùng is_best flag vì flag đó loại Naive
+    rankable_rows.sort(key=lambda r: (r["rmse"], r.get("mae") or 999999, r.get("mape") or 999999))
+    return rankable_rows[0].get("model")
 
 
 def _init_model_stats():
@@ -167,8 +175,8 @@ def _summarize_station(results_by_h):
 
             rows.append(row)
 
-            # chỉ accumulate stats cho ML (loại baseline)
-            if not _is_baseline(row.get("model")):
+            # accumulate stats cho tất cả trừ Holt-Winters bất thường
+            if not row.get("model", "").strip().lower().startswith("holt"):
                 _append_model_stats(model_stats, row.get("model"), row)
 
         best = _best_model_from_rows(rows)
@@ -179,7 +187,7 @@ def _summarize_station(results_by_h):
             "best_model": best,            # ✅ best_model loại baseline
         })
 
-    model_avg_rmse = _stats_to_sorted_rows(model_stats, exclude_baselines=True)
+    model_avg_rmse = _stats_to_sorted_rows(model_stats, exclude_baselines=False)
     best_overall = model_avg_rmse[0]["model"] if model_avg_rmse else None
     return horizon_rows, model_avg_rmse, best_overall, total_rows, valid_rows
 
@@ -195,10 +203,10 @@ def _build_city_summary(stations_out):
                 total_rows += 1
                 if row.get("rankable"):
                     valid_rows += 1
-                if not _is_baseline(row.get("model")):
+                if not row.get("model", "").strip().lower().startswith("holt"):
                     _append_model_stats(model_stats, row.get("model"), row)
 
-    model_rows = _stats_to_sorted_rows(model_stats, exclude_baselines=True)
+    model_rows = _stats_to_sorted_rows(model_stats, exclude_baselines=False)
     best_model = model_rows[0]["model"] if model_rows else None
 
     return {
@@ -310,12 +318,8 @@ def get_model_evaluation():
         station_data = normalized_results.get(sid, {})
         horizon_rows, model_avg_rmse, best_overall, total_rows, valid_rows = _summarize_station(station_data)
 
-        # name priority: station_labels -> STATION_NAMES -> fallback
-        station_name = None
-        if isinstance(station_labels, dict) and sid in station_labels:
-            station_name = str(station_labels[sid])
-        if not station_name:
-            station_name = STATION_NAMES.get(sid, f"S{sid}")
+        # name priority: STATION_NAMES trước (địa danh chuẩn), station_labels chỉ fallback
+        station_name = STATION_NAMES.get(sid) or (str(station_labels[sid]) if isinstance(station_labels, dict) and sid in station_labels else None) or f"S{sid}"
 
         station_options.append({"id": sid, "label": station_name})
         stations_out.append({

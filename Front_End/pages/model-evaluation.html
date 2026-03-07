@@ -35,27 +35,27 @@
 
     <!-- Content Grid -->
     <div class="content-grid">
-        <!-- Comparison Table Section -->
-        <section class="card comparison-section">
-            <h3 class="card-title">Bảng so sánh các mô hình</h3>
+        <!-- Left Column -->
+        <div class="left-column">
 
-            <div class="controls">
-                <!-- Dropdown: Station -->
-                <div class="dropdown-wrapper">
-                    <label>Chọn trạm:</label>
-                    <div class="dropdown-container" id="station-dropdown">
+            <!-- Comparison Table Card -->
+            <div class="pm25-station-section comparison-section">
+                <div class="section-header">
+                    <h2 class="card-title">Bảng so sánh các mô hình</h2>
+                </div>
+
+                <div class="controls station-controls">
+                    <!-- Dropdown: Station -->
+                    <div class="dropdown-container" id="station-dropdown" style="position: relative; width: 220px;">
                         <button class="dropdown-button" type="button" aria-haspopup="true" aria-expanded="false">
                             <span class="dropdown-button-text">TP.HCM</span>
                             <span class="dropdown-arrow">&#9662;</span>
                         </button>
                         <div class="dropdown-menu" role="menu"></div>
                     </div>
-                </div>
 
-                <!-- ✅ Dropdown: Horizon -->
-                <div class="dropdown-wrapper">
-                    <label>Chọn thời gian:</label>
-                    <div class="dropdown-container" id="horizon-dropdown">
+                    <!-- Dropdown: Horizon -->
+                    <div class="dropdown-container" id="horizon-dropdown" style="position: relative; width: 160px;">
                         <button class="dropdown-button" type="button" aria-haspopup="true" aria-expanded="false">
                             <span class="dropdown-button-text">1h</span>
                             <span class="dropdown-arrow">&#9662;</span>
@@ -64,66 +64,68 @@
                     </div>
                 </div>
 
-                <button class="btn-create" id="btn-create" type="button">Tạo</button>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Mô hình</th>
+                            <th>RMSE</th>
+                            <th>MAE</th>
+                            <th>MAPE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- JS render từ JSON -->
+                    </tbody>
+                </table>
             </div>
 
-            <table class="comparison-table">
-                <thead>
-                    <tr>
-                        <th>Mô hình</th>
-                        <th>RMSE</th>
-                        <th>MAE</th>
-                        <th>MAPE</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- JS sẽ render từ JSON -->
-                </tbody>
-            </table>
-        </section>
-
-        <!-- Best Model Section -->
-        <section class="card best-model-section">
-            <h3 class="card-title">Mô hình tốt nhất</h3>
-            <div class="best-model-box">
-                <h3 class="best-model-name">-</h3>
+            <!-- Chart Card -->
+            <div class="pm25-station-section chart-section">
+                <div class="section-header">
+                    <h2 class="card-title">Biểu đồ so sánh mô hình</h2>
+                    <p class="chart-description">Biểu đồ thể hiện RMSE/MAE của các mô hình</p>
+                </div>
+                <div class="chart-container" id="comparison-chart-wrap">
+                    <canvas id="comparison-chart"></canvas>
+                </div>
             </div>
-            <p class="best-model-description">Là mô hình Machine Learning...</p>
-        </section>
 
-        <!-- Chart Section -->
-        <section class="card chart-section">
-            <h3 class="card-title">Biểu đồ so sánh mô hình</h3>
-            <p class="chart-description">Biểu đồ thể hiện RMSE/MAE của các mô hình</p>
-            <div class="chart-container">
-                <canvas id="comparison-chart"></canvas>
+        </div><!-- end left-column -->
+
+        <!-- Right Column -->
+        <div class="right-column">
+
+            <!-- Best Model Card -->
+            <div class="station-info-section best-model-section">
+                <div class="section-header">
+                    <h2 class="card-title">Mô hình tốt nhất</h2>
+                </div>
+                <div class="best-model-box">
+                    <h3 class="best-model-name" id="best-model-name">-</h3>
+                </div>
+                <p class="best-model-description">Là mô hình Machine Learning cho kết quả dự báo PM2.5 chính xác nhất tại trạm đang chọn.</p>
             </div>
-        </section>
 
-        <!-- Area Difference Section -->
-        <section class="card area-difference-section">
-            <h3 class="card-title">Sự khác biệt theo khu vực:</h3>
-            <p class="area-difference-text">Traffic thường biến động theo giờ → khó hơn Residential.</p>
-        </section>
+            <!-- Area Difference Card -->
+            <div class="station-info-section area-difference-section">
+                <div class="section-header">
+                    <h2 class="card-title">Sự khác biệt theo khu vực</h2>
+                </div>
+                <p class="area-difference-text">Traffic thường biến động theo giờ → khó hơn Residential.</p>
+            </div>
 
-        <!-- Reason Section -->
-        <section class="card reason-section">
-            <h3 class="card-title">Lý do chọn mô hình:</h3>
-            <p class="reason-text">ưu tiên R² cao và RMSE/MAE thấp, đồng thời ổn định khi áp dụng đa trạm</p>
-        </section>
+        </div><!-- end right-column -->
     </div>
+
 </main>
 
 <!-- Sidebar Component -->
 <aside class="side-ql-unchoose" id="sidebar">
-    <!-- Logo ở trên cùng -->
     <img class="image-3 logo-large" src="../assets/img/logo_lon.png" alt="AirSense HCMC Logo" id="sidebar-logo"/>
     <img class="image-3 logo-small" src="../assets/img/logo_nho.png" alt="AirSense HCMC Logo Small" id="sidebar-logo-small" style="display: none;"/>
 
-    <!-- Toggle Button -->
     <img class="show-left-side-panel" id="sidebarToggle" src="https://c.animaapp.com/aROkQ2yh/img/show-left-side-panel@2x.png" alt="Toggle sidebar" style="cursor: pointer;"/>
 
-    <!-- Mode Switcher -->
     <div class="group-12">
         <div class="rectangle-26"></div>
         <div class="rectangle-27"></div>
@@ -131,10 +133,8 @@
         <div class="text-wrapper-77" data-mode="management">Quản lý</div>
     </div>
 
-    <!-- Active Menu Item Background -->
     <div class="rectangle-28"></div>
 
-    <!-- Navigation Icons -->
     <a href="overview.html" class="nav-link" data-page="overview">
         <img class="analyze" src="https://c.animaapp.com/aROkQ2yh/img/analyze@2x.png" alt="Tổng quan"/>
         <div class="text-wrapper-78">Tổng quan</div>
@@ -150,12 +150,12 @@
         <div class="text-wrapper-79">Khuyến cáo</div>
     </a>
 
-    <a href="dataset.html" class="nav-link active" data-page="dataset">
+    <a href="dataset.html" class="nav-link" data-page="dataset">
         <img class="database" src="https://c.animaapp.com/aROkQ2yh/img/database@2x.png" alt="Dữ liệu"/>
         <div class="text-wrapper-80">Dữ liệu</div>
     </a>
 
-    <a href="model-evaluation.html" class="nav-link" data-page="model-evaluation">
+    <a href="model-evaluation.html" class="nav-link active" data-page="model-evaluation">
         <img class="intelligence" src="https://c.animaapp.com/aROkQ2yh/img/intelligence@2x.png" alt="Đánh giá mô hình"/>
         <div class="text-wrapper-81">Đánh giá mô hình</div>
     </a>
@@ -165,7 +165,6 @@
         <div class="text-wrapper-82">Gợi ý chính sách</div>
     </a>
 
-    <!-- User Profile Section -->
     <div class="group-11">
         <div class="rectangle-25"></div>
         <img class="image-2" src="../assets/img/avatar.jpeg" alt="Avatar"/>
@@ -176,13 +175,30 @@
 </aside>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- Bạn có thể giữ dropdown.js, nhưng file JS dưới không phụ thuộc -->
 <script src="../components/dropdown.js"></script>
-
-<!-- ✅ File đã sửa để đọc JSON đúng schema -->
 <script src="../assets/js/model-evaluation.js"></script>
-
 <script src="../components/sidebar.js"></script>
+
+<script>
+function syncColumnHeights() {
+    const left  = document.querySelector('.left-column');
+    const right = document.querySelector('.right-column');
+    if (!left || !right) return;
+    const h = left.offsetHeight;
+    right.style.height = h + 'px';
+}
+
+// Chạy nhiều lần để bắt được sau khi chart + renderDiffText xong
+['load','resize'].forEach(e => window.addEventListener(e, syncColumnHeights));
+[100, 300, 600, 1000, 1500].forEach(t => setTimeout(syncColumnHeights, t));
+
+// Observe DOM changes trong right-column để sync lại ngay khi JS inject nội dung
+const rightCol = document.querySelector('.right-column');
+if (rightCol) {
+    new MutationObserver(syncColumnHeights)
+        .observe(rightCol, { childList: true, subtree: true });
+}
+</script>
+
 </body>
 </html>

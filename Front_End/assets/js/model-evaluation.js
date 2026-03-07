@@ -2,26 +2,62 @@
   "use strict";
 
   const API_FALLBACK = "http://127.0.0.1:5000/api/model-evaluation";
+  const API_PATH =
+    (location.port === "5000" || location.origin.includes(":5000"))
+      ? "/api/model-evaluation"
+      : API_FALLBACK;
+  const JSON_FALLBACK = "../data/processed/model_evaluation_payload.json";
 
-// Nếu đang chạy UI từ Flask (port 5000) -> dùng relative path
-// Nếu đang mở bằng Live Server (5500, ...) -> gọi thẳng backend 5000
-const API_PATH =
-  (location.port === "5000" || location.origin.includes(":5000"))
-    ? "/api/model-evaluation"
-    : API_FALLBACK;
-
-async function fetchModelEvaluation() {
-  const res = await fetch(API_PATH, { cache: "no-store" });
-  if (!res.ok) {
-    let detail = "";
-    try {
-      const errBody = await res.json();
-      detail = errBody?.message ? ` - ${errBody.message}` : "";
-    } catch (_) {}
-    throw new Error(`HTTP ${res.status} at ${API_PATH}${detail}`);
+// Normalize raw JSON payload → format giống API response
+  function normalizeRawJson(raw) {
+    const NAMES = {"1":"Thủ Đức","2":"Bình Tân","3":"Tân Phú","4":"Bình Thạnh","5":"Quận 3","6":"Quận 10"};
+    const HLABELS = {"1":"1h","3":"3h","6":"6h","12":"12h","24":"24h"};
+    function cn(v) { const n=parseFloat(v); return (v==null||isNaN(n)||!isFinite(n))?null:Math.round(n*1000)/1000; }
+    function pos(v) { return v!=null&&v>0; }
+    function rankable(r) { return pos(r.rmse)&&pos(r.mae)&&pos(r.mape); }
+    function bestFrom(rows) {
+      let valid=rows.filter(r=>r.rankable&&pos(r.rmse));
+      const nonHW=valid.filter(r=>!r.model?.toLowerCase().startsWith("holt"));
+      if(nonHW.length){const med=[...nonHW.map(r=>r.rmse)].sort((a,b)=>a-b)[Math.floor(nonHW.length/2)];valid=valid.filter(r=>r.rmse<=med*10);}
+      if(!valid.length)return null;
+      return valid.sort((a,b)=>a.rmse-b.rmse)[0].model;
+    }
+    function sumByH(byH) {
+      return Object.entries(byH||{}).map(([h,metrics])=>{
+        const rows=(metrics||[]).map(item=>{const r={model:item.model,rmse:cn(item.rmse),mae:cn(item.mae),mape:cn(item.mape),is_best:item.is_best||0};r.rankable=rankable(r);return r;});
+        return {horizon:h,horizon_label:HLABELS[h]||h+"h",rows,best_model:bestFrom(rows)};
+      });
+    }
+    const stations=[];
+    if(raw?.global?.by_horizon){
+      const hzs=sumByH(raw.global.by_horizon);
+      stations.push({id:"global",name:"TP.HCM",horizons:hzs,best_model_overall:hzs.find(h=>h.horizon==="1")?.best_model||null});
+    }
+    const results=raw?.per_station?.results||{};
+    Object.keys(results).sort((a,b)=>+a-+b).forEach(sid=>{
+      const hzs=sumByH(results[sid]||{});
+      stations.push({id:sid,name:NAMES[sid]||"S"+sid,horizons:hzs,best_model_overall:hzs.find(h=>h.horizon==="1")?.best_model||null});
+    });
+    const horizons=(raw?.horizons||[1,3,6,12,24]).map(String);
+    const defId=stations.some(s=>s.id==="global")?"global":(stations[0]?.id||"global");
+    return {ok:true,stations,horizons,default_station_id:defId,default_horizon:"1"};
   }
-  return await res.json();
-}
+
+  async function fetchModelEvaluation() {
+    // 1) Thử Flask API
+    for (const url of [API_PATH, API_FALLBACK]) {
+      try {
+        const res = await fetch(url, { cache:"no-store", signal:AbortSignal.timeout(3000) });
+        if (res.ok) { const d=await res.json(); if(d?.ok&&Array.isArray(d?.stations))return d; }
+      } catch(_) {}
+    }
+    // 2) Fallback: đọc JSON trực tiếp
+    try {
+      const res = await fetch(JSON_FALLBACK, { cache:"no-store" });
+      if (res.ok) return normalizeRawJson(await res.json());
+    } catch(_) {}
+    throw new Error("Không thể tải dữ liệu: Flask API không phản hồi và không tìm thấy JSON fallback.");
+  }
 
   let _data = null;
   let _stationById = {};
@@ -85,11 +121,14 @@ async function fetchModelEvaluation() {
 
     // Build per-station blocks
     for (const st of stationsRaw) {
-      const name = stationLabels[st] ? `Trạm ${stationLabels[st].replace(/^S/, "")}` : `Trạm ${st}`;
-      const stResults = payload?.results?.[st] || {};
+      const STATION_NAMES = {"1":"Thủ Đức","2":"Bình Tân","3":"Tân Bình","4":"Bình Thạnh","5":"Quận 3","6":"Quận 10"};
+      const name = STATION_NAMES[st] || (stationLabels[st] ? stationLabels[st] : `Trạm ${st}`);
+      const stResults = payload?.per_station?.results?.[st] || raw?.per_station?.results?.[st] || payload?.results?.[st] || {};
 
       const hBlocks = horizons.map((h) => {
-        const rows = (stResults[String(h)] || []).map((r) => ({
+        const rows = (stResults[String(h)] || [])
+          .filter(r => r.rmse !== null && r.rmse !== undefined)
+          .map((r) => ({
           model: r.model,
           rmse: r.rmse,
           mae: r.mae,
@@ -124,9 +163,13 @@ async function fetchModelEvaluation() {
     }
 
     // Build GLOBAL station "global" from payload.global.by_horizon if exists
-    if (payload?.global?.by_horizon) {
+    // global nằm ở top-level JSON (raw.global), không phải trong per_station
+    const globalData = raw?.global || payload?.global || payload?.per_station?.global || null;
+    if (globalData?.by_horizon) {
       const gBlocks = horizons.map((h) => {
-        const rows = (payload.global.by_horizon[String(h)] || []).map((r) => ({
+        const rows = (globalData.by_horizon[String(h)] || [])
+          .filter(r => r.rmse !== null && r.rmse !== undefined)
+          .map((r) => ({
           model: r.model,
           rmse: r.rmse,
           mae: r.mae,
@@ -137,7 +180,7 @@ async function fetchModelEvaluation() {
         return {
           horizon: h,
           rows,
-          best_model: bestRow ? bestRow.model : (payload?.global?.best_by_horizon?.[String(h)] || null),
+          best_model: bestRow ? bestRow.model : (globalData?.best_by_horizon?.[String(h)] || null),
         };
       });
 
@@ -145,7 +188,7 @@ async function fetchModelEvaluation() {
         id: "global",
         name: "TP.HCM",
         horizons: gBlocks,
-        best_model_overall: payload?.global?.best_overall || null,
+        best_model_overall: globalData?.best_overall || null,
         used_rows: null,
         dropped_rows: null,
       });
@@ -193,20 +236,20 @@ async function fetchModelEvaluation() {
   function getBestModel(station, horizon) {
     if (!station) return null;
 
-    const hb = getHorizonBlock(station, horizon);
-    if (!hb) return station.best_model_overall || null;
+    // Tính lại theo RMSE thấp nhất — không dùng server flag (có thể loại Naive)
+    const rows = getRows(station, horizon).filter(r => asNum(r.rmse) != null && asNum(r.rmse) > 0);
+    if (!rows.length) return station.best_model_overall || null;
 
-    // 1) ưu tiên best_model do server/json set (đã tie-break)
-    if (hb.best_model) return hb.best_model;
-
-    // 2) fallback: row có is_best=1
-    const rows = getRows(station, horizon);
-    const bestRow = rows.find(r => Number(r.is_best) === 1);
-    if (bestRow) return bestRow.model;
-
-    // 3) fallback: min RMSE
-    rows.sort((a, b) => (asNum(a.rmse) ?? 999) - (asNum(b.rmse) ?? 999));
-    return rows[0]?.model || null;
+    // Loại Holt-Winters nếu RMSE bất thường
+    const nonHW = rows.filter(r => !r.model?.toLowerCase().startsWith("holt"));
+    let candidates = rows;
+    if (nonHW.length > 0) {
+      const rmseVals = nonHW.map(r => asNum(r.rmse)).sort((a,b) => a-b);
+      const median = rmseVals[Math.floor(rmseVals.length / 2)];
+      candidates = rows.filter(r => asNum(r.rmse) <= median * 10);
+    }
+    candidates.sort((a, b) => (asNum(a.rmse) ?? 999) - (asNum(b.rmse) ?? 999));
+    return candidates[0]?.model || null;
   }
 
   // ----------------------------
@@ -215,28 +258,25 @@ async function fetchModelEvaluation() {
   function renderTable(station) {
     const tbody = q(".comparison-table tbody");
     if (!tbody || !station) return;
+    let rows = getRows(station, _activeHorizon);
+    if (!rows.length) { tbody.innerHTML = '<tr><td colspan="4">Không có dữ liệu.</td></tr>'; return; }
 
-    const rows = getRows(station, _activeHorizon);
-    const best = getBestModel(station, _activeHorizon);
+    // Ẩn HW nếu rmse null/0
+    rows = rows.filter(r => !(r.model?.toLowerCase().startsWith("holt") && (asNum(r.rmse)==null||asNum(r.rmse)<=0)));
 
-    if (!rows.length) {
-      tbody.innerHTML = '<tr><td colspan="4">Không có dữ liệu tại trạm / mốc này.</td></tr>';
-      return;
-    }
+    // Tính best theo RMSE
+    const valid = rows.filter(r=>asNum(r.rmse)!=null&&asNum(r.rmse)>0);
+    const nonHW = valid.filter(r=>!r.model?.toLowerCase().startsWith("holt"));
+    let cands = valid;
+    if(nonHW.length){const med=[...nonHW.map(r=>asNum(r.rmse))].sort((a,b)=>a-b)[Math.floor(nonHW.length/2)];cands=valid.filter(r=>asNum(r.rmse)<=med*10);}
+    cands.sort((a,b)=>(asNum(a.rmse)??999)-(asNum(b.rmse)??999));
+    const best = cands[0]?.model||null;
 
-    // sort by RMSE asc (null last)
-    rows.sort((a, b) => (asNum(a.rmse) ?? 999) - (asNum(b.rmse) ?? 999));
-
-    tbody.innerHTML = rows.map((r) => {
-      const isBest = best && r.model === best;
-      return `
-        <tr${isBest ? ' class="row-best"' : ""}>
-          <td>${r.model || "--"}${isBest ? ' <span class="badge-best">Tốt nhất</span>' : ""}</td>
-          <td>${fmt(r.rmse)}</td>
-          <td>${fmt(r.mae)}</td>
-          <td>${fmt(r.mape)}</td>
-        </tr>
-      `;
+    rows.sort((a,b)=>{ if(a.model===best)return -1; if(b.model===best)return 1; return (asNum(a.rmse)??999)-(asNum(b.rmse)??999); });
+    tbody.innerHTML = rows.map(r=>{
+      const ib=best&&r.model===best, rv=asNum(r.rmse), mv=asNum(r.mae), pv=asNum(r.mape);
+      return `<tr${ib?' class="row-best"':""}><td>${r.model||"--"}${ib?' <span class="badge-best">Tốt nhất</span>':""}
+      </td><td>${rv!=null&&rv>0?fmt(rv):"--"}</td><td>${mv!=null&&mv>0?fmt(mv):"--"}</td><td>${pv!=null&&pv>0?fmt(pv):"--"}</td></tr>`;
     }).join("");
   }
 
@@ -247,22 +287,19 @@ async function fetchModelEvaluation() {
     const bestName = q(".best-model-name");
     const bestDesc = q(".best-model-description");
     if (!bestName || !bestDesc || !station) return;
-
     const best = getBestModel(station, _activeHorizon) || "--";
     bestName.textContent = String(best).toUpperCase();
-
-    const used = station.used_rows != null ? Number(station.used_rows) : null;
-    const dropped = station.dropped_rows != null ? Number(station.dropped_rows) : null;
-
-    let extra = "";
-    if (used != null && dropped != null) {
-      extra = ` Dùng ${used} bản ghi hợp lệ, loại ${dropped} bản ghi rỗng hoặc bằng 0.`;
-    }
-
-    bestDesc.textContent =
-      `Mô hình ${best} được chọn tại ${station.name} ở mốc ${_activeHorizon}h ` +
-      `(ưu tiên RMSE, sau đó MAE và MAPE; tie-break do server/json quyết định).` +
-      extra;
+    const MODEL_DESC = {
+      "Naive":         "Dự báo bằng giá trị quan sát gần nhất. Hiệu quả khi PM2.5 ổn định, ít biến động đột ngột.",
+      "Ridge":         "Hồi quy tuyến tính có regularization — cân bằng tốt giữa độ chính xác và độ ổn định trên nhiều trạm.",
+      "Random Forest": "Tập hợp nhiều cây quyết định — nắm bắt tốt các mối quan hệ phi tuyến trong dữ liệu PM2.5.",
+      "XGBoost":       "Gradient boosting tối ưu — hiệu quả trên dữ liệu có nhiều đặc trưng và xu hướng phức tạp.",
+    };
+    const rows = getRows(station, _activeHorizon).filter(r => asNum(r.rmse) != null && asNum(r.rmse) > 0);
+    const bestRow = rows.find(r => r.model === best);
+    const desc = MODEL_DESC[best] || `Mô hình ${best} có sai số dự báo thấp nhất tại trạm này.`;
+    const rmseInfo = bestRow ? ` RMSE = ${fmt(bestRow.rmse)}, thấp nhất trong ${rows.length} mô hình ở mốc ${_activeHorizon}h.` : "";
+    bestDesc.textContent = desc + rmseInfo;
   }
 
   // ----------------------------
@@ -332,39 +369,101 @@ async function fetchModelEvaluation() {
   // Render difference text
   // ----------------------------
   function renderDiffText(station) {
-    const el = q(".area-difference-text");
-    if (!el || !station) return;
-
-    const best = getBestModel(station, _activeHorizon);
-    const rows = getRows(station, _activeHorizon);
-    const stRow = rows.find(r => r.model === best);
-
-    if (!stRow || asNum(stRow.rmse) == null) {
-      el.textContent = "Chưa đủ dữ liệu để nhận xét sự khác biệt khu vực.";
-      return;
+    const section = q(".area-difference-section");
+    if (!section || !station) return;
+    const oldText = section.querySelector(".area-difference-text");
+    if (oldText) oldText.remove();
+    let container = section.querySelector(".kpi-area-container");
+    if (!container) {
+      container = document.createElement("div");
+      container.className = "kpi-area-container";
+      section.appendChild(container);
     }
 
-    // global mean RMSE of BEST model per station at this horizon (including baselines if they win)
-    const allStations = Object.values(_stationById || {}).filter(s => s && s.id !== "global");
-    const rmseList = allStations.map(st => {
+    // Xếp hạng tất cả trạm (không gồm global) theo RMSE best model
+    const allSt = Object.values(_stationById||{}).filter(s => s && s.id !== "global");
+    const ranked = allSt.map(st => {
       const b = getBestModel(st, _activeHorizon);
-      const rr = getRows(st, _activeHorizon).find(x => x.model === b);
-      return rr ? asNum(rr.rmse) : null;
-    }).filter(v => v != null);
+      const r = getRows(st, _activeHorizon)
+        .filter(x => asNum(x.rmse) != null && asNum(x.rmse) > 0)
+        .find(x => x.model === b);
+      return { id: st.id, name: st.name, model: b||"--", rmse: r ? asNum(r.rmse) : null };
+    }).filter(s => s.rmse != null).sort((a, b) => a.rmse - b.rmse);
 
-    if (!rmseList.length) {
-      el.textContent = "Chưa đủ dữ liệu để nhận xét sự khác biệt khu vực.";
-      return;
+    if (!ranked.length) { container.innerHTML = `<p style="color:#888;font-size:13px">Chưa đủ dữ liệu.</p>`; return; }
+
+    const myData = ranked.find(r => r.id === station.id);
+    const myRank = ranked.indexOf(myData) + 1;
+    const cityAvg = ranked.reduce((s,r) => s+r.rmse, 0) / ranked.length;
+    const minRmse = ranked[0].rmse;
+    const maxRmse = ranked[ranked.length-1].rmse;
+    const range = maxRmse - minRmse || 1;
+
+    const isGlobal = station.id === "global";
+
+    // Verdict cho trạm cụ thể
+    let verdictHTML = "";
+    if (!isGlobal && myData) {
+      const diff = myData.rmse - cityAvg;
+      const vc = diff > 0.5 ? "harder" : diff < -0.5 ? "easier" : "neutral";
+      const vi = diff > 0.5 ? "⚠️" : diff < -0.5 ? "✅" : "➖";
+      const better = myRank - 1;
+      const worse  = ranked.length - myRank;
+      const vt = diff > 0.5
+        ? `<strong>${myData.name}</strong> khó dự báo hơn ${better} trạm, dễ hơn ${worse} trạm — PM2.5 biến động lớn.`
+        : diff < -0.5
+        ? `<strong>${myData.name}</strong> dễ dự báo hơn ${worse} trạm, khó hơn ${better} trạm — PM2.5 ổn định.`
+        : `<strong>${myData.name}</strong> có mức độ dự báo tương đương trung bình thành phố.`;
+      verdictHTML = `<div class="kpi-verdict ${vc}" style="margin-bottom:14px">
+        <span class="kpi-verdict-icon">${vi}</span><span>${vt}</span>
+      </div>`;
     }
 
-    const globalMean = rmseList.reduce((s, v) => s + v, 0) / rmseList.length;
-    const stationRmse = asNum(stRow.rmse);
-    const diff = Math.abs(stationRmse - globalMean);
-    const trend = stationRmse > globalMean ? "khó dự báo hơn mức trung bình" : "ổn định hơn mức trung bình";
+    // Station ranking bars
+    const stRows = ranked.map((r, i) => {
+      const isCurrent = r.id === station.id;
+      const barPct = Math.round((1 - (r.rmse - minRmse) / range) * 100);
+      const medals = ["🥇","🥈","🥉"];
+      const rankLabel = medals[i] || `${i+1}`;
+      return `
+        <div class="st-row ${isCurrent ? "st-current" : ""}">
+          <span class="st-rank">${rankLabel}</span>
+          <div class="st-body">
+            <div class="st-top">
+              <span class="st-name">${r.name}</span>
+              <span class="st-model-tag">${r.model}</span>
+              <span class="st-rmse-val">${fmt(r.rmse)}</span>
+            </div>
+            <div class="st-bar-track">
+              <div class="st-bar-fill ${isCurrent ? "st-bar-current" : ""}" style="width:${barPct}%"></div>
+            </div>
+          </div>
+        </div>`;
+    }).join("");
 
-    el.textContent =
-      `${station.name}: mô hình tốt nhất là ${best || "--"} (RMSE=${fmt(stationRmse)}), ` +
-      `${trend} khoảng ${fmt(diff)} RMSE so với mức trung bình các trạm (${fmt(globalMean)}).`;
+    // Summary pills
+    const easiest = ranked[0];
+    const hardest = ranked[ranked.length-1];
+
+    container.innerHTML = `
+      <div class="st-pills">
+        <div class="st-pill st-pill-easy">
+          <span class="st-pill-icon">✅</span>
+          <div><span class="st-pill-label">Dễ nhất</span><span class="st-pill-val">${easiest.name}</span></div>
+          <span class="st-pill-rmse">${fmt(easiest.rmse)}</span>
+        </div>
+        <div class="st-pill st-pill-hard">
+          <span class="st-pill-icon">🔴</span>
+          <div><span class="st-pill-label">Khó nhất</span><span class="st-pill-val">${hardest.name}</span></div>
+          <span class="st-pill-rmse">${fmt(hardest.rmse)}</span>
+        </div>
+      </div>
+
+      ${verdictHTML}
+
+      <div class="st-list-title">Xếp hạng độ dễ dự báo · mốc ${_activeHorizon}h</div>
+      <div class="st-list">${stRows}</div>
+      <div class="st-list-note">RMSE thấp = dễ dự báo hơn · Bar dài = tốt hơn</div>`;
   }
 
   // ----------------------------
@@ -528,7 +627,6 @@ async function fetchModelEvaluation() {
 
     initStationDropdown();
     initHorizonDropdown();
-    bindCreateButton();
 
     renderStation(_activeStationId);
   }
