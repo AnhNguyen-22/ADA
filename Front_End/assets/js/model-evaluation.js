@@ -423,7 +423,7 @@
     const stRows = ranked.map((r, i) => {
       const isCurrent = r.id === station.id;
       const barPct = Math.round((1 - (r.rmse - minRmse) / range) * 100);
-      const medals = ["🥇","🥈","🥉"];
+      const medals = ["","",""];
       const rankLabel = medals[i] || `${i+1}`;
       return `
         <div class="st-row ${isCurrent ? "st-current" : ""}">
@@ -448,12 +448,12 @@
     container.innerHTML = `
       <div class="st-pills">
         <div class="st-pill st-pill-easy">
-          <span class="st-pill-icon">✅</span>
+          <span class="st-pill-icon"></span>
           <div><span class="st-pill-label">Dễ nhất</span><span class="st-pill-val">${easiest.name}</span></div>
           <span class="st-pill-rmse">${fmt(easiest.rmse)}</span>
         </div>
         <div class="st-pill st-pill-hard">
-          <span class="st-pill-icon">🔴</span>
+          <span class="st-pill-icon"></span>
           <div><span class="st-pill-label">Khó nhất</span><span class="st-pill-val">${hardest.name}</span></div>
           <span class="st-pill-rmse">${fmt(hardest.rmse)}</span>
         </div>
