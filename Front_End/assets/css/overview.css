@@ -331,7 +331,7 @@
 }
 
 .explanation-list li {
-  font-size: 14px;
+  font-size: 18px;
   color: white;
   line-height: 1.6;
   padding-left: 24px;
@@ -342,7 +342,7 @@
   content: "•";
   position: absolute;
   left: 0;
-  color: #0EA5E9;
+  color: white;
   font-size: 20px;
   line-height: 1.2;
 }

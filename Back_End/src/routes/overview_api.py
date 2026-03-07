@@ -29,25 +29,40 @@ STATION_TYPE_MAP = {
     6: "Giao thông + Dân cư",     # Quận 10
 }
 
+# Tên hiển thị theo khu vực (dùng cho ranking, bản đồ, dropdown)
+STATION_NAME_MAP = {
+    1: "Thủ Đức",
+    2: "Bình Tân",
+    3: "Tân Phú",
+    4: "Bình Thạnh",
+    5: "Quận 3",
+    6: "Quận 10",
+}
+
 
 def classify_pm25_level(value: float):
     """
-    Trả về (level_en, level_vi, risk_code)
-    risk_code dùng để map màu: 'good' | 'moderate' | 'unhealthy'
+    Trả về (level_en, level_vi, risk_code) theo bảng chuẩn PM2.5-AQI:
+    - 0-12: Tốt | 12.1-35.4: Trung bình | 35.5-55.4: Không tốt cho nhóm nhạy cảm
+    - 55.5-150.4: Không tốt cho sức khỏe | 150.5-250.4: Rất không tốt | 250.5+: Nguy hiểm
     """
     if pd.isna(value):
         return "Unknown", "Không xác định", "moderate"
+    if value == 0:
+        return "Unknown", "Không đo lường được", "moderate"
 
-    if value <= 15:
-        return "Healthy", "Tốt", "good"
-    elif value <= 45:
-        return "Fair", "Trung bình", "moderate"
-    elif value <= 75:
-        return "Unhealthy", "Kém", "unhealthy"
-    elif value <= 100:
-        return "Very Unhealthy", "Rất kém", "unhealthy"
+    if value <= 12.0:
+        return "Good", "Tốt", "good"
+    elif value <= 35.4:
+        return "Moderate", "Trung bình", "moderate"
+    elif value <= 55.4:
+        return "Unhealthy for Sensitive", "Không tốt cho nhóm nhạy cảm", "unhealthy"
+    elif value <= 150.4:
+        return "Unhealthy", "Không tốt cho sức khỏe", "unhealthy"
+    elif value <= 250.4:
+        return "Very Unhealthy", "Rất không tốt", "unhealthy"
     else:
-        return "Hazardous", "Nguy hại", "unhealthy"
+        return "Hazardous", "Nguy hiểm", "unhealthy"
 
 
 def _safe_float(x: Optional[float]) -> Optional[float]:
@@ -100,12 +115,12 @@ def compute_overview_kpis() -> Dict[str, Any]:
             most_polluted_type = STATION_TYPE_MAP.get(most_polluted_station)
 
             for station, avg_pm in station_avg_pm25.items():
-                ranking_labels.append(f"S{int(station)}")
+                ranking_labels.append(STATION_NAME_MAP.get(int(station), f"S{int(station)}"))
                 ranking_values.append(float(avg_pm))
 
     # -----------------------------
-    # KPI 3: trung bình PM2.5 hôm nay / hôm qua
-    # + trend 7 ngày, + thông tin từng trạm
+    # KPI 3: trung bình PM2.5 trong ngày (dataset theo giờ -> gộp theo ngày)
+    # Hôm nay = ngày mới nhất trong dataset, Hôm qua = ngày liền trước
     # -----------------------------
     avg_pm25_today: Optional[float] = None
     avg_pm25_yesterday: Optional[float] = None
@@ -126,17 +141,18 @@ def compute_overview_kpis() -> Dict[str, Any]:
         df_kpi = df_kpi.dropna(subset=["datetime"])
 
         if not df_kpi.empty:
+            # Gộp dữ liệu theo giờ -> trung bình theo ngày (theo dataset)
+            daily_avg_pm25 = df_kpi.groupby(df_kpi["datetime"].dt.date)["PM2.5"].mean()
+
             latest_ts = df_kpi["datetime"].max()
             latest_date = latest_ts.date()
-            yesterday_date = (latest_ts - pd.Timedelta(days=1)).date()
+            previous_date = latest_date - pd.Timedelta(days=1)  # tính từ date, không từ timestamp
 
-            today_data = df_kpi[df_kpi["datetime"].dt.date == latest_date]
-            yesterday_data = df_kpi[df_kpi["datetime"].dt.date == yesterday_date]
-
-            if not today_data.empty:
-                avg_pm25_today = today_data["PM2.5"].mean()
-            if not yesterday_data.empty:
-                avg_pm25_yesterday = yesterday_data["PM2.5"].mean()
+            # Hôm nay = ngày mới nhất, Hôm qua = ngày liền trước (theo dataset)
+            if latest_date in daily_avg_pm25.index:
+                avg_pm25_today = float(daily_avg_pm25[latest_date])
+            if previous_date in daily_avg_pm25.index:
+                avg_pm25_yesterday = float(daily_avg_pm25[previous_date])
 
             if pd.notna(avg_pm25_today) and pd.notna(avg_pm25_yesterday):
                 change = float(avg_pm25_today - avg_pm25_yesterday)
@@ -222,7 +238,7 @@ def compute_overview_kpis() -> Dict[str, Any]:
                     )
                     top3 = hours_by_station.head(3)
                     for station, hours in top3.items():
-                        hours_above_threshold_labels.append(f"S{int(station)}")
+                        hours_above_threshold_labels.append(STATION_NAME_MAP.get(int(station), f"S{int(station)}"))
                         hours_above_threshold_values.append(int(hours))
 
     # Đóng gói kết quả, giữ cùng schema như JSON cũ

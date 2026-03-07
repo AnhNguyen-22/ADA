@@ -11,15 +11,15 @@ const variables = [
         imageSize: '180%',
     },
     { 
-        name: 'PM10', 
-        unit: 'µg/m³', 
-        fullName: 'Particulate Matter 10 - Bụi mịn PM10',
-        phonetic: '/pɑːrˈtɪkjələt ˈmætər ten/',
-        description: 'Các hạt bụi có đường kính dưới 10 micromet, bao gồm bụi, phấn hoa và nấm mốc. Gây kích ứng niêm mạc mắt, mũi, họng; tích tụ trong các phế quản lớn.', 
-        image: '../assets/img/dataset_grid_PM.jpg',
-        imagePosition: '80% center',
-        imageSize: '160%',
-    },
+    name: 'TSP', 
+    unit: 'µg/m³', 
+    fullName: 'Total Suspended Particles - Tổng bụi lơ lửng',
+    phonetic: '/ˈtoʊtəl səˈspendɪd ˈpɑːrtɪkəlz/',
+    description: 'Tổng lượng các hạt bụi lơ lửng trong không khí, bao gồm tất cả kích thước. Ảnh hưởng đến tầm nhìn và hệ hô hấp.', 
+    image: '../assets/img/dataset_grid_TSP.jpg',
+    imagePosition: 'center',
+    imageSize: 'cover',
+},
     { 
         name: 'NO2', 
         unit: 'µg/m³', 
@@ -113,8 +113,8 @@ function createHeatmap() {
             const matrix = result.matrix;
             
             container.innerHTML = ''; 
-            container.style.display = 'grid';
-            container.style.gridTemplateColumns = `max-content repeat(${apiVars.length}, 1fr)`;
+            container.style.display = 'grid';container.style.gridTemplateColumns = `max-content repeat(${apiVars.length}, 1fr)`;
+            
             container.style.gap = '2px';
             
             container.appendChild(document.createElement('div'));

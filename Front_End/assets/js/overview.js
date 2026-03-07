@@ -76,15 +76,31 @@ document.addEventListener('DOMContentLoaded', function() {
         6: { lat: 10.7804716, lng: 106.6594579 }, // S6 - Trường Sơn, Quận 10
     };
 
-    // Tên hiển thị của trạm theo quận/khu vực
+    // Tên hiển thị của trạm theo khu vực (Thủ Đức, Bình Tân, ...)
     const STATION_LABELS = {
-        1: 'Trạm Thủ Đức',
-        2: 'Trạm Bình Tân',
-        3: 'Trạm Tân Phú',
-        4: 'Trạm Bình Thạnh',
-        5: 'Trạm Quận 3',
-        6: 'Trạm Quận 10',
+        1: 'Thủ Đức',
+        2: 'Bình Tân',
+        3: 'Tân Phú',
+        4: 'Bình Thạnh',
+        5: 'Quận 3',
+        6: 'Quận 10',
     };
+    // Map "S1".."S6" → tên khu vực (để chuẩn hóa cả khi API trả về mã trạm)
+    const STATION_ID_TO_NAME = {
+        'S1': 'Thủ Đức', 'S2': 'Bình Tân', 'S3': 'Tân Phú',
+        'S4': 'Bình Thạnh', 'S5': 'Quận 3', 'S6': 'Quận 10',
+    };
+    function stationDisplayName(idOrLabel) {
+        if (idOrLabel == null) return '';
+        const str = String(idOrLabel).trim().toUpperCase();
+        const num = parseInt(str.replace(/^S/, ''), 10);
+        if (num >= 1 && num <= 6 && !isNaN(num)) return STATION_LABELS[num];
+        if (STATION_ID_TO_NAME[str]) return STATION_ID_TO_NAME[str];
+        // Đã là tên khu vực (Thủ Đức, Bình Tân...) thì giữ nguyên
+        const names = ['THỦ ĐỨC', 'BÌNH TÂN', 'TÂN PHÚ', 'BÌNH THẠNH', 'QUẬN 3', 'QUẬN 10'];
+        if (names.indexOf(str) >= 0) return String(idOrLabel).trim();
+        return STATION_LABELS[idOrLabel] || ('S' + idOrLabel);
+    }
 
     // Khởi tạo bản đồ Leaflet (nếu thư viện đã được load)
     if (typeof L !== 'undefined') {
@@ -126,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Card 2: Trạm có mức độ ô nhiễm cao nhất
             const mostPollutedEl = document.querySelector('.summary-cards .summary-band-item:nth-child(2) .summary-band-value');
             if (mostPollutedEl && data.most_polluted_station != null && data.most_polluted_value != null) {
-                const stationLabel = 'Trạm S' + data.most_polluted_station;
+                const stationLabel = stationDisplayName(data.most_polluted_station);
                 const valueLabel = data.most_polluted_value.toFixed(1) + ' µg/m³';
                 mostPollutedEl.textContent = stationLabel + ' (' + valueLabel + ')';
             }
@@ -163,11 +179,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     const coord = STATION_COORDS[station.id];
                     if (!coord) return;
 
-                    const label = STATION_LABELS[station.id] || ('Trạm S' + station.id);
+                    const label = STATION_LABELS[station.id] || ('S' + station.id);
                     const typeText = station.type || 'N/A';
-                    const pmText = typeof station.pm25 === 'number'
+                    const pmText = (typeof station.pm25 === 'number' && station.pm25 !== 0)
                         ? station.pm25.toFixed(1) + ' µg/m³'
-                        : 'N/A';
+                        : (station.pm25 === 0 ? 'không đo lường được' : 'N/A');
                     const levelText = station.level_vi || station.level_en || 'Không xác định';
 
                     const popupHtml =
@@ -353,18 +369,23 @@ document.addEventListener('DOMContentLoaded', function() {
             if (explanationList) {
                 explanationList.innerHTML = '';
 
-                // 1) Mức PM2.5 trung bình hôm nay so với chuẩn WHO 24h = 15 µg/m³
+                // 1) Mức PM2.5 trung bình hôm nay theo bảng chuẩn PM2.5-AQI
                 if (typeof data.avg_pm25_today === 'number') {
                     const li1 = document.createElement('li');
                     const today = data.avg_pm25_today;
-                    const diffToWho = today - 15;
                     let statusText;
-                    if (today <= 15) {
-                        statusText = 'dưới ngưỡng khuyến nghị của WHO (tốt).';
+                    if (today <= 12.0) {
+                        statusText = 'ở mức tốt (hầu như không ảnh hưởng sức khỏe).';
                     } else if (today <= 35.4) {
-                        statusText = 'cao hơn ngưỡng WHO nhưng vẫn ở mức trung bình.';
+                        statusText = 'ở mức trung bình (người nhạy cảm có thể bị kích ứng nhẹ đường hô hấp).';
+                    } else if (today <= 55.4) {
+                        statusText = 'không tốt cho nhóm nhạy cảm (trẻ em, người già nên hạn chế hoạt động ngoài trời).';
+                    } else if (today <= 150.4) {
+                        statusText = 'không tốt cho sức khỏe (hạn chế vận động mạnh, che chắn khi ra ngoài).';
+                    } else if (today <= 250.4) {
+                        statusText = 'rất không tốt (tránh hoạt động ngoài trời, bảo vệ hô hấp).';
                     } else {
-                        statusText = 'cao hơn nhiều so với ngưỡng WHO, cần hạn chế các hoạt động ngoài trời.';
+                        statusText = 'nguy hiểm (không nên ra ngoài, bắt buộc dùng biện pháp bảo vệ đặc biệt).';
                     }
                     li1.textContent = `PM2.5 trung bình 24h hiện tại là ${today.toFixed(1)} µg/m³, ${statusText}`;
                     explanationList.appendChild(li1);
@@ -386,8 +407,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 // 3) Trạm ô nhiễm nhất hiện tại
                 if (data.most_polluted_station != null && typeof data.most_polluted_value === 'number') {
                     const li3 = document.createElement('li');
+                    const name = stationDisplayName(data.most_polluted_station);
                     li3.textContent =
-                        `Trạm ô nhiễm nhất hiện tại là trạm S${data.most_polluted_station} ` +
+                        `Trạm ô nhiễm nhất hiện tại là trạm ${name} ` +
                         `với PM2.5 trung bình ${data.most_polluted_value.toFixed(1)} µg/m³.`;
                     explanationList.appendChild(li3);
                 }
@@ -418,7 +440,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // ------------------------------------------------------------------
             const hoursChartCanvas = document.getElementById('hoursAboveThresholdChart');
             if (hoursChartCanvas && Array.isArray(data.hours_above_threshold_labels) && Array.isArray(data.hours_above_threshold_values)) {
-                const labels3 = data.hours_above_threshold_labels;
+                const labels3 = data.hours_above_threshold_labels.map(function(l) { return stationDisplayName(l); });
                 const values3 = data.hours_above_threshold_values;
 
                 if (labels3.length === values3.length && labels3.length > 0) {
@@ -523,14 +545,14 @@ document.addEventListener('DOMContentLoaded', function() {
             // ------------------------------------------------------------------
             const rankingCtx = document.getElementById('rankingChart');
             if (rankingCtx) {
-                // Dữ liệu mặc định (fallback nếu backend không cung cấp)
-                let labels = ['S2', 'S4', 'S6', 'S5', 'S3', 'S1'];
+                // Dữ liệu mặc định (fallback nếu backend không cung cấp) — tên khu vực
+                let labels = ['Bình Tân', 'Bình Thạnh', 'Quận 10', 'Quận 3', 'Tân Phú', 'Thủ Đức'];
                 let values = [52.1, 48.3, 42.7, 38.9, 35.2, 32.1];
 
-                // Sử dụng dữ liệu xếp hạng từ backend nếu có
+                // Sử dụng dữ liệu xếp hạng từ backend nếu có (chuẩn hóa label S1/S4 → tên khu vực)
                 if (Array.isArray(data.ranking_labels) && Array.isArray(data.ranking_values) &&
                     data.ranking_labels.length === data.ranking_values.length && data.ranking_labels.length > 0) {
-                    labels = data.ranking_labels;
+                    labels = data.ranking_labels.map(function(l) { return stationDisplayName(l); });
                     values = data.ranking_values;
                 }
 
@@ -542,8 +564,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
 
+                // Bộ màu xanh rất dịu: trạm nhất xanh đậm, còn lại xanh rất nhạt (không chói)
                 const barColors = values.map((_, idx) =>
-                    idx === topIndex ? '#EF4444' : '#F97316'
+                    idx === topIndex ? '#075985' : '#5A91AE'
                 );
 
                 new Chart(rankingCtx, {

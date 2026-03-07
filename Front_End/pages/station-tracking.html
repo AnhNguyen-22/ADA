@@ -5,6 +5,17 @@
 <meta charset="utf-8"/>
 <title>AirSense HCMC - Theo dõi trạm</title>
 <link href="../assets/css/station-tracking.css" rel="stylesheet"/>
+<style>
+.status-poor     { background-color: #ff6f00; }
+.status-very-bad { background-color: #ba68c8; }
+.status-hazardous{ background-color: #7b1fa2; }
+/* Badge tự co giãn theo độ dài chữ, không wrap */
+.status-badge {
+    white-space: nowrap !important;
+    max-width: none !important;
+    width: auto !important;
+}
+</style>
 <link href="../components/sidebar.css" rel="stylesheet"/>
 <link href="../components/dropdown.css" rel="stylesheet"/>
 <link href="../assets/css/main.css" rel="stylesheet"/>
@@ -47,7 +58,7 @@
                     <!-- Station Dropdown Component -->
                     <div class="dropdown-container" id="station-dropdown" style="position: relative; width: 250px;">
                         <button class="dropdown-button" type="button" aria-haspopup="true" aria-expanded="false">
-                            <span class="dropdown-button-text">S1 - Giao thông</span>
+                            <span class="dropdown-button-text">Thủ Đức</span>
                             <span class="dropdown-arrow">&#9662;</span>
                         </button>
                         <div class="dropdown-menu" role="menu">
@@ -94,37 +105,6 @@
                 <div class="comparison-chart-container">
                     <h3 class="card-title">So sánh chỉ số PM2.5 tại Trạm <span id="station-name-display">S1</span></h3>
                     <canvas id="comparison-chart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- AQI Scale Section -->
-        <div class="aqi-scale-section">
-            <h2 class="card-title">Thang đo chỉ số chất lượng không khí (AQI)</h2>
-            <div class="aqi-gradient-bar">
-                <div class="aqi-segment aqi-good" style="flex: 1;">
-                    <div class="aqi-label">Tốt</div>
-                    <div class="aqi-range">0-50</div>
-                </div>
-                <div class="aqi-segment aqi-moderate" style="flex: 1;">
-                    <div class="aqi-label">Trung bình</div>
-                    <div class="aqi-range">51-100</div>
-                </div>
-                <div class="aqi-segment aqi-poor" style="flex: 1;">
-                    <div class="aqi-label">Kém</div>
-                    <div class="aqi-range">101-150</div>
-                </div>
-                <div class="aqi-segment aqi-bad" style="flex: 1;">
-                    <div class="aqi-label">Xấu</div>
-                    <div class="aqi-range">151-200</div>
-                </div>
-                <div class="aqi-segment aqi-very-bad" style="flex: 1;">
-                    <div class="aqi-label">Rất xấu</div>
-                    <div class="aqi-range">201-300</div>
-                </div>
-                <div class="aqi-segment aqi-hazardous" style="flex: 1;">
-                    <div class="aqi-label">Nguy hại</div>
-                    <div class="aqi-range">301+</div>
                 </div>
             </div>
         </div>
@@ -280,10 +260,33 @@
             's5': [30, 32, 34, 36, 35, 37, 36, 34, 33, 32, 31, 30],
             's6': [22, 24, 26, 28, 27, 29, 28, 26, 25, 24, 23, 22]
         };
+        // THÊM DÒNG NÀY:
+        const stationNameVi = {
+            s1: 'Thủ Đức', s2: 'Bình Tân', s3: 'Tân Phú',
+            s4: 'Bình Thạnh', s5: 'Quận 3', s6: 'Quận 10'
+        };
 
         // Hàm tính giá trị trung bình
         function calculateAverage(values) {
             return Math.round((values.reduce((a, b) => a + b, 0) / values.length) * 10) / 10;
+        }
+
+        // Hàm xác định trạng thái theo ngưỡng PM2.5 thực (µg/m³) — theo bảng AQI chuẩn
+        function getPM25Status(pm25) {
+            if (pm25 <= 12.0)  return { cls: 'status-good',     text: 'Tốt' };
+            if (pm25 <= 35.4)  return { cls: 'status-moderate', text: 'Trung bình' };
+            if (pm25 <= 55.4)  return { cls: 'status-poor',     text: 'Không tốt cho nhóm nhạy cảm' };
+            if (pm25 <= 150.4) return { cls: 'status-bad',      text: 'Không tốt cho sức khỏe' };
+            if (pm25 <= 250.4) return { cls: 'status-very-bad', text: 'Rất không tốt' };
+            return                    { cls: 'status-hazardous', text: 'Nguy hiểm' };
+        }
+
+        function applyStatusBadges(pm25) {
+            const status = getPM25Status(pm25);
+            document.querySelectorAll('.status-badge').forEach(badge => {
+                badge.className = 'status-badge ' + status.cls;
+                badge.textContent = status.text;
+            });
         }
 
         // Hàm tạo giải thích động cho trạm
@@ -624,7 +627,7 @@
             const stationValue = calculateAverage(stationPM25Data[stationId]);
             const hcmcAverage = 35;
 
-            const labels = ['0', 'WHO', `Trạm ${stationId.toUpperCase()}`, 'TP.HCM'];
+            const labels = ['0', 'WHO', stationNameVi[stationId], 'TP.HCM'];
             const values = [0, whoGuideline, stationValue, hcmcAverage];
             const maxValue = Math.max(...values) + 10;
 
@@ -783,20 +786,7 @@
             if (subtitleEl) subtitleEl.textContent = `Trung bình ~ ${avgValue} µg/m³`;
 
             // Cập nhật status badge
-            const statusBadges = document.querySelectorAll('.status-badge');
-            statusBadges.forEach(badge => {
-                badge.className = 'status-badge';
-                if (avgValue > 50) {
-                    badge.classList.add('status-bad');
-                    badge.textContent = 'Xấu';
-                } else if (avgValue > 35) {
-                    badge.classList.add('status-moderate');
-                    badge.textContent = 'Trung bình';
-                } else {
-                    badge.classList.add('status-good');
-                    badge.textContent = 'Tốt';
-                }
-            });
+            applyStatusBadges(avgValue);
 
             // Cập nhật station name display
             const nameEl = document.getElementById('station-name-display');
@@ -827,12 +817,12 @@
         let currentStation = 's1';
         const stationDropdown = new Dropdown('station-dropdown', {
             items: [
-                { value: 's1', text: 'S1 - Giao thông' },
-                { value: 's2', text: 'S2 - Khu dân cư' },
-                { value: 's3', text: 'S3 - Giao thông' },
-                { value: 's4', text: 'S4 - Khu công nghiệp' },
-                { value: 's5', text: 'S5 - Giao thông' },
-                { value: 's6', text: 'S6 - Khu dân cư' }
+                { value: 's1', text: 'Thủ Đức' },
+                { value: 's2', text: 'Bình Tân' },
+                { value: 's3', text: 'Tân Phú' },
+                { value: 's4', text: 'Bình Thạnh' },
+                { value: 's5', text: 'Quận 3' },
+                { value: 's6', text: 'Quận 10' }
             ],
             defaultItem: 's1',
             onSelect: function(value, text) {
@@ -843,20 +833,7 @@
                 const avgValue = calculateAverage(data);
                 document.querySelector('.section-subtitle').textContent = `Trung bình ~ ${avgValue} µg/m³`;
 
-                const statusBadges = document.querySelectorAll('.status-badge');
-                statusBadges.forEach(badge => {
-                    badge.className = 'status-badge';
-                    if (avgValue > 50) {
-                        badge.classList.add('status-bad');
-                        badge.textContent = 'Xấu';
-                    } else if (avgValue > 35) {
-                        badge.classList.add('status-moderate');
-                        badge.textContent = 'Trung bình';
-                    } else {
-                        badge.classList.add('status-good');
-                        badge.textContent = 'Tốt';
-                    }
-                });
+                applyStatusBadges(avgValue);
 
                 document.getElementById('station-name-display').textContent = value.toUpperCase();
                 document.getElementById('gauge-value').textContent = Math.round(avgValue);
@@ -870,6 +847,7 @@
 
         const initialAvg = calculateAverage(stationPM25Data['s1']);
         document.getElementById('gauge-value').textContent = Math.round(initialAvg);
+        applyStatusBadges(initialAvg);
         drawChart('s1');
         drawGaugeChart(initialAvg);
         drawComparisonChart('s1');
@@ -1119,11 +1097,16 @@ document.addEventListener('DOMContentLoaded', function () {
     let sameTypeMode = 'all';
     let diffTypeStation = null;
 
+    const stationNameVi = {
+        s1: 'Thủ Đức', s2: 'Bình Tân', s3: 'Tân Phú',
+        s4: 'Bình Thạnh', s5: 'Quận 3', s6: 'Quận 10'
+    };
+
     function buildSameTypeItems(currentStationId) {
         const t = stationType[currentStationId];
         const sameStations = Object.keys(stationType).filter(s => stationType[s] === t);
         const items = [{ value: 'all', text: 'Tất cả' }];
-        sameStations.forEach(s => items.push({ value: s, text: `${s.toUpperCase()} - ${typeLabelVi[t] || t}` }));
+        sameStations.forEach(s => items.push({ value: s, text: stationNameVi[s] }));
         return items;
     }
 
@@ -1131,8 +1114,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const t = stationType[currentStationId];
         const diffStations = Object.keys(stationType).filter(s => stationType[s] !== t);
         return diffStations.map(s => {
-            const tp = stationType[s];
-            return { value: s, text: `${s.toUpperCase()} - ${typeLabelVi[tp] || tp}` };
+            return { value: s, text: stationNameVi[s] };
         });
     }
 
@@ -1140,7 +1122,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const exceed = stationPM25DataGov[stationId].map(v => Math.max(v - WHO_GUIDELINE, 0));
         drawBarChart({
             canvasId: 'exceedance-hourly-chart',
-            title: `Above WHO (${WHO_GUIDELINE}) by hour — ${stationId.toUpperCase()}`,
+            title: `Vượt ngưỡng theo giờ — ${stationNameVi[stationId]}`,
             labels: timeLabelsGov,
             values: exceed,
             yLabel: 'µg/m³ above'
@@ -1156,7 +1138,7 @@ document.addEventListener('DOMContentLoaded', function () {
             drawBarChart({
                 canvasId: 'same-type-comparison-chart',
                 title: `Same type: ${typeLabelVi[t] || t} — Daily average`,
-                labels: sameStations.map(s => s.toUpperCase()),
+                labels: sameStations.map(s => stationNameVi[s]),
                 values: sameStations.map(s => average(stationPM25DataGov[s])),
                 yLabel: 'µg/m³ (avg)'
             });
@@ -1166,8 +1148,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const other = sameTypeMode;
         drawBarChart({
             canvasId: 'same-type-comparison-chart',
-            title: `Same type compare (avg): WHO vs ${currentStationId.toUpperCase()} vs ${other.toUpperCase()}`,
-            labels: ['WHO', currentStationId.toUpperCase(), other.toUpperCase()],
+            title: `So sánh cùng loại (avg): WHO vs ${stationNameVi[currentStationId]} vs ${stationNameVi[other]}`,
+            labels: ['WHO', stationNameVi[currentStationId], stationNameVi[other]],
             values: [WHO_GUIDELINE, currentAvg, average(stationPM25DataGov[other])],
             yLabel: 'µg/m³ (avg)'
         });
@@ -1180,21 +1162,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
         drawBarChart({
             canvasId: 'diff-type-comparison-chart',
-            title: `Different type compare (avg): WHO vs ${currentStationId.toUpperCase()} vs ${other.toUpperCase()}`,
-            labels: ['WHO', currentStationId.toUpperCase(), other.toUpperCase()],
+            title: `So sánh khác loại (avg): WHO vs ${stationNameVi[currentStationId]} vs ${stationNameVi[other]}`,
+            labels: ['WHO', stationNameVi[currentStationId], stationNameVi[other]],
             values: [WHO_GUIDELINE, currentAvg, average(stationPM25DataGov[other])],
             yLabel: 'µg/m³ (avg)'
         });
     }
 
     function updateGovernmentTitles(stationId) {
-        const stationUpper = stationId.toUpperCase();
+    const stationName = stationNameVi[stationId] || stationId.toUpperCase();
         const el1 = document.getElementById('gov-station-name-exceedance');
         const el2 = document.getElementById('gov-station-name-same-type');
         const el3 = document.getElementById('gov-station-name-diff-type');
-        if (el1) el1.textContent = stationUpper;
-        if (el2) el2.textContent = stationUpper;
-        if (el3) el3.textContent = stationUpper;
+        if (el1) el1.textContent = stationName;
+        if (el2) el2.textContent = stationName;
+        if (el3) el3.textContent = stationName;
     }
 
     function initOrUpdateGovDropdowns(currentStationId) {

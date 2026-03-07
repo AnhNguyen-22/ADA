@@ -29,10 +29,14 @@
       .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
 
+  const STATION_NAMES = {
+    "1": "Thủ Đức", "2": "Bình Tân", "3": "Tân Phú",
+    "4": "Bình Thạnh", "5": "Quận 3", "6": "Quận 10"
+  };
   function stationLabel(stationId) {
     if (stationId === "global") return "Global";
     const num = String(stationId).replace(".0", "");
-    return "Trạm " + num;
+    return STATION_NAMES[num] || ("Trạm " + num);
   }
 
   // horizon → folder mapping
@@ -83,10 +87,7 @@
 
     select.addEventListener("change", function () {
       _activeHorizon = this.value;
-      updateShapImage();
-      // top_features_by_station trong payload hiện tại là cho 1 horizon
-      // Nếu sau này API trả theo horizon, gọi lại renderFeatureBars ở đây
-      if (_globalData) renderFeatureBars(_globalData);
+      load();
     });
   }
 
@@ -327,7 +328,7 @@
   // ─── Load ─────────────────────────────────────────────────────────────────
   async function load() {
     try {
-      const res = await fetch(API_URL, { cache: "no-store" });
+      const res = await fetch(`${API_URL}?horizon=${_activeHorizon}`, { cache: "no-store" });
       if (!res.ok) throw new Error("HTTP " + res.status);
 
       const data = await res.json();
