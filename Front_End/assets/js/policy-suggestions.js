@@ -115,6 +115,22 @@
     if (!img) return;
 
     const legend = el("shap-legend");
+
+    // Mốc 1h dùng model Naive → không có SHAP
+    if (_activeHorizon === "1h") {
+      img.style.display = "none";
+      if (placeholder) {
+        placeholder.innerHTML =
+          '<div class="chart-dot" style="background:#f59e0b"></div>' +
+          '<p style="max-width:420px;text-align:center;line-height:1.6">' +
+          'Model Naive không có nhiều biến đầu vào. Dự báo được tính trực tiếp từ giá trị PM2.5 trước đó, nên không có SHAP feature importance.' +
+          '</p>';
+        placeholder.style.display = "flex";
+      }
+      if (legend) legend.textContent = "";
+      return;
+    }
+
     // reset legend to default whenever switching
     if (legend && shap.color_legend) legend.textContent = shap.color_legend;
 
@@ -170,6 +186,15 @@
   function renderFeatureBars(data) {
     const container = el("feature-bars");
     if (!container) return;
+
+    if (_activeHorizon === "1h") {
+      container.style.cssText = "display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;min-height:120px";
+      container.innerHTML =
+        '<div class="chart-dot" style="background:#f59e0b;margin-bottom:10px"></div>' +
+        '<p style="color:rgba(255,255,255,0.55);font-size:14px;text-align:center;line-height:1.6">Không có feature importance<br>cho model Naive.</p>';
+      return;
+    }
+    container.style.cssText = "";
 
     // top_features_by_station là object: { "1.0": [...], "3.0": [...], ... }
     let features = [];
