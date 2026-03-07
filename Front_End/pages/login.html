@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - AirSense HCMC</title>
+    <link rel="stylesheet" href="../assets/css/login.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+    <div class="login-container" data-name="Login" data-node-id="313:3">
+        <!-- Background -->
+        <div class="background" aria-hidden="true">
+            <div class="background-overlay"></div>
+            <img src="../assets/img/background.png" alt="" class="background-image">
+        </div>
+
+        <!-- Login Panel -->
+        <div class="login-panel" data-name="side_ql_unchoose" data-node-id="313:4">
+            <!-- System Name -->
+            <div class="system-name-container">
+                <p class="system-name" data-node-id="313:5">AirSense HCMC</p>
+            </div>
+
+            <!-- Welcome Message -->
+            <h1 class="welcome-title" data-node-id="313:7">Chào mừng quay trở lại!</h1>
+            <p class="welcome-subtitle" data-node-id="313:8">Bạn chỉ có thể đăng nhập vào hệ thống nếu bạn có tài khoản của chính phủ.</p>
+
+            <!-- Login Form -->
+            <form class="login-form" id="loginForm">
+                <!-- Email Field -->
+                <div class="form-group">
+                    <label for="email" class="form-label" data-node-id="313:10">Email</label>
+                    <div class="input-wrapper" data-node-id="313:14">
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            class="form-input" 
+                            placeholder="Nhập email của bạn"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <!-- Password Field -->
+                <div class="form-group">
+                    <div class="password-header">
+                        <label for="password" class="form-label" data-node-id="313:11">Mật khẩu</label>
+                        <a href="#" class="forgot-password-link" data-node-id="313:12">Quên mật khẩu?</a>
+                    </div>
+                    <div class="input-wrapper" data-node-id="313:15">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            class="form-input" 
+                            placeholder="Nhập mật khẩu của bạn"
+                            required
+                        >
+                        <img src="../assets/img/login_password_hide.png" id="togglePassword" class="toggle-password-icon" alt="Toggle Password Visibility">
+                    </div>
+                </div>
+            </form>
+
+            <!-- Login Button -->
+            <button type="submit" form="loginForm" class="login-button" data-node-id="313:16">
+                <span class="login-button-text" data-node-id="313:21">Đăng nhập</span>
+            </button>
+
+            <!-- Footer Links -->
+            <div class="footer-links">
+                <p class="no-account-text" data-node-id="313:9">Không có tài khoản?</p>
+                <a href="#" class="public-page-link" data-node-id="313:13">Quay về trang công khai</a>
+            </div>
+        </div>
+
+        <!-- Right Side Image -->
+        <div class="right-image-container" data-name="image 15" data-node-id="408:30">
+            <img src="../assets/img/logo_lon.png" alt="" class="right-image">
+        </div>
+    </div>
+
+    <script src="../assets/js/login.js"></script>
+</body>
+</html>
+

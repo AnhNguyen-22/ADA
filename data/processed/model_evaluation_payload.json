@@ -1,0 +1,1591 @@
+{
+  "generated_at": "2026-03-07T02:26:15.590927Z",
+  "location": "Thành phố Hồ Chí Minh",
+  "stations": [
+    "1",
+    "3",
+    "4",
+    "5",
+    "6"
+  ],
+  "station_names": {
+    "1": "Thủ Đức",
+    "3": "Tân Phú",
+    "4": "Bình Thạnh",
+    "5": "Quận 3",
+    "6": "Quận 10"
+  },
+  "station_labels": {
+    "1": "Thủ Đức",
+    "3": "Tân Phú",
+    "4": "Bình Thạnh",
+    "5": "Quận 3",
+    "6": "Quận 10"
+  },
+  "station_region_types": {
+    "1": "Urban background",
+    "3": "Industrial",
+    "4": "Residential",
+    "5": "Traffic",
+    "6": "Traffic + Residential"
+  },
+  "station_locations": {
+    "1": "Vietnam National University, Linh Trung ward, Thủ Đức, HCMC",
+    "3": "Tân Bình industrial zone/park, Tây Thạnh ward, Tân Phú, HCMC",
+    "4": "49 Thanh Đa street, Ward 27, Bình Thạnh, HCMC",
+    "5": "268 Nguyễn Đình Chiểu street, Ward 6, District 3, HCMC",
+    "6": "MM18 Trường Sơn street, Ward 14, District 10, HCMC"
+  },
+  "horizons": [
+    1,
+    3,
+    6,
+    12,
+    24
+  ],
+  "per_station": {
+    "results": {
+      "1": {
+        "1": [
+          {
+            "model": "Naive",
+            "rmse": 5.501212475504905,
+            "mae": 3.575447117167546,
+            "mape": 19.076822123458786,
+            "comparable": 1,
+            "is_best": 1
+          },
+          {
+            "model": "Holt-Winters",
+            "rmse": null,
+            "mae": null,
+            "mape": null,
+            "comparable": 0,
+            "is_best": 0
+          },
+          {
+            "model": "Ridge",
+            "rmse": 7.040498315117098,
+            "mae": 5.165378333590841,
+            "mape": 30.866082200533608,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Random Forest",
+            "rmse": 7.2761041845899435,
+            "mae": 5.548607904248951,
+            "mape": 35.813499533872964,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "XGBoost",
+            "rmse": 7.425767249002005,
+            "mae": 5.7269473558365505,
+            "mape": 36.724038486445416,
+            "comparable": 1,
+            "is_best": 0
+          }
+        ],
+        "3": [
+          {
+            "model": "Naive",
+            "rmse": 9.33019028562117,
+            "mae": 6.64189756711111,
+            "mape": 37.9789189995746,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Holt-Winters",
+            "rmse": null,
+            "mae": null,
+            "mape": null,
+            "comparable": 0,
+            "is_best": 0
+          },
+          {
+            "model": "Ridge",
+            "rmse": 8.455291530058007,
+            "mae": 6.604559336784997,
+            "mape": 40.17696724550834,
+            "comparable": 1,
+            "is_best": 1
+          },
+          {
+            "model": "Random Forest",
+            "rmse": 8.711520769095848,
+            "mae": 7.068501287945567,
+            "mape": 45.754028583470316,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "XGBoost",
+            "rmse": 9.22106844894889,
+            "mae": 7.291245416235889,
+            "mape": 46.76714667368198,
+            "comparable": 1,
+            "is_best": 0
+          }
+        ],
+        "6": [
+          {
+            "model": "Naive",
+            "rmse": 11.797808147656356,
+            "mae": 8.66641548395816,
+            "mape": 49.62269189041924,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Holt-Winters",
+            "rmse": null,
+            "mae": null,
+            "mape": null,
+            "comparable": 0,
+            "is_best": 0
+          },
+          {
+            "model": "Ridge",
+            "rmse": 9.24884337993446,
+            "mae": 7.538840416466675,
+            "mape": 46.950281688712636,
+            "comparable": 1,
+            "is_best": 1
+          },
+          {
+            "model": "Random Forest",
+            "rmse": 9.556201361653079,
+            "mae": 7.796783795512651,
+            "mape": 49.808529979955196,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "XGBoost",
+            "rmse": 9.626344681089043,
+            "mae": 7.782756204094839,
+            "mape": 48.60742202416077,
+            "comparable": 1,
+            "is_best": 0
+          }
+        ],
+        "12": [
+          {
+            "model": "Naive",
+            "rmse": 13.394983121462166,
+            "mae": 10.348286234587643,
+            "mape": 59.496464831415366,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Holt-Winters",
+            "rmse": null,
+            "mae": null,
+            "mape": null,
+            "comparable": 0,
+            "is_best": 0
+          },
+          {
+            "model": "Ridge",
+            "rmse": 9.359113357092099,
+            "mae": 7.700758300602542,
+            "mape": 48.346730226737996,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Random Forest",
+            "rmse": 9.270277457862322,
+            "mae": 7.710761264234013,
+            "mape": 48.51616230856893,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "XGBoost",
+            "rmse": 9.146772694795953,
+            "mae": 7.700236853831394,
+            "mape": 49.06930163582477,
+            "comparable": 1,
+            "is_best": 1
+          }
+        ],
+        "24": [
+          {
+            "model": "Naive",
+            "rmse": 11.367936626659517,
+            "mae": 8.210448723664099,
+            "mape": 45.026629401460724,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Holt-Winters",
+            "rmse": null,
+            "mae": null,
+            "mape": null,
+            "comparable": 0,
+            "is_best": 0
+          },
+          {
+            "model": "Ridge",
+            "rmse": 9.50160264693481,
+            "mae": 7.54537750240389,
+            "mape": 47.522511007943386,
+            "comparable": 1,
+            "is_best": 1
+          },
+          {
+            "model": "Random Forest",
+            "rmse": 9.460500825352645,
+            "mae": 7.759274504069287,
+            "mape": 50.28225522409437,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "XGBoost",
+            "rmse": 9.5276275571013,
+            "mae": 7.7780585103589885,
+            "mape": 50.37107401145866,
+            "comparable": 1,
+            "is_best": 0
+          }
+        ]
+      },
+      "3": {
+        "1": [
+          {
+            "model": "Naive",
+            "rmse": 11.191360777081293,
+            "mae": 6.099600847161335,
+            "mape": 24.088740699269856,
+            "comparable": 1,
+            "is_best": 1
+          },
+          {
+            "model": "Holt-Winters",
+            "rmse": 29.595948181992433,
+            "mae": 24.60201305715132,
+            "mape": 186.77431603589412,
+            "comparable": 0,
+            "is_best": 0
+          },
+          {
+            "model": "Ridge",
+            "rmse": 14.241226916353341,
+            "mae": 8.321935744582516,
+            "mape": 39.07809640535374,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Random Forest",
+            "rmse": 15.256217723862742,
+            "mae": 8.851007776795488,
+            "mape": 40.844686802881874,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "XGBoost",
+            "rmse": 15.11908167258655,
+            "mae": 8.951430813312458,
+            "mape": 41.52759039401825,
+            "comparable": 1,
+            "is_best": 0
+          }
+        ],
+        "3": [
+          {
+            "model": "Naive",
+            "rmse": 18.843448518331414,
+            "mae": 11.424800598638575,
+            "mape": 52.12040403239683,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Holt-Winters",
+            "rmse": 29.33658434156763,
+            "mae": 24.4640352398088,
+            "mape": 187.32830578223135,
+            "comparable": 0,
+            "is_best": 0
+          },
+          {
+            "model": "Ridge",
+            "rmse": 16.885984982666905,
+            "mae": 10.442733565669084,
+            "mape": 48.16600484731495,
+            "comparable": 1,
+            "is_best": 1
+          },
+          {
+            "model": "Random Forest",
+            "rmse": 17.557230438776365,
+            "mae": 10.956460115265317,
+            "mape": 51.16323459069212,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "XGBoost",
+            "rmse": 17.03678849505002,
+            "mae": 11.02352500784522,
+            "mape": 53.14876393946388,
+            "comparable": 1,
+            "is_best": 0
+          }
+        ],
+        "6": [
+          {
+            "model": "Naive",
+            "rmse": 23.693508122788426,
+            "mae": 15.504300963231431,
+            "mape": 74.77456862672773,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Holt-Winters",
+            "rmse": 29.52876865352172,
+            "mae": 24.614539782451615,
+            "mape": 188.46976428823876,
+            "comparable": 0,
+            "is_best": 0
+          },
+          {
+            "model": "Ridge",
+            "rmse": 18.56627183805728,
+            "mae": 11.645008744089589,
+            "mape": 54.596097088635055,
+            "comparable": 1,
+            "is_best": 1
+          },
+          {
+            "model": "Random Forest",
+            "rmse": 19.06432323901962,
+            "mae": 12.17291498022111,
+            "mape": 58.692508359633855,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "XGBoost",
+            "rmse": 19.1972140349582,
+            "mae": 12.226446418181418,
+            "mape": 57.848194619184646,
+            "comparable": 1,
+            "is_best": 0
+          }
+        ],
+        "12": [
+          {
+            "model": "Naive",
+            "rmse": 26.419149316987,
+            "mae": 17.892560498966006,
+            "mape": 86.63503226211526,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Holt-Winters",
+            "rmse": 29.748957487967665,
+            "mae": 24.711995206730098,
+            "mape": 186.61727775992097,
+            "comparable": 0,
+            "is_best": 0
+          },
+          {
+            "model": "Ridge",
+            "rmse": 18.75675924669207,
+            "mae": 12.352963240594647,
+            "mape": 61.18965627891488,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Random Forest",
+            "rmse": 19.23220278356819,
+            "mae": 12.606659421986446,
+            "mape": 61.58306792214622,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "XGBoost",
+            "rmse": 19.409164233907862,
+            "mae": 12.335297373426528,
+            "mape": 57.660874971271156,
+            "comparable": 1,
+            "is_best": 1
+          }
+        ],
+        "24": [
+          {
+            "model": "Naive",
+            "rmse": 22.19084144143868,
+            "mae": 13.992364831808269,
+            "mape": 61.66417726663952,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Holt-Winters",
+            "rmse": 29.54806809302465,
+            "mae": 24.435042372235987,
+            "mape": 187.17256672831678,
+            "comparable": 0,
+            "is_best": 0
+          },
+          {
+            "model": "Ridge",
+            "rmse": 19.454894176232308,
+            "mae": 11.923990705082579,
+            "mape": 53.8852593342933,
+            "comparable": 1,
+            "is_best": 1
+          },
+          {
+            "model": "Random Forest",
+            "rmse": 19.916660319074232,
+            "mae": 12.380976776656462,
+            "mape": 57.9721045017766,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "XGBoost",
+            "rmse": 20.187779524067718,
+            "mae": 12.435975562452665,
+            "mape": 56.625588516625335,
+            "comparable": 1,
+            "is_best": 0
+          }
+        ]
+      },
+      "4": {
+        "1": [
+          {
+            "model": "Naive",
+            "rmse": 9.694679125531215,
+            "mae": 4.675620675591367,
+            "mape": 16.364210982447307,
+            "comparable": 1,
+            "is_best": 1
+          },
+          {
+            "model": "Holt-Winters",
+            "rmse": 29.7289390733628,
+            "mae": 24.828797479294185,
+            "mape": 121.03969114330893,
+            "comparable": 0,
+            "is_best": 0
+          },
+          {
+            "model": "Ridge",
+            "rmse": 11.338063416573684,
+            "mae": 6.782440543770657,
+            "mape": 27.656058957091386,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Random Forest",
+            "rmse": 12.342438842370012,
+            "mae": 7.916820392184452,
+            "mape": 36.74463113289569,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "XGBoost",
+            "rmse": 12.760147149427851,
+            "mae": 8.331413677654355,
+            "mape": 38.344646958926596,
+            "comparable": 1,
+            "is_best": 0
+          }
+        ],
+        "3": [
+          {
+            "model": "Naive",
+            "rmse": 14.708835626167565,
+            "mae": 8.352781093806888,
+            "mape": 31.484100562523476,
+            "comparable": 1,
+            "is_best": 1
+          },
+          {
+            "model": "Holt-Winters",
+            "rmse": 29.785142882486717,
+            "mae": 24.88878735172524,
+            "mape": 121.59481443642115,
+            "comparable": 0,
+            "is_best": 0
+          },
+          {
+            "model": "Ridge",
+            "rmse": 13.892545571020225,
+            "mae": 8.821502437452695,
+            "mape": 38.37442878541824,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Random Forest",
+            "rmse": 14.197551413935667,
+            "mae": 9.518987679006623,
+            "mape": 43.76700861431731,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "XGBoost",
+            "rmse": 14.839696863967097,
+            "mae": 10.191153242747927,
+            "mape": 47.24738283905259,
+            "comparable": 1,
+            "is_best": 0
+          }
+        ],
+        "6": [
+          {
+            "model": "Naive",
+            "rmse": 18.361777979108222,
+            "mae": 11.05971878459978,
+            "mape": 42.94649359565985,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Holt-Winters",
+            "rmse": 29.817313500851025,
+            "mae": 24.908917142232774,
+            "mape": 121.91223329768954,
+            "comparable": 0,
+            "is_best": 0
+          },
+          {
+            "model": "Ridge",
+            "rmse": 15.428192741967568,
+            "mae": 9.973888048740509,
+            "mape": 44.65481910625228,
+            "comparable": 1,
+            "is_best": 1
+          },
+          {
+            "model": "Random Forest",
+            "rmse": 15.998783763865132,
+            "mae": 11.425732713141656,
+            "mape": 55.66873725715242,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "XGBoost",
+            "rmse": 16.549788403730886,
+            "mae": 11.780755342634235,
+            "mape": 57.221454477609015,
+            "comparable": 1,
+            "is_best": 0
+          }
+        ],
+        "12": [
+          {
+            "model": "Naive",
+            "rmse": 21.21851122059564,
+            "mae": 12.760041545059075,
+            "mape": 50.005479965716184,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Holt-Winters",
+            "rmse": 29.727595440648287,
+            "mae": 24.840069619987773,
+            "mape": 121.20918552258036,
+            "comparable": 0,
+            "is_best": 0
+          },
+          {
+            "model": "Ridge",
+            "rmse": 16.88029295934283,
+            "mae": 10.252657634915451,
+            "mape": 45.50905563625018,
+            "comparable": 1,
+            "is_best": 1
+          },
+          {
+            "model": "Random Forest",
+            "rmse": 17.84800460022778,
+            "mae": 12.557044140118265,
+            "mape": 62.04251612072314,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "XGBoost",
+            "rmse": 17.02692995171145,
+            "mae": 11.266101610833745,
+            "mape": 53.108599551556324,
+            "comparable": 1,
+            "is_best": 0
+          }
+        ],
+        "24": [
+          {
+            "model": "Naive",
+            "rmse": 19.50702659320131,
+            "mae": 10.818710506882276,
+            "mape": 41.261051387949216,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Holt-Winters",
+            "rmse": 29.75359449158088,
+            "mae": 24.900946252051902,
+            "mape": 121.78815638774611,
+            "comparable": 0,
+            "is_best": 0
+          },
+          {
+            "model": "Ridge",
+            "rmse": 16.788020012839677,
+            "mae": 10.603344742668664,
+            "mape": 48.46984385116026,
+            "comparable": 1,
+            "is_best": 1
+          },
+          {
+            "model": "Random Forest",
+            "rmse": 17.47954460529859,
+            "mae": 11.888629606397627,
+            "mape": 56.74411081789215,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "XGBoost",
+            "rmse": 17.444888163318055,
+            "mae": 11.76382868448946,
+            "mape": 55.87063349365574,
+            "comparable": 1,
+            "is_best": 0
+          }
+        ]
+      },
+      "5": {
+        "1": [
+          {
+            "model": "Naive",
+            "rmse": 3.3819045571854347,
+            "mae": 2.0116248540229447,
+            "mape": 12.69680069670048,
+            "comparable": 1,
+            "is_best": 1
+          },
+          {
+            "model": "Holt-Winters",
+            "rmse": 7.370809122426002,
+            "mae": 4.931875714296536,
+            "mape": 30.43906679222321,
+            "comparable": 0,
+            "is_best": 0
+          },
+          {
+            "model": "Ridge",
+            "rmse": 4.696606813580502,
+            "mae": 3.2291728329833465,
+            "mape": 22.02946862958805,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Random Forest",
+            "rmse": 5.872365417416942,
+            "mae": 4.679852300251585,
+            "mape": 37.66736731343766,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "XGBoost",
+            "rmse": 7.684949474298242,
+            "mae": 5.77762232001076,
+            "mape": 47.95087087198404,
+            "comparable": 1,
+            "is_best": 0
+          }
+        ],
+        "3": [
+          {
+            "model": "Naive",
+            "rmse": 6.293956879689751,
+            "mae": 3.951569401256809,
+            "mape": 24.713676743698414,
+            "comparable": 1,
+            "is_best": 1
+          },
+          {
+            "model": "Holt-Winters",
+            "rmse": 7.406268997360356,
+            "mae": 4.968470109757133,
+            "mape": 30.48215215989687,
+            "comparable": 0,
+            "is_best": 0
+          },
+          {
+            "model": "Ridge",
+            "rmse": 6.092241230276577,
+            "mae": 4.44023389464691,
+            "mape": 31.464543569648885,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Random Forest",
+            "rmse": 8.250605004445404,
+            "mae": 6.865472856222525,
+            "mape": 57.51025657870944,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "XGBoost",
+            "rmse": 14.108066118273003,
+            "mae": 10.424243189177728,
+            "mape": 91.65399181004831,
+            "comparable": 1,
+            "is_best": 0
+          }
+        ],
+        "6": [
+          {
+            "model": "Naive",
+            "rmse": 8.055849209743533,
+            "mae": 5.3508769642495055,
+            "mape": 35.29505947955816,
+            "comparable": 1,
+            "is_best": 1
+          },
+          {
+            "model": "Holt-Winters",
+            "rmse": 7.209652206521816,
+            "mae": 4.841160248858404,
+            "mape": 30.10243220839674,
+            "comparable": 0,
+            "is_best": 0
+          },
+          {
+            "model": "Ridge",
+            "rmse": 7.097339999027294,
+            "mae": 5.437990780933654,
+            "mape": 40.698599874816,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Random Forest",
+            "rmse": 9.309768096071899,
+            "mae": 7.698445620346925,
+            "mape": 65.25782575753918,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "XGBoost",
+            "rmse": 12.336181352932053,
+            "mae": 9.682684121596775,
+            "mape": 85.83551347133633,
+            "comparable": 1,
+            "is_best": 0
+          }
+        ],
+        "12": [
+          {
+            "model": "Naive",
+            "rmse": 9.380513865930485,
+            "mae": 6.472696631607214,
+            "mape": 44.52626815918586,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Holt-Winters",
+            "rmse": 7.234000706083963,
+            "mae": 4.840233511683467,
+            "mape": 30.095525137567027,
+            "comparable": 0,
+            "is_best": 0
+          },
+          {
+            "model": "Ridge",
+            "rmse": 7.533738875269731,
+            "mae": 6.0092277583151805,
+            "mape": 46.62274105921031,
+            "comparable": 1,
+            "is_best": 1
+          },
+          {
+            "model": "Random Forest",
+            "rmse": 8.297189088460039,
+            "mae": 6.8810038581064195,
+            "mape": 56.193033511814086,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "XGBoost",
+            "rmse": 8.418147949357579,
+            "mae": 7.019896323236372,
+            "mape": 57.88749174618282,
+            "comparable": 1,
+            "is_best": 0
+          }
+        ],
+        "24": [
+          {
+            "model": "Naive",
+            "rmse": 9.456903092522516,
+            "mae": 6.159474355329875,
+            "mape": 40.25272913635889,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Holt-Winters",
+            "rmse": 7.669737832410869,
+            "mae": 5.0926754212494,
+            "mape": 30.642539615889742,
+            "comparable": 0,
+            "is_best": 0
+          },
+          {
+            "model": "Ridge",
+            "rmse": 7.740988402841972,
+            "mae": 5.901750501515103,
+            "mape": 43.46538039053729,
+            "comparable": 1,
+            "is_best": 1
+          },
+          {
+            "model": "Random Forest",
+            "rmse": 8.612812547660464,
+            "mae": 7.170022232430711,
+            "mape": 59.328691239815015,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "XGBoost",
+            "rmse": 8.354937130079794,
+            "mae": 6.926791836661561,
+            "mape": 56.598653890695225,
+            "comparable": 1,
+            "is_best": 0
+          }
+        ]
+      },
+      "6": {
+        "1": [
+          {
+            "model": "Naive",
+            "rmse": 4.257047380730538,
+            "mae": 2.521410276395973,
+            "mape": 12.751397008002247,
+            "comparable": 1,
+            "is_best": 1
+          },
+          {
+            "model": "Holt-Winters",
+            "rmse": null,
+            "mae": null,
+            "mape": null,
+            "comparable": 0,
+            "is_best": 0
+          },
+          {
+            "model": "Ridge",
+            "rmse": 6.035963281778518,
+            "mae": 4.154891479874849,
+            "mape": 23.468247304423627,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Random Forest",
+            "rmse": 5.790852523500357,
+            "mae": 3.8162088691411347,
+            "mape": 21.310246889080624,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "XGBoost",
+            "rmse": 5.897661214750087,
+            "mae": 3.8778991269477743,
+            "mape": 20.89363341930855,
+            "comparable": 1,
+            "is_best": 0
+          }
+        ],
+        "3": [
+          {
+            "model": "Naive",
+            "rmse": 7.552549556043413,
+            "mae": 4.802171603559435,
+            "mape": 25.21976817474137,
+            "comparable": 1,
+            "is_best": 1
+          },
+          {
+            "model": "Holt-Winters",
+            "rmse": null,
+            "mae": null,
+            "mape": null,
+            "comparable": 0,
+            "is_best": 0
+          },
+          {
+            "model": "Ridge",
+            "rmse": 7.258246040332804,
+            "mae": 5.007276387461565,
+            "mape": 28.366165380924315,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Random Forest",
+            "rmse": 7.482816046645867,
+            "mae": 5.284494651099508,
+            "mape": 31.124683764672557,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "XGBoost",
+            "rmse": 7.6866472187684725,
+            "mae": 5.3954016538821055,
+            "mape": 31.743130602900134,
+            "comparable": 1,
+            "is_best": 0
+          }
+        ],
+        "6": [
+          {
+            "model": "Naive",
+            "rmse": 9.911386891093489,
+            "mae": 6.48326141251595,
+            "mape": 33.96831722783033,
+            "comparable": 1,
+            "is_best": 1
+          },
+          {
+            "model": "Holt-Winters",
+            "rmse": null,
+            "mae": null,
+            "mape": null,
+            "comparable": 0,
+            "is_best": 0
+          },
+          {
+            "model": "Ridge",
+            "rmse": 8.65077987863574,
+            "mae": 6.645265435182272,
+            "mape": 41.764386166886666,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Random Forest",
+            "rmse": 9.121618053934625,
+            "mae": 6.974214016067502,
+            "mape": 44.10900625595925,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "XGBoost",
+            "rmse": 9.104722270501233,
+            "mae": 6.867305316744521,
+            "mape": 43.13981068177033,
+            "comparable": 1,
+            "is_best": 0
+          }
+        ],
+        "12": [
+          {
+            "model": "Naive",
+            "rmse": 11.45508467002558,
+            "mae": 7.531155486794883,
+            "mape": 39.351715313242636,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Holt-Winters",
+            "rmse": null,
+            "mae": null,
+            "mape": null,
+            "comparable": 0,
+            "is_best": 0
+          },
+          {
+            "model": "Ridge",
+            "rmse": 9.30784483571695,
+            "mae": 7.300261892937947,
+            "mape": 47.32318558777893,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Random Forest",
+            "rmse": 9.462821832240714,
+            "mae": 7.159565506444685,
+            "mape": 45.39083882323545,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "XGBoost",
+            "rmse": 9.22945895540534,
+            "mae": 6.977863914476839,
+            "mape": 43.94338913489026,
+            "comparable": 1,
+            "is_best": 1
+          }
+        ],
+        "24": [
+          {
+            "model": "Naive",
+            "rmse": 10.06162242458047,
+            "mae": 6.42962171246518,
+            "mape": 33.58282607821005,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "Holt-Winters",
+            "rmse": null,
+            "mae": null,
+            "mape": null,
+            "comparable": 0,
+            "is_best": 0
+          },
+          {
+            "model": "Ridge",
+            "rmse": 8.391601238824036,
+            "mae": 5.836451237588388,
+            "mape": 33.115315683277416,
+            "comparable": 1,
+            "is_best": 1
+          },
+          {
+            "model": "Random Forest",
+            "rmse": 9.032929994023526,
+            "mae": 6.517941558026354,
+            "mape": 39.52348215754887,
+            "comparable": 1,
+            "is_best": 0
+          },
+          {
+            "model": "XGBoost",
+            "rmse": 9.169035752063262,
+            "mae": 6.693328451518309,
+            "mape": 41.54944803925053,
+            "comparable": 1,
+            "is_best": 0
+          }
+        ]
+      }
+    },
+    "best_model": {
+      "1": {
+        "1": "Naive",
+        "3": "Ridge",
+        "6": "Ridge",
+        "12": "XGBoost",
+        "24": "Ridge"
+      },
+      "3": {
+        "1": "Naive",
+        "3": "Ridge",
+        "6": "Ridge",
+        "12": "XGBoost",
+        "24": "Ridge"
+      },
+      "4": {
+        "1": "Naive",
+        "3": "Naive",
+        "6": "Ridge",
+        "12": "Ridge",
+        "24": "Ridge"
+      },
+      "5": {
+        "1": "Naive",
+        "3": "Naive",
+        "6": "Naive",
+        "12": "Ridge",
+        "24": "Ridge"
+      },
+      "6": {
+        "1": "Naive",
+        "3": "Naive",
+        "6": "Naive",
+        "12": "XGBoost",
+        "24": "Ridge"
+      }
+    },
+    "best_reason": {
+      "1": {
+        "1": "Naive được chọn cho Thủ Đức (Urban background) ở mốc 1h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=5.501, MAE=3.575, MAPE=19.08%. Mô hình này tốt hơn mô hình xếp sau khoảng 1.590 MAE.",
+        "3": "Ridge được chọn cho Thủ Đức (Urban background) ở mốc 3h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=8.455, MAE=6.605, MAPE=40.18%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.037 MAE.",
+        "6": "Ridge được chọn cho Thủ Đức (Urban background) ở mốc 6h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=9.249, MAE=7.539, MAPE=46.95%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.244 MAE.",
+        "12": "XGBoost được chọn cho Thủ Đức (Urban background) ở mốc 12h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=9.147, MAE=7.700, MAPE=49.07%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.001 MAE.",
+        "24": "Ridge được chọn cho Thủ Đức (Urban background) ở mốc 24h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=9.502, MAE=7.545, MAPE=47.52%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.214 MAE."
+      },
+      "3": {
+        "1": "Naive được chọn cho Tân Phú (Industrial) ở mốc 1h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=11.191, MAE=6.100, MAPE=24.09%. Mô hình này tốt hơn mô hình xếp sau khoảng 2.222 MAE.",
+        "3": "Ridge được chọn cho Tân Phú (Industrial) ở mốc 3h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=16.886, MAE=10.443, MAPE=48.17%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.514 MAE.",
+        "6": "Ridge được chọn cho Tân Phú (Industrial) ở mốc 6h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=18.566, MAE=11.645, MAPE=54.60%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.528 MAE.",
+        "12": "XGBoost được chọn cho Tân Phú (Industrial) ở mốc 12h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=19.409, MAE=12.335, MAPE=57.66%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.018 MAE.",
+        "24": "Ridge được chọn cho Tân Phú (Industrial) ở mốc 24h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=19.455, MAE=11.924, MAPE=53.89%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.457 MAE."
+      },
+      "4": {
+        "1": "Naive được chọn cho Bình Thạnh (Residential) ở mốc 1h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=9.695, MAE=4.676, MAPE=16.36%. Mô hình này tốt hơn mô hình xếp sau khoảng 2.107 MAE.",
+        "3": "Naive được chọn cho Bình Thạnh (Residential) ở mốc 3h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=14.709, MAE=8.353, MAPE=31.48%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.469 MAE.",
+        "6": "Ridge được chọn cho Bình Thạnh (Residential) ở mốc 6h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=15.428, MAE=9.974, MAPE=44.65%. Mô hình này tốt hơn mô hình xếp sau khoảng 1.086 MAE.",
+        "12": "Ridge được chọn cho Bình Thạnh (Residential) ở mốc 12h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=16.880, MAE=10.253, MAPE=45.51%. Mô hình này tốt hơn mô hình xếp sau khoảng 1.013 MAE.",
+        "24": "Ridge được chọn cho Bình Thạnh (Residential) ở mốc 24h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=16.788, MAE=10.603, MAPE=48.47%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.215 MAE."
+      },
+      "5": {
+        "1": "Naive được chọn cho Quận 3 (Traffic) ở mốc 1h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=3.382, MAE=2.012, MAPE=12.70%. Mô hình này tốt hơn mô hình xếp sau khoảng 1.218 MAE.",
+        "3": "Naive được chọn cho Quận 3 (Traffic) ở mốc 3h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=6.294, MAE=3.952, MAPE=24.71%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.489 MAE.",
+        "6": "Naive được chọn cho Quận 3 (Traffic) ở mốc 6h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=8.056, MAE=5.351, MAPE=35.30%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.087 MAE.",
+        "12": "Ridge được chọn cho Quận 3 (Traffic) ở mốc 12h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=7.534, MAE=6.009, MAPE=46.62%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.463 MAE.",
+        "24": "Ridge được chọn cho Quận 3 (Traffic) ở mốc 24h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=7.741, MAE=5.902, MAPE=43.47%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.258 MAE."
+      },
+      "6": {
+        "1": "Naive được chọn cho Quận 10 (Traffic + Residential) ở mốc 1h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=4.257, MAE=2.521, MAPE=12.75%. Mô hình này tốt hơn mô hình xếp sau khoảng 1.295 MAE.",
+        "3": "Naive được chọn cho Quận 10 (Traffic + Residential) ở mốc 3h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=7.553, MAE=4.802, MAPE=25.22%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.205 MAE.",
+        "6": "Naive được chọn cho Quận 10 (Traffic + Residential) ở mốc 6h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=9.911, MAE=6.483, MAPE=33.97%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.162 MAE.",
+        "12": "XGBoost được chọn cho Quận 10 (Traffic + Residential) ở mốc 12h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=9.229, MAE=6.978, MAPE=43.94%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.182 MAE.",
+        "24": "Ridge được chọn cho Quận 10 (Traffic + Residential) ở mốc 24h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=8.392, MAE=5.836, MAPE=33.12%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.593 MAE."
+      }
+    },
+    "region_difference_reason": {
+      "1": {
+        "1": "Thủ Đức (Urban background): mô hình tốt nhất là Naive (RMSE=5.501), tốt hơn mô hình xếp sau khoảng 1.590 MAE.",
+        "3": "Thủ Đức (Urban background): mô hình tốt nhất là Ridge (RMSE=8.455), tốt hơn mô hình xếp sau khoảng 0.037 MAE.",
+        "6": "Thủ Đức (Urban background): mô hình tốt nhất là Ridge (RMSE=9.249), tốt hơn mô hình xếp sau khoảng 0.244 MAE.",
+        "12": "Thủ Đức (Urban background): mô hình tốt nhất là XGBoost (RMSE=9.147), tốt hơn mô hình xếp sau khoảng 0.001 MAE.",
+        "24": "Thủ Đức (Urban background): mô hình tốt nhất là Ridge (RMSE=9.502), tốt hơn mô hình xếp sau khoảng 0.214 MAE."
+      },
+      "3": {
+        "1": "Tân Phú (Industrial): mô hình tốt nhất là Naive (RMSE=11.191), tốt hơn mô hình xếp sau khoảng 2.222 MAE.",
+        "3": "Tân Phú (Industrial): mô hình tốt nhất là Ridge (RMSE=16.886), tốt hơn mô hình xếp sau khoảng 0.514 MAE.",
+        "6": "Tân Phú (Industrial): mô hình tốt nhất là Ridge (RMSE=18.566), tốt hơn mô hình xếp sau khoảng 0.528 MAE.",
+        "12": "Tân Phú (Industrial): mô hình tốt nhất là XGBoost (RMSE=19.409), tốt hơn mô hình xếp sau khoảng 0.018 MAE.",
+        "24": "Tân Phú (Industrial): mô hình tốt nhất là Ridge (RMSE=19.455), tốt hơn mô hình xếp sau khoảng 0.457 MAE."
+      },
+      "4": {
+        "1": "Bình Thạnh (Residential): mô hình tốt nhất là Naive (RMSE=9.695), tốt hơn mô hình xếp sau khoảng 2.107 MAE.",
+        "3": "Bình Thạnh (Residential): mô hình tốt nhất là Naive (RMSE=14.709), tốt hơn mô hình xếp sau khoảng 0.469 MAE.",
+        "6": "Bình Thạnh (Residential): mô hình tốt nhất là Ridge (RMSE=15.428), tốt hơn mô hình xếp sau khoảng 1.086 MAE.",
+        "12": "Bình Thạnh (Residential): mô hình tốt nhất là Ridge (RMSE=16.880), tốt hơn mô hình xếp sau khoảng 1.013 MAE.",
+        "24": "Bình Thạnh (Residential): mô hình tốt nhất là Ridge (RMSE=16.788), tốt hơn mô hình xếp sau khoảng 0.215 MAE."
+      },
+      "5": {
+        "1": "Quận 3 (Traffic): mô hình tốt nhất là Naive (RMSE=3.382), tốt hơn mô hình xếp sau khoảng 1.218 MAE.",
+        "3": "Quận 3 (Traffic): mô hình tốt nhất là Naive (RMSE=6.294), tốt hơn mô hình xếp sau khoảng 0.489 MAE.",
+        "6": "Quận 3 (Traffic): mô hình tốt nhất là Naive (RMSE=8.056), tốt hơn mô hình xếp sau khoảng 0.087 MAE.",
+        "12": "Quận 3 (Traffic): mô hình tốt nhất là Ridge (RMSE=7.534), tốt hơn mô hình xếp sau khoảng 0.463 MAE.",
+        "24": "Quận 3 (Traffic): mô hình tốt nhất là Ridge (RMSE=7.741), tốt hơn mô hình xếp sau khoảng 0.258 MAE."
+      },
+      "6": {
+        "1": "Quận 10 (Traffic + Residential): mô hình tốt nhất là Naive (RMSE=4.257), tốt hơn mô hình xếp sau khoảng 1.295 MAE.",
+        "3": "Quận 10 (Traffic + Residential): mô hình tốt nhất là Naive (RMSE=7.553), tốt hơn mô hình xếp sau khoảng 0.205 MAE.",
+        "6": "Quận 10 (Traffic + Residential): mô hình tốt nhất là Naive (RMSE=9.911), tốt hơn mô hình xếp sau khoảng 0.162 MAE.",
+        "12": "Quận 10 (Traffic + Residential): mô hình tốt nhất là XGBoost (RMSE=9.229), tốt hơn mô hình xếp sau khoảng 0.182 MAE.",
+        "24": "Quận 10 (Traffic + Residential): mô hình tốt nhất là Ridge (RMSE=8.392), tốt hơn mô hình xếp sau khoảng 0.593 MAE."
+      }
+    },
+    "exclude_from_comparison": [
+      "Holt-Winters"
+    ],
+    "source": "per_station_results_df"
+  },
+  "global": {
+    "by_horizon": {
+      "1": [
+        {
+          "model": "Holt-Winters",
+          "rmse": 263.6709977656159,
+          "mae": 64.72871531360089,
+          "mape": 345.18060069978384,
+          "rmae_pct": 224.32907756163632,
+          "rmsle": 3.2584254542335813,
+          "n_eval": 8440,
+          "comparable": 0,
+          "is_best": 0
+        },
+        {
+          "model": "Naive",
+          "rmse": 8.33956085309005,
+          "mae": 4.1150213093297845,
+          "mape": 16.760218189983465,
+          "rmae_pct": 17.52042924017512,
+          "rmsle": 0.22993976541090863,
+          "n_eval": 20008,
+          "comparable": 1,
+          "is_best": 1
+        },
+        {
+          "model": "Random Forest",
+          "rmse": 10.400909194200777,
+          "mae": 5.952802026289257,
+          "mape": 27.840600220076695,
+          "rmae_pct": 25.34590697773022,
+          "rmsle": 0.3184884607708789,
+          "n_eval": 20008,
+          "comparable": 1,
+          "is_best": 0
+        },
+        {
+          "model": "Ridge",
+          "rmse": 10.162439324560484,
+          "mae": 5.863102836929345,
+          "mape": 27.570913837522586,
+          "rmae_pct": 24.963984767071494,
+          "rmsle": 0.3131304692285464,
+          "n_eval": 20008,
+          "comparable": 1,
+          "is_best": 0
+        },
+        {
+          "model": "XGBoost",
+          "rmse": 10.453577846145365,
+          "mae": 6.005861719368468,
+          "mape": 27.675731285102017,
+          "rmae_pct": 25.57182513175473,
+          "rmsle": 0.32076447426376475,
+          "n_eval": 20008,
+          "comparable": 1,
+          "is_best": 0
+        }
+      ],
+      "3": [
+        {
+          "model": "Holt-Winters",
+          "rmse": 263.4387610103709,
+          "mae": 64.24166535892441,
+          "mape": 343.9613818794944,
+          "rmae_pct": 223.35326535167775,
+          "rmsle": 3.2561697136922185,
+          "n_eval": 8375,
+          "comparable": 0,
+          "is_best": 0
+        },
+        {
+          "model": "Naive",
+          "rmse": 13.447547396259045,
+          "mae": 7.588680597868697,
+          "mape": 33.772885424094945,
+          "rmae_pct": 32.302677811192815,
+          "rmsle": 0.4037773504487569,
+          "n_eval": 19798,
+          "comparable": 1,
+          "is_best": 0
+        },
+        {
+          "model": "Random Forest",
+          "rmse": 12.465850512259125,
+          "mae": 7.639483523399198,
+          "mape": 37.395678610457225,
+          "rmae_pct": 32.52207254383381,
+          "rmsle": 0.39530413111928897,
+          "n_eval": 19798,
+          "comparable": 1,
+          "is_best": 0
+        },
+        {
+          "model": "Ridge",
+          "rmse": 12.2343373000456,
+          "mae": 7.476266579427608,
+          "mape": 36.503523105683065,
+          "rmae_pct": 31.827241109749497,
+          "rmsle": 0.38793575137079467,
+          "n_eval": 19798,
+          "comparable": 1,
+          "is_best": 1
+        },
+        {
+          "model": "XGBoost",
+          "rmse": 12.399251752223092,
+          "mae": 7.659828563856623,
+          "mape": 37.34506191940677,
+          "rmae_pct": 32.60868348809947,
+          "rmsle": 0.3945360749340548,
+          "n_eval": 19798,
+          "comparable": 1,
+          "is_best": 0
+        }
+      ],
+      "6": [
+        {
+          "model": "Holt-Winters",
+          "rmse": 259.959151608963,
+          "mae": 63.01492479534083,
+          "mape": 336.39945786470975,
+          "rmae_pct": 219.08454027070925,
+          "rmsle": 3.2552460826821186,
+          "n_eval": 8309,
+          "comparable": 0,
+          "is_best": 0
+        },
+        {
+          "model": "Naive",
+          "rmse": 16.946805356565772,
+          "mae": 10.173234610143545,
+          "mape": 46.65236268274043,
+          "rmae_pct": 43.23287926327999,
+          "rmsle": 0.5165816932908452,
+          "n_eval": 19545,
+          "comparable": 1,
+          "is_best": 0
+        },
+        {
+          "model": "Random Forest",
+          "rmse": 13.854102188632996,
+          "mae": 8.831001135992748,
+          "mape": 44.697153374277164,
+          "rmae_pct": 37.53253656944464,
+          "rmsle": 0.4452075955150396,
+          "n_eval": 19545,
+          "comparable": 1,
+          "is_best": 0
+        },
+        {
+          "model": "Ridge",
+          "rmse": 13.669969951460264,
+          "mae": 8.671349651295348,
+          "mape": 44.04239391735749,
+          "rmae_pct": 36.854003626747,
+          "rmsle": 0.43980791386283036,
+          "n_eval": 19545,
+          "comparable": 1,
+          "is_best": 0
+        },
+        {
+          "model": "XGBoost",
+          "rmse": 13.727635421041326,
+          "mae": 8.538649759190022,
+          "mape": 42.27012741264946,
+          "rmae_pct": 36.290017338385525,
+          "rmsle": 0.4342070871156172,
+          "n_eval": 19545,
+          "comparable": 1,
+          "is_best": 1
+        }
+      ],
+      "12": [
+        {
+          "model": "Holt-Winters",
+          "rmse": 254.5139476322135,
+          "mae": 62.10032615517918,
+          "mape": 332.1423735101694,
+          "rmae_pct": 214.71230458376033,
+          "rmsle": 3.2604760642951685,
+          "n_eval": 8209,
+          "comparable": 0,
+          "is_best": 0
+        },
+        {
+          "model": "Naive",
+          "rmse": 19.305089829562892,
+          "mae": 11.781766320074027,
+          "mape": 54.300128599697764,
+          "rmae_pct": 49.808083691370456,
+          "rmsle": 0.5778356153249743,
+          "n_eval": 19200,
+          "comparable": 1,
+          "is_best": 0
+        },
+        {
+          "model": "Random Forest",
+          "rmse": 14.783214974643883,
+          "mae": 9.343576955290978,
+          "mape": 47.1841431977701,
+          "rmae_pct": 39.50443508041788,
+          "rmsle": 0.4622537199512428,
+          "n_eval": 19200,
+          "comparable": 1,
+          "is_best": 0
+        },
+        {
+          "model": "Ridge",
+          "rmse": 14.598955086651907,
+          "mae": 9.275496666006694,
+          "mape": 47.73276373390835,
+          "rmae_pct": 39.216593134966345,
+          "rmsle": 0.46122261634723094,
+          "n_eval": 19200,
+          "comparable": 1,
+          "is_best": 0
+        },
+        {
+          "model": "XGBoost",
+          "rmse": 14.507395345159326,
+          "mae": 8.861490779707374,
+          "mape": 43.61243758190669,
+          "rmae_pct": 37.46618547669143,
+          "rmsle": 0.4443840434510471,
+          "n_eval": 19200,
+          "comparable": 1,
+          "is_best": 1
+        }
+      ],
+      "24": [
+        {
+          "model": "Holt-Winters",
+          "rmse": 249.34031427531258,
+          "mae": 61.554628173332176,
+          "mape": 320.29456443952023,
+          "rmae_pct": 212.037034705481,
+          "rmsle": 3.2651410108145997,
+          "n_eval": 8062,
+          "comparable": 0,
+          "is_best": 0
+        },
+        {
+          "model": "Naive",
+          "rmse": 17.059716696165,
+          "mae": 9.758574929212223,
+          "mape": 43.04799745904446,
+          "rmae_pct": 41.189884670293,
+          "rmsle": 0.497881107942027,
+          "n_eval": 18706,
+          "comparable": 1,
+          "is_best": 0
+        },
+        {
+          "model": "Random Forest",
+          "rmse": 14.622633720845721,
+          "mae": 9.005386856763485,
+          "mape": 45.150934410926006,
+          "rmae_pct": 38.01205622568887,
+          "rmsle": 0.453854993186503,
+          "n_eval": 18706,
+          "comparable": 1,
+          "is_best": 0
+        },
+        {
+          "model": "Ridge",
+          "rmse": 14.579787857373741,
+          "mae": 9.105466206735006,
+          "mape": 46.344144636140335,
+          "rmae_pct": 38.434494699310996,
+          "rmsle": 0.45641902984652266,
+          "n_eval": 18706,
+          "comparable": 1,
+          "is_best": 0
+        },
+        {
+          "model": "XGBoost",
+          "rmse": 14.561674732993778,
+          "mae": 8.832155865628401,
+          "mape": 43.50480446131388,
+          "rmae_pct": 37.2808420891065,
+          "rmsle": 0.4461467986247369,
+          "n_eval": 18706,
+          "comparable": 1,
+          "is_best": 1
+        }
+      ]
+    },
+    "best_by_horizon": {
+      "1": "Naive",
+      "3": "Ridge",
+      "6": "XGBoost",
+      "12": "XGBoost",
+      "24": "XGBoost"
+    },
+    "best_reason_by_horizon": {
+      "1": "Naive được chọn cho toàn thành phố ở mốc 1h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=8.340, MAE=4.115, MAPE=16.76%. Mô hình này tốt hơn mô hình xếp sau khoảng 1.748 MAE.",
+      "3": "Ridge được chọn cho toàn thành phố ở mốc 3h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=12.234, MAE=7.476, MAPE=36.50%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.112 MAE.",
+      "6": "XGBoost được chọn cho toàn thành phố ở mốc 6h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=13.728, MAE=8.539, MAPE=42.27%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.133 MAE.",
+      "12": "XGBoost được chọn cho toàn thành phố ở mốc 12h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=14.507, MAE=8.861, MAPE=43.61%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.414 MAE.",
+      "24": "XGBoost được chọn cho toàn thành phố ở mốc 24h vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=14.562, MAE=8.832, MAPE=43.50%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.173 MAE."
+    },
+    "all_horizons_avg": [
+      {
+        "model": "Holt-Winters",
+        "rmse": 258.18463445849517,
+        "mae": 63.12805195927549,
+        "mape": 335.5956756787355,
+        "rmae_pct": 218.70324449465292,
+        "rmsle": 3.2590916651435373,
+        "n_eval_avg": 8279.0,
+        "comparable": 0,
+        "is_best": 0
+      },
+      {
+        "model": "Naive",
+        "rmse": 15.01974402632855,
+        "mae": 8.683455553325656,
+        "mape": 38.906718471112214,
+        "rmae_pct": 36.810790935262276,
+        "rmsle": 0.4452031064835024,
+        "n_eval_avg": 19451.4,
+        "comparable": 1,
+        "is_best": 0
+      },
+      {
+        "model": "Random Forest",
+        "rmse": 13.225342118116501,
+        "mae": 8.154450099547134,
+        "mape": 40.45370196270143,
+        "rmae_pct": 34.58340147942308,
+        "rmsle": 0.41502178010859064,
+        "n_eval_avg": 19451.4,
+        "comparable": 1,
+        "is_best": 0
+      },
+      {
+        "model": "Ridge",
+        "rmse": 13.0490979040184,
+        "mae": 8.0783363880788,
+        "mape": 40.43874784612236,
+        "rmae_pct": 34.25926346756906,
+        "rmsle": 0.4117031561311849,
+        "n_eval_avg": 19451.4,
+        "comparable": 1,
+        "is_best": 0
+      },
+      {
+        "model": "XGBoost",
+        "rmse": 13.129907019512578,
+        "mae": 7.979597337550177,
+        "mape": 38.88163253207576,
+        "rmae_pct": 33.843510704807535,
+        "rmsle": 0.4080076956778441,
+        "n_eval_avg": 19451.4,
+        "comparable": 1,
+        "is_best": 1
+      }
+    ],
+    "best_overall": "XGBoost",
+    "best_reason_overall": "XGBoost được chọn cho toàn bộ các mốc dự báo ở mốc allh vì có MAE thấp nhất trong nhóm mô hình được phép so sánh. Kết quả chính: RMSE=13.130, MAE=7.980, MAPE=38.88%. Mô hình này tốt hơn mô hình xếp sau khoảng 0.099 MAE.",
+    "exclude_from_comparison": [
+      "Holt-Winters"
+    ],
+    "source": "global_results_df (common_eval_idx)"
+  }
+}

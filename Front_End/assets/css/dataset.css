@@ -1,0 +1,421 @@
+/* ============================================================
+   dataset.css — đồng bộ với station-tracking.css
+   ============================================================ */
+
+:root {
+    --primary-blue:   #013a59;
+    --teal-light:     #4fc3f7;
+    --teal-medium:    #26a69a;
+    --teal-dark:      #00695c;
+    --text-dark:      #131e29;
+    --text-gray:      #546e7a;
+}
+
+.dashboard-container {
+    position: relative;
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    overflow-x: hidden;
+}
+
+/* ============================================================
+   CARD
+   ============================================================ */
+.card {
+    background: rgba(255, 255, 255, 0.28);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 1.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    padding: 1rem 1.25rem;
+    box-shadow: 0 4px 24px rgba(1, 58, 89, 0.08);
+}
+
+.card-title {
+    font-family: "72-Semibold", Helvetica, sans-serif;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0 0 0.75rem 0;
+}
+
+/* --- DATA OVERVIEW --- */
+.data-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(clamp(220px, 28vw, 340px), 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.card-value {
+    font-family: "72-Semibold", Helvetica, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    color: var(--text-dark);
+    margin: 0.25rem 0 0;
+}
+
+.card-subtitle {
+    font-size: 0.8125rem;
+    color: var(--text-gray);
+    margin-top: 0.25rem;
+    font-weight: 400;
+}
+
+/* ============================================================
+   HEATMAP
+   ============================================================ */
+.heatmap-section { margin-bottom: 1rem; }
+
+#heatmapContainer {
+    margin-top: 0.75rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+}
+
+.heatmap-header-cell,
+.heatmap-row-label {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    color: var(--primary-blue);
+    background: rgba(255, 255, 255, 0.42) !important;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-radius: 0.375rem;
+    padding: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.heatmap-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    border-radius: 0.375rem;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    opacity: 0.82;
+}
+
+.heatmap-cell:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+    z-index: 10;
+    position: relative;
+    opacity: 1;
+    outline: 1.5px solid rgba(255, 255, 255, 0.8);
+}
+
+/* ============================================================
+   VARIABLE SECTION
+   ============================================================ */
+.variable-section { margin-bottom: 1rem; }
+
+.variable-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.control-label {
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 0.875rem;
+}
+
+/* ============================================================
+   BẢNG DANH SÁCH BIẾN
+   ============================================================ */
+.variable-table-container {
+    width: 100%;
+    overflow-x: auto;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.variable-table {
+    width: 100%;
+    min-width: 600px;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 0.875rem;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Header — đồng màu với #dataTable th */
+.variable-table thead th {
+    background: rgba(209, 236, 249, 0.55) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    color: var(--primary-blue) !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8125rem;
+    letter-spacing: 0.4px;
+    vertical-align: middle;
+    padding: 0.875rem 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    /* Mặc định căn giữa */
+    text-align: center !important;
+}
+
+.variable-table tbody td {
+    color: var(--text-dark) !important;
+    background-color: transparent !important;
+    padding: 0.875rem 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    vertical-align: middle;
+    word-wrap: break-word;
+    font-size: 0.875rem;
+    /* Mặc định căn giữa */
+    text-align: center;
+}
+
+.variable-table tbody tr:last-child td { border-bottom: none; }
+
+.variable-table tbody tr:hover td {
+    background-color: rgba(79, 195, 247, 0.08) !important;
+}
+
+/* Cột 1: Biến */
+.variable-table th:nth-child(1),
+.variable-table td:nth-child(1) {
+    width: 90px;
+    text-align: center !important;
+}
+
+/* Cột 2: Đơn vị */
+.variable-table th:nth-child(2),
+.variable-table td:nth-child(2) {
+    width: 90px;
+    text-align: center !important;
+    white-space: nowrap;
+}
+
+/* Cột 3: Ý nghĩa — CĂN TRÁI */
+.variable-table th:nth-child(3),
+.variable-table td:nth-child(3) {
+    width: 280px;
+    text-align: left !important;
+    padding-left: 1.25rem !important;
+    line-height: 1.5;
+}
+
+/* Cột 4: Mô tả — CĂN TRÁI */
+.variable-table th:nth-child(4),
+.variable-table td:nth-child(4) {
+    text-align: left !important;
+    padding-left: 1.25rem !important;
+    line-height: 1.5;
+}
+
+/* ============================================================
+   VARIABLE GRID
+   ============================================================ */
+.variable-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    padding: 0.5rem 0;
+}
+
+@media (max-width: 1100px) { .variable-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 768px)  { .variable-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.variable-card {
+    background: rgba(255, 255, 255, 0.32);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    box-shadow: 0 2px 12px rgba(1, 58, 89, 0.07);
+}
+
+.variable-card:hover {
+    transform: translateY(-4px);
+    z-index: 999;
+    border-color: rgba(79, 195, 247, 0.6);
+    box-shadow: 0 8px 28px rgba(38, 166, 154, 0.2);
+    background: rgba(255, 255, 255, 0.42);
+}
+
+.var-card-name { font-size: 1.25rem; font-weight: 800; color: var(--primary-blue); }
+
+.var-card-unit {
+    font-size: 0.75rem;
+    color: var(--teal-dark);
+    background: rgba(224, 242, 241, 0.75);
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    margin: 0.5rem 0;
+    font-weight: 500;
+}
+
+.var-card-desc { font-size: 0.8rem; color: var(--text-gray); line-height: 1.5; }
+
+/* --- POPOVER --- */
+.var-explanation-popover {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 105%;
+    transform: translateY(-50%);
+    width: 420px;
+    height: 220px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 1rem;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.18);
+    z-index: 1000;
+    overflow: hidden;
+    pointer-events: none;
+    animation: fadeIn 0.25s ease;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+}
+
+.var-explanation-popover.popover-flip { left: auto; right: 105%; }
+.variable-card:hover .var-explanation-popover { display: flex; }
+
+.popover-left {
+    width: 55%;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    background: transparent;
+}
+
+.popover-title  { font-size: 2rem; color: var(--primary-blue); font-weight: 800; margin: 0; }
+.popover-full   { color: var(--teal-medium); font-weight: 600; font-size: 0.875rem; margin-bottom: 0.5rem; }
+.phonetic       { color: #90a4ae; font-size: 0.6875rem; font-style: italic; }
+.popover-text   { color: var(--text-gray); font-size: 0.8125rem; line-height: 1.6; }
+
+.popover-right {
+    width: 45%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: var(--text-dark);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ============================================================
+   BẢNG DỮ LIỆU CHI TIẾT
+   ============================================================ */
+.raw-data-section { margin-top: 1rem; }
+
+.csv-table-container {
+    height: 480px;
+    overflow: auto;
+    position: relative;
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+#dataTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+#dataTable th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(209, 236, 249, 0.55);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--primary-blue);
+    padding: 0.875rem 0.625rem;
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.3px;
+    box-shadow: inset 0 -1px 0 rgba(1, 58, 89, 0.15);
+}
+
+#dataTable th:first-child { border-top-left-radius: 1rem; }
+#dataTable th:last-child  {
+    border-top-right-radius: 1rem;
+    box-shadow: inset 0 -1px 0 rgba(1, 58, 89, 0.15);
+}
+
+#dataTable tbody td {
+    color: rgba(255, 255, 255, 0.9);
+    padding: 0.75rem 0.625rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: center;
+    font-size: 0.8125rem;
+    transition: background 0.12s ease;
+}
+
+#dataTable td:last-child { border-right: none; }
+
+#dataTable tbody tr:hover td { background: rgba(79, 195, 247, 0.1); }
+
+#dataTable th, #dataTable td { min-width: 100px; }
+#dataTable th:last-child, #dataTable td:last-child { min-width: 150px; }
+
+/* --- SCROLLBAR --- */
+::-webkit-scrollbar         { width: 7px; height: 7px; }
+::-webkit-scrollbar-track   { background: rgba(0, 0, 0, 0.04); border-radius: 10px; }
+::-webkit-scrollbar-thumb   { background: rgba(1, 58, 89, 0.35); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--teal-dark); }
+
+/* --- ANIMATIONS --- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-50%) translateX(-8px); }
+    to   { opacity: 1; transform: translateY(-50%) translateX(0); }
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 1024px) {
+    .var-explanation-popover {
+        left: 50% !important;
+        top: -110%;
+        transform: translateX(-50%);
+        width: 90vw;
+        height: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content      { padding: 0.9375rem; }
+    .variable-controls { flex-direction: column; }
+    .data-overview     { grid-template-columns: 1fr; }
+}
